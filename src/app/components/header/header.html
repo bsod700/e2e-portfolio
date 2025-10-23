@@ -8,8 +8,8 @@
       <ul class="nav-links" [class.active]="menuOpen">
         <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
         <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
-        <li><a href="/#services" (click)="closeMenu()">Services</a></li>
-        <li><a href="/#work" (click)="closeMenu()">Work</a></li>
+        <li><a routerLink="/services" (click)="closeMenu()">Services</a></li>
+        <li><a routerLink="/projects" (click)="closeMenu()">Projects</a></li>
         <li><a href="/#testimonials" (click)="closeMenu()">Testimonials</a></li>
         <li><a href="/#contact" (click)="closeMenu()" class="btn">Let's Talk</a></li>
       </ul>

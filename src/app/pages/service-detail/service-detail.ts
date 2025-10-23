@@ -1,28 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
-export interface Service {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  fullDescription: string;
-  services: string[];
-  benefits: string[];
-  codeExample?: string;
-}
+import { ActivatedRoute, Router } from '@angular/router';
+import { Service } from '../../components/services/services';
 
 @Component({
-  selector: 'app-services',
+  selector: 'app-service-detail',
   imports: [CommonModule],
-  templateUrl: './services.html',
-  styleUrl: './services.scss'
+  templateUrl: './service-detail.html',
+  styleUrl: './service-detail.scss'
 })
-export class ServicesComponent {
-  constructor(private router: Router) {}
+export class ServiceDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  
+  service: Service | null = null;
 
-  services: Service[] = [
+  // All services data
+  private allServices: Service[] = [
     {
       id: 'development',
       icon: '</>',
@@ -133,7 +127,28 @@ export class FeatureComponent {
     }
   ];
 
-  navigateToService(serviceId: string): void {
-    this.router.navigate(['/services', serviceId]);
+  ngOnInit(): void {
+    const serviceId = this.route.snapshot.paramMap.get('id');
+    if (serviceId) {
+      this.service = this.allServices.find(s => s.id === serviceId) || null;
+      
+      if (!this.service) {
+        // Redirect to home if service not found
+        this.router.navigate(['/']);
+      }
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/services']);
+  }
+
+  navigateToContact(): void {
+    this.router.navigate(['/'], { fragment: 'contact' });
+  }
+
+  navigateToServices(): void {
+    this.router.navigate(['/services']);
   }
 }
+

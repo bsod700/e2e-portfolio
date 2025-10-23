@@ -1,23 +1,60 @@
 <section class="services section" id="services">
   <div class="container">
     <div class="section-header">
-      <p class="section-subtitle">Our Abilities</p>
+      <p class="section-subtitle">What We Offer</p>
       <h2 class="section-title">End-to-end product<br />design & development</h2>
       <p class="section-description">
-        I offer a comprehensive approach to taking your ideas from concept to reality with a full suite of services in design, development and automation.
+        I design and build digital products with smart UX, clean code, and modern tooling that deliver results.
       </p>
     </div>
     
     <div class="services-grid">
-      <div class="service-card" *ngFor="let service of services">
-        <div class="service-icon">
-          <span [innerHTML]="service.icon"></span>
+      <!-- Development Card -->
+      <div class="service-card" (click)="navigateToService('development')">
+        <div class="service-icon-text">{{ services[0].icon }}</div>
+        <h3>{{ services[0].title }}</h3>
+        <p>{{ services[0].description }}</p>
+        <div class="learn-more">
+          Learn More <span class="arrow">→</span>
         </div>
-        <h3>{{ service.title }}</h3>
-        <p>{{ service.description }}</p>
-        <ul class="service-features">
-          <li *ngFor="let feature of service.features">{{ feature }}</li>
-        </ul>
+      </div>
+
+      <!-- Strategy Card -->
+      <div class="service-card" (click)="navigateToService('strategy')">
+        <div class="service-icon-text">{{ services[1].icon }}</div>
+        <h3>{{ services[1].title }}</h3>
+        <p>{{ services[1].description }}</p>
+        <div class="learn-more">
+          Learn More <span class="arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Decoration Card - Center -->
+      <div class="decoration-card">
+        <div class="decoration-content">
+          <h3 class="decoration-title">Build Your Ideas</h3>
+          <div class="decoration-glow"></div>
+        </div>
+      </div>
+
+      <!-- AI Automation Card -->
+      <div class="service-card" (click)="navigateToService('ai-automation')">
+        <div class="service-icon-text">{{ services[2].icon }}</div>
+        <h3>{{ services[2].title }}</h3>
+        <p>{{ services[2].description }}</p>
+        <div class="learn-more">
+          Learn More <span class="arrow">→</span>
+        </div>
+      </div>
+
+      <!-- Design Card -->
+      <div class="service-card" (click)="navigateToService('design')">
+        <div class="service-icon-text">{{ services[3].icon }}</div>
+        <h3>{{ services[3].title }}</h3>
+        <p>{{ services[3].description }}</p>
+        <div class="learn-more">
+          Learn More <span class="arrow">→</span>
+        </div>
       </div>
     </div>
   </div>

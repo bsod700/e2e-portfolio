@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 interface Project {
   emoji: string;
@@ -12,7 +13,7 @@ interface Project {
 
 @Component({
   selector: 'app-case-studies',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './case-studies.html',
   styleUrl: './case-studies.scss'
 })

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-export interface Service {
+export interface ServiceDetail {
   id: string;
   icon: string;
   title: string;
@@ -14,15 +14,15 @@ export interface Service {
 }
 
 @Component({
-  selector: 'app-services',
+  selector: 'app-services-page',
   imports: [CommonModule],
-  templateUrl: './services.html',
-  styleUrl: './services.scss'
+  templateUrl: './services-page.html',
+  styleUrl: './services-page.scss'
 })
-export class ServicesComponent {
+export class ServicesPageComponent {
   constructor(private router: Router) {}
 
-  services: Service[] = [
+  services: ServiceDetail[] = [
     {
       id: 'development',
       icon: '</>',
@@ -133,7 +133,82 @@ export class FeatureComponent {
     }
   ];
 
+  additionalServices = [
+    {
+      icon: '🚀',
+      title: 'Performance Optimization',
+      description: 'Enhance your application\'s speed and efficiency with advanced optimization techniques.',
+      points: [
+        'Code splitting and lazy loading',
+        'Image and asset optimization',
+        'Caching strategies',
+        'Database query optimization'
+      ]
+    },
+    {
+      icon: '🔒',
+      title: 'Security & Best Practices',
+      description: 'Implement industry-standard security measures to protect your application and user data.',
+      points: [
+        'Authentication & authorization',
+        'Data encryption',
+        'OWASP security guidelines',
+        'Regular security audits'
+      ]
+    },
+    {
+      icon: '📊',
+      title: 'Analytics & Monitoring',
+      description: 'Track performance and user behavior with comprehensive analytics and monitoring solutions.',
+      points: [
+        'Real-time monitoring dashboards',
+        'Error tracking and logging',
+        'User behavior analytics',
+        'Performance metrics tracking'
+      ]
+    },
+    {
+      icon: '🔄',
+      title: 'Continuous Integration/Deployment',
+      description: 'Streamline your development workflow with automated CI/CD pipelines.',
+      points: [
+        'Automated testing pipelines',
+        'Deployment automation',
+        'Version control best practices',
+        'Rollback strategies'
+      ]
+    }
+  ];
+
+  process = [
+    {
+      number: '01',
+      title: 'Discovery & Planning',
+      description: 'We start by understanding your goals, target audience, and technical requirements to create a comprehensive project plan.'
+    },
+    {
+      number: '02',
+      title: 'Design & Architecture',
+      description: 'I design the user interface and system architecture, ensuring scalability and optimal user experience.'
+    },
+    {
+      number: '03',
+      title: 'Development & Testing',
+      description: 'Clean, efficient code is written with continuous testing to ensure quality and performance.'
+    },
+    {
+      number: '04',
+      title: 'Deployment & Support',
+      description: 'Your project is deployed with full documentation, training, and ongoing support to ensure success.'
+    }
+  ];
+
   navigateToService(serviceId: string): void {
     this.router.navigate(['/services', serviceId]);
   }
+
+  navigateToContact(): void {
+    this.router.navigate(['/'], { fragment: 'contact' });
+  }
 }
+
