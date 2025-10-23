@@ -1,0 +1,291 @@
+.testimonials {
+  background: var(--color-bg-primary);
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-3xl);
+
+  .section-subtitle {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-title {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-description {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+// Animation Control Button
+.animation-control-btn-container {
+  position: relative;
+  height: 50px;
+  width: 100%
+}
+
+.animation-control-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--color-bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  svg {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    padding: 0.6rem;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Carousel Container
+.carousel-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: relative;
+  padding: 1rem 0;
+
+  // Fade effect on edges
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg-primary), transparent);
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg-primary), transparent);
+  }
+
+  @media (max-width: 768px) {
+    &::before,
+    &::after {
+      width: 40px;
+    }
+  }
+}
+
+// Carousel Row
+.carousel-row {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  will-change: transform;
+
+  .scroll-left & {
+    animation: scrollLeft 40s linear infinite;
+  }
+
+  .scroll-right & {
+    animation: scrollRight 40s linear infinite;
+  }
+
+  // Pause animation on hover or when button is clicked
+  .carousel-container.paused & {
+    animation-play-state: paused;
+  }
+}
+
+// Keyframe animations for seamless infinite scroll
+@keyframes scrollLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-400px * 3 - 1.5rem * 3));
+  }
+}
+
+@keyframes scrollRight {
+  from {
+    transform: translateX(calc(-400px * 3 - 1.5rem * 3));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+// Responsive animation for mobile
+@media (max-width: 768px) {
+  @keyframes scrollLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-300px * 3 - 1.5rem * 3));
+    }
+  }
+
+  @keyframes scrollRight {
+    from {
+      transform: translateX(calc(-300px * 3 - 1.5rem * 3));
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Testimonial Card
+.testimonial-card {
+  flex: 0 0 400px;
+  min-width: 400px;
+  background: var(--color-bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  transition: var(--transition-normal);
+
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(102, 126, 234, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    flex: 0 0 300px;
+    min-width: 300px;
+    padding: var(--spacing-md);
+  }
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .author-info {
+    min-width: 0;
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--color-text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.testimonial-content {
+  position: relative;
+  margin-bottom: 1rem;
+
+  .quote-icon {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 4rem;
+    color: var(--color-primary);
+    opacity: 0.2;
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  p {
+    position: relative;
+    z-index: 1;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+}
+
+.testimonial-footer {
+  .rating {
+    display: flex;
+    gap: 0.25rem;
+
+    span {
+      color: #FFC107;
+      font-size: 1.2rem;
+    }
+  }
+}
+

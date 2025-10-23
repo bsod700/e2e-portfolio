@@ -1,0 +1,144 @@
+<app-header></app-header>
+
+<main class="about-page">
+  <!-- About Section -->
+  <section class="about-intro section">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image">
+          <div class="image-wrapper">
+            <img src="/profile.jpg" alt="Guy Tagger - Full Stack Developer" />
+            <div class="image-decoration"></div>
+          </div>
+          <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>Available for Work</span>
+          </div>
+        </div>
+        
+        <div class="about-content">
+          <h1 class="page-title">About Me</h1>
+          <h2 class="section-subtitle">
+            Design, code, and AI aligned
+          </h2>
+          
+          <div class="about-text">
+            <p>
+              I'm a UI/UX Designer &amp; Full Stack Developer who builds intuitive, innovative 
+              digital experiences. With deep expertise in design, development, and AI, I create 
+              end-to-end solutions that solve real problems.
+            </p>
+            
+            <p>
+              My passion lies in merging cutting-edge technology with clean design. Whether 
+              building complex web apps, crafting delightful user interfaces, or leveraging AI 
+              to enhance functionality, I approach every project with strategic thinking and 
+              technical precision.
+            </p>
+            
+            <p>
+              I've worked with over 500+ clients worldwide, delivering projects that combine 
+              technical excellence with exceptional user experiences. From startups to enterprise 
+              solutions, I bring ideas to life with modern tools and best practices.
+            </p>
+            
+            <p>
+              When I'm not coding or designing, I'm staying up-to-date with the latest web 
+              technologies, exploring AI innovations, and continuously improving my craft. 
+              I believe in writing clean code, creating scalable architectures, and designing 
+              with empathy for the end user.
+            </p>
+            
+            <p class="quote">
+              "I see code not just as logic, but as a medium of expression - where functionality 
+              meets artistry, and where every line should serve both purpose and elegance."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="skills-section section">
+    <div class="container">
+      <h2 class="section-title text-center">Skills & Expertise</h2>
+      <p class="section-description text-center">
+        A comprehensive toolkit for building exceptional digital experiences
+      </p>
+      
+      <div class="skills-grid">
+        @for (skillGroup of skills; track skillGroup.category) {
+          <div class="skill-card">
+            <h3 class="skill-category">{{ skillGroup.category }}</h3>
+            <div class="skill-tags">
+              @for (skill of skillGroup.items; track skill) {
+                <span class="skill-tag">{{ skill }}</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Experience Section -->
+  <section class="experience-section section">
+    <div class="container">
+      <h2 class="section-title text-center">Work Experience</h2>
+      <p class="section-description text-center">
+        A journey of continuous growth and impactful projects
+      </p>
+      
+      <div class="timeline">
+        @for (exp of workExperiences; track exp.period) {
+          <div class="timeline-item">
+            <div class="timeline-marker">
+              <div class="timeline-dot"></div>
+            </div>
+            
+            <div class="timeline-content">
+              <div class="experience-card">
+                <div class="experience-header">
+                  <div class="experience-info">
+                    <h3 class="experience-role">{{ exp.role }}</h3>
+                    <p class="experience-company">{{ exp.company }}</p>
+                  </div>
+                  <span class="experience-period">{{ exp.period }}</span>
+                </div>
+                
+                <p class="experience-description">{{ exp.description }}</p>
+                
+                <div class="experience-achievements">
+                  <h4>Key Achievements:</h4>
+                  <ul>
+                    @for (achievement of exp.achievements; track achievement) {
+                      <li>{{ achievement }}</li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section section">
+    <div class="container">
+      <div class="cta-card">
+        <h2>Let's Work Together</h2>
+        <p>
+          Ready to bring your project to life? I'm available for freelance work, 
+          consulting, and exciting new opportunities.
+        </p>
+        <a href="/#contact" class="btn btn-primary">Get In Touch</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer></app-footer>
+

@@ -1,0 +1,149 @@
+<section class="testimonials section" id="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Real People, Real Words</p>
+      <h2 class="section-title">What Clients Say<br />About My Work</h2>
+      <p class="section-description">
+        Hear from satisfied collaborators who can attest to our work ethic and the positive impact we've made together.
+      </p>
+    </div>
+
+    <!-- Animation Control Button -->
+     <div class="animation-control-btn-container">
+      <button 
+        class="animation-control-btn"
+        (click)="toggleAnimation()"
+        [attr.aria-label]="isAnimationPaused ? 'Play animation' : 'Pause animation'"
+        type="button">
+        @if (!isAnimationPaused) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        }
+        @if (isAnimationPaused) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        }
+      </button>
+    </div>
+    <div class="carousel-container" 
+         [class.paused]="isAnimationPaused"
+         (mouseenter)="pauseAnimation()"
+         (mouseleave)="resumeAnimation()">
+      
+      <!-- First Row - Scrolling Left -->
+      <div class="carousel-row scroll-left">
+        <div class="carousel-track">
+          <!-- Original set -->
+          @for (testimonial of firstRowTestimonials; track testimonial.name) {
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">
+                  <span>{{ testimonial.initials }}</span>
+                </div>
+                <div class="author-info">
+                  <h4>{{ testimonial.name }}</h4>
+                  <p>{{ testimonial.role }}</p>
+                </div>
+              </div>
+              <div class="testimonial-content">
+                <div class="quote-icon">"</div>
+                <p>{{ testimonial.text }}</p>
+              </div>
+              <div class="testimonial-footer">
+                <div class="rating">
+                  @for (star of [1,2,3,4,5]; track star) {
+                    <span>★</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+          <!-- Duplicate set for seamless loop -->
+          @for (testimonial of firstRowTestimonials; track testimonial.name + '_duplicate') {
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">
+                  <span>{{ testimonial.initials }}</span>
+                </div>
+                <div class="author-info">
+                  <h4>{{ testimonial.name }}</h4>
+                  <p>{{ testimonial.role }}</p>
+                </div>
+              </div>
+              <div class="testimonial-content">
+                <div class="quote-icon">"</div>
+                <p>{{ testimonial.text }}</p>
+              </div>
+              <div class="testimonial-footer">
+                <div class="rating">
+                  @for (star of [1,2,3,4,5]; track star) {
+                    <span>★</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Second Row - Scrolling Right -->
+      <div class="carousel-row scroll-right">
+        <div class="carousel-track">
+          <!-- Original set -->
+          @for (testimonial of secondRowTestimonials; track testimonial.name) {
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">
+                  <span>{{ testimonial.initials }}</span>
+                </div>
+                <div class="author-info">
+                  <h4>{{ testimonial.name }}</h4>
+                  <p>{{ testimonial.role }}</p>
+                </div>
+              </div>
+              <div class="testimonial-content">
+                <div class="quote-icon">"</div>
+                <p>{{ testimonial.text }}</p>
+              </div>
+              <div class="testimonial-footer">
+                <div class="rating">
+                  @for (star of [1,2,3,4,5]; track star) {
+                    <span>★</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+          <!-- Duplicate set for seamless loop -->
+          @for (testimonial of secondRowTestimonials; track testimonial.name + '_duplicate') {
+            <div class="testimonial-card">
+              <div class="testimonial-header">
+                <div class="avatar">
+                  <span>{{ testimonial.initials }}</span>
+                </div>
+                <div class="author-info">
+                  <h4>{{ testimonial.name }}</h4>
+                  <p>{{ testimonial.role }}</p>
+                </div>
+              </div>
+              <div class="testimonial-content">
+                <div class="quote-icon">"</div>
+                <p>{{ testimonial.text }}</p>
+              </div>
+              <div class="testimonial-footer">
+                <div class="rating">
+                  @for (star of [1,2,3,4,5]; track star) {
+                    <span>★</span>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

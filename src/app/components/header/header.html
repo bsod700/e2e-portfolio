@@ -1,0 +1,24 @@
+<header class="header" [class.scrolled]="isScrolled">
+  <div class="container">
+    <nav class="nav">
+      <a routerLink="/" class="logo">
+        <span class="logo-text">Guy<span class="highlight">Tagger</span></span>
+      </a>
+      
+      <ul class="nav-links" [class.active]="menuOpen">
+        <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
+        <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
+        <li><a href="/#services" (click)="closeMenu()">Services</a></li>
+        <li><a href="/#work" (click)="closeMenu()">Work</a></li>
+        <li><a href="/#testimonials" (click)="closeMenu()">Testimonials</a></li>
+        <li><a href="/#contact" (click)="closeMenu()" class="btn">Let's Talk</a></li>
+      </ul>
+      
+      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </div>
+</header>

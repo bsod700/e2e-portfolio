@@ -1,0 +1,106 @@
+.services {
+  background: var(--color-bg-secondary);
+}
+
+.section-header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto var(--spacing-3xl);
+
+  .section-subtitle {
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .section-title {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-description {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+  }
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-card {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  transition: var(--transition-normal);
+
+  &:hover {
+    transform: translateY(-10px);
+    border-color: rgba(102, 126, 234, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+
+    .service-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+  }
+
+  .service-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    transition: var(--transition-normal);
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text-primary);
+  }
+
+  > p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.5rem 0;
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+      position: relative;
+      padding-left: 1.5rem;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-weight: bold;
+      }
+    }
+  }
+}
+

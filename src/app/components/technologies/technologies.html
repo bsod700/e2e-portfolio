@@ -1,0 +1,78 @@
+<section class="technologies section" id="technologies">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-subtitle">Tech Stack</p>
+      <h2 class="section-title">Technologies Behind<br />Every Product</h2>
+      <p class="section-description">
+        I stay ahead of the curve by working with the latest and most powerful technologies to deliver cutting-edge solutions.
+      </p>
+    </div>
+
+    <!-- Animation Control Button -->
+    <div class="animation-control-btn-container">
+      <button 
+        class="animation-control-btn"
+        (click)="toggleAnimation()"
+        [attr.aria-label]="isAnimationPaused ? 'Play animation' : 'Pause animation'"
+        type="button">
+        @if (!isAnimationPaused) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="6" y="4" width="4" height="16"></rect>
+            <rect x="14" y="4" width="4" height="16"></rect>
+          </svg>
+        }
+        @if (isAnimationPaused) {
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        }
+      </button>
+    </div>
+
+    <div class="carousel-container" 
+         [class.paused]="isAnimationPaused"
+         (mouseenter)="pauseAnimation()"
+         (mouseleave)="resumeAnimation()">
+      
+      <!-- First Row - Scrolling Left -->
+      <div class="carousel-row scroll-left">
+        <div class="carousel-track">
+          <!-- Original set -->
+          @for (tech of firstRowTechnologies; track tech.name) {
+            <div class="tech-card">
+              <div class="tech-icon">{{ tech.icon }}</div>
+              <span class="tech-name">{{ tech.name }}</span>
+            </div>
+          }
+          <!-- Duplicate set for seamless loop -->
+          @for (tech of firstRowTechnologies; track tech.name + '_duplicate') {
+            <div class="tech-card">
+              <div class="tech-icon">{{ tech.icon }}</div>
+              <span class="tech-name">{{ tech.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Second Row - Scrolling Right -->
+      <div class="carousel-row scroll-right">
+        <div class="carousel-track">
+          <!-- Original set -->
+          @for (tech of secondRowTechnologies; track tech.name) {
+            <div class="tech-card">
+              <div class="tech-icon">{{ tech.icon }}</div>
+              <span class="tech-name">{{ tech.name }}</span>
+            </div>
+          }
+          <!-- Duplicate set for seamless loop -->
+          @for (tech of secondRowTechnologies; track tech.name + '_duplicate') {
+            <div class="tech-card">
+              <div class="tech-icon">{{ tech.icon }}</div>
+              <span class="tech-name">{{ tech.name }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
