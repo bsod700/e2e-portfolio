@@ -1,36 +1,71 @@
 <section class="hero" id="home">
+  <!-- Background Elements -->
   <div class="hero-background">
-    <div class="glow-orb"></div>
-    <div class="gradient-overlay"></div>
+    <div class="glow-red-1"></div>
+    <div class="glow-blue-2"></div>
+    <div class="grid-layer"></div>
+    <div class="glow-blue-1"></div>
+    <div class="glow-red-2"></div>
+    <div class="glow-red-3"></div>
+    <div class="lights">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 754 634" fill="none" class="lights-svg">
+        <defs>
+          <filter id="fx" x="0" y="-440" width="1074" height="1074">
+            <feGaussianBlur stdDeviation="15"/>
+          </filter>
+          <clipPath id="clip">
+            <path d="M828-318 656-56 870-285 672-42 908-248 686-28 943-208 698-11 972-164 708 6 997-117 717 24 1017-68 723 44 1031-17 728 63 1041 36 730 84 1044 89 731 104 1042 142 729 124 1035 194 725 144 1022 246 719 163 1004 296 711 182 980 343 701 200 952 388 690 216 919 430 676 232 882 468 661 245 842 502 645 258 798 532 628 268 751 557 609 276 701 577 590 283 650 591 570 288 598 600 550 290 545 604 530 290 492 602 510 289 440 594 490 285 388 582 471 279 338 563 452 271 291 540 427 252 216 526 412 239 111 562 398 227 125 467 389 221 132 401 376 205 102 357 366 188 77 310 357 169 57 261 351 150 43 210 346 130 33 158 344 110 30 105 343 90 32 52 345 70 39-1 349 50 52-52 355 30 71-102 363 12 94-150 373-6 122-195 385-23 155-236 398-38 192-275 413-52 232-309 429-64 276-338 446-74 323-363 465-83 373-383 484-90 424-398 504-94 476-407 524-96 529-410 544-97 582-408 564-95 635-401 584-91 686-388 604-85 736-370 622-77 784-346 640-67 829-318Z"/>
+          </clipPath>
+          <radialGradient id="grad" cx="50%" cy="20%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+            <stop offset="3%" stop-color="rgba(255,255,255,.95)"/>
+            <stop offset="8%" stop-color="rgba(255,255,255,.5)"/>
+            <stop offset="15%" stop-color="rgba(102,126,234,.8)"/>
+            <stop offset="25%" stop-color="rgba(102,126,234,.5)"/>
+            <stop offset="50%" stop-color="rgba(102,126,234,.2)"/>
+            <stop offset="100%" stop-color="rgba(102,126,234,0)"/>
+          </radialGradient>
+        </defs>
+        <g class="lights-group">
+          <g class="lights-conic" clip-path="url(#clip)">
+            <g class="conic-transform">
+              <foreignObject x="-1040" y="-1040" width="2081" height="2081"><div class="conic-bg"></div></foreignObject>
+            </g>
+          </g>
+          <path class="lights-path" fill="url(#grad)" d="M828-318 656-56 870-285 672-42 908-248 686-28 943-208 698-11 972-164 708 6 997-117 717 24 1017-68 723 44 1031-17 728 63 1041 36 730 84 1044 89 731 104 1042 142 729 124 1035 194 725 144 1022 246 719 163 1004 296 711 182 980 343 701 200 952 388 690 216 919 430 676 232 882 468 661 245 842 502 645 258 798 532 628 268 751 557 609 276 701 577 590 283 650 591 570 288 598 600 550 290 545 604 530 290 492 602 510 289 440 594 490 285 388 582 471 279 338 563 452 271 291 540 427 252 216 526 412 239 111 562 398 227 125 467 389 221 132 401 376 205 102 357 366 188 77 310 357 169 57 261 351 150 43 210 346 130 33 158 344 110 30 105 343 90 32 52 345 70 39-1 349 50 52-52 355 30 71-102 363 12 94-150 373-6 122-195 385-23 155-236 398-38 192-275 413-52 232-309 429-64 276-338 446-74 323-363 465-83 373-383 484-90 424-398 504-94 476-407 524-96 529-410 544-97 582-408 564-95 635-401 584-91 686-388 604-85 736-370 622-77 784-346 640-67 829-318Z"/>
+        </g>
+      </svg>
+    </div>
+    <div class="glow-big-blue-1"></div>
+    <div class="stars"></div>
+    <div class="shadow"></div>
   </div>
   
-  <div class="container">
+  <div class="hero-container">
     <div class="hero-content">
-      <div class="badge">
-        <span class="badge-icon">✨</span>
-        <span>A Freelance IT Professional</span>
+      <div class="hero-main">
+        <!-- Kicker Badge -->
+        <div class="kicker">
+          <span class="badge-icon">✨</span>
+          <span class="badge-text">From Vision to Infrastructure</span>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content-wrapper">
+          <h1 class="hero-title">
+            Building End-to-End Digital Solutions
+          </h1>
+          
+          <p class="hero-description">
+            design and build intuitive apps and websites, combining UX, development and AI into seamless user experiences.
+          </p>
+        </div>
+        
+        <!-- Project Inquiry Form -->
+        <div class="project-inquiry">
+          <app-project-inquiry></app-project-inquiry>
+        </div>
       </div>
-      
-      <h1 class="hero-title">
-        <span class="line-1">Building End-to-End</span>
-        <span class="line-2">Digital Solutions</span>
-      </h1>
-      
-      <p class="hero-description">
-        Design and build intuitive apps and services, combining UX, 
-        JavaScript/TS and AI. I do deliver best of class digital solutions, adaptable with 500+ clients worldwide.
-      </p>
-      
-      <div class="hero-cta">
-        <app-project-inquiry></app-project-inquiry>
-      </div>
-    </div>
-    
-    <div class="scroll-indicator">
-      <div class="mouse">
-        <div class="wheel"></div>
-      </div>
-      <p>Scroll Down</p>
     </div>
   </div>
 </section>

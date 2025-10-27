@@ -166,6 +166,21 @@ a {
   }
 }
 
+.noise-overlay {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9"/></filter><rect width="100%25" height="100%25" filter="url(%23noise)"/></svg>');
+    opacity: 0.74;
+    z-index: 1;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {

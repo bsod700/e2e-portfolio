@@ -1,0 +1,29 @@
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="navbar-container">
+      <div class="navbar-left">
+        <a routerLink="/" class="logo">
+         <img src="/assets/images/logo-red.svg" alt="Logo" class="logo-icon">
+        </a>
+        
+        <ul class="nav-links" [class.active]="menuOpen">
+          <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
+          <li><a routerLink="/projects" (click)="closeMenu()">Projects</a></li>
+          <li><a routerLink="/services" (click)="closeMenu()">Services</a></li>
+          <li><a href="/blog" (click)="closeMenu()">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="navbar-right">
+        <a href="/#contact" (click)="closeMenu()" class="cta-nav">
+          <span>Let's Talk</span>
+          <img src="http://localhost:3845/assets/04aff9f85675c89b51c9005cc45e93dce2c3adbe.svg" alt="Arrow" class="arrow-icon" />
+        </a>
+      </div>
+      
+      <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+</nav>
