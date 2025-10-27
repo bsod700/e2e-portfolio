@@ -10,7 +10,21 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
-    path: '**',
+    path: 'services',
     renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'projects',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'services/:id',
+    renderMode: RenderMode.Prerender,
+    getPrerenderParams: async () => [
+      { id: 'development' },
+      { id: 'strategy' },
+      { id: 'ai-automation' },
+      { id: 'design' }
+    ]
   }
 ];
