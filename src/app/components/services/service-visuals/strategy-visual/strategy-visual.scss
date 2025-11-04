@@ -1,0 +1,172 @@
+.strategy-visual {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    pointer-events: none;
+
+    &.glow-blue-1 {
+      width: 219px;
+      height: 206px;
+      top: 263px;
+      left: 91px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+    }
+
+    &.glow-red-1 {
+      width: 204px;
+      height: 204px;
+      top: 376px;
+      left: 285px;
+      background: radial-gradient(circle, rgba(209, 75, 59, 0.4) 0%, transparent 70%);
+    }
+
+    &.glow-big-blue-1 {
+      width: 692px;
+      height: 692px;
+      top: 113px;
+      left: -127px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
+      mix-blend-mode: soft-light;
+    }
+  }
+
+  .dots-pattern {
+    position: absolute;
+    top: -159px;
+    left: 0;
+    width: 659px;
+    height: 659px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+  }
+
+  .strategy-charts {
+    position: absolute;
+    top: -31px;
+    left: -139px;
+    width: 640px;
+    height: 548px;
+  }
+
+  .chart-container {
+    position: absolute;
+    background: rgba(47, 50, 64, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+
+    &.chart-1 {
+      width: 244px;
+      height: 69px;
+      top: 89px;
+      left: 117px;
+    }
+
+    &.chart-2 {
+      width: 443px;
+      height: 210px;
+      top: 90px;
+      left: -5px;
+    }
+
+    &.chart-3 {
+      width: 515px;
+      height: 330px;
+      top: 5px;
+      left: 117px;
+    }
+  }
+
+  .chart-bar {
+    height: 20px;
+    background: linear-gradient(to right, rgba(112, 185, 238, 0.3) 0%, rgba(112, 185, 238, 0) 100%);
+    border-radius: 4px;
+    margin-bottom: 8px;
+
+    &.chart-bar-1 {
+      width: 100%;
+    }
+
+    &.chart-bar-2 {
+      width: 60%;
+    }
+
+    &.chart-bar-3 {
+      width: 80%;
+    }
+
+    &.chart-bar-4 {
+      width: 45%;
+    }
+  }
+
+  .chart-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, rgba(112, 185, 238, 0.3) 0%, rgba(112, 185, 238, 0) 100%);
+    margin: 20px 0;
+  }
+
+  .chart-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .grid-line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background: rgba(112, 185, 238, 0.1);
+
+    &:nth-child(1) {
+      top: 0;
+    }
+
+    &:nth-child(2) {
+      top: 25%;
+    }
+
+    &:nth-child(3) {
+      top: 50%;
+    }
+
+    &:nth-child(4) {
+      top: 75%;
+    }
+  }
+
+  .strategy-node {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(112, 185, 238, 0.5);
+    opacity: 0.6;
+
+    &.strategy-node-1 {
+      top: 154px;
+      left: 114px;
+    }
+
+    &.strategy-node-2 {
+      top: 89px;
+      left: 358px;
+    }
+
+    &.strategy-node-3 {
+      top: 176px;
+      left: 0px;
+    }
+  }
+}
+

@@ -1,0 +1,131 @@
+.ai-automation-visual {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    pointer-events: none;
+
+    &.glow-blue-1 {
+      width: 219px;
+      height: 206px;
+      top: 263px;
+      left: 91px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+    }
+
+    &.glow-red-1 {
+      width: 204px;
+      height: 204px;
+      top: 376px;
+      left: 285px;
+      background: radial-gradient(circle, rgba(209, 75, 59, 0.4) 0%, transparent 70%);
+    }
+
+    &.glow-big-blue-1 {
+      width: 692px;
+      height: 692px;
+      top: 113px;
+      left: -127px;
+      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
+      mix-blend-mode: soft-light;
+    }
+  }
+
+  .dots-pattern {
+    position: absolute;
+    top: -159px;
+    left: 0;
+    width: 659px;
+    height: 659px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+  }
+
+  .workflow-visualization {
+    position: absolute;
+    top: -300px;
+    left: -215px;
+    width: 640px;
+    height: 548px;
+  }
+
+  .workflow-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+  }
+
+  .ai-node {
+    position: absolute;
+    width: 45px;
+    height: 43px;
+
+    &.ai-node-1 {
+      top: -12px;
+      left: 295px;
+    }
+
+    &.ai-node-2 {
+      top: 113px;
+      left: -12px;
+    }
+
+    &.ai-node-3 {
+      top: -32px;
+      left: 367px;
+    }
+
+    &.ai-node-4 {
+      top: 87px;
+      left: 333px;
+    }
+
+    &.ai-node-5 {
+      top: 214px;
+      left: -44px;
+    }
+
+    &.ai-node-6 {
+      top: 238px;
+      left: 79px;
+    }
+  }
+
+  .node-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    opacity: 0.5;
+  }
+
+  .central-ai-visual {
+    position: absolute;
+    top: 18px;
+    left: 90px;
+    width: 168px;
+    height: 168px;
+  }
+
+  .ai-core {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(209, 75, 59, 0.3) 0%, transparent 70%);
+    border: 2px solid rgba(209, 75, 59, 0.2);
+    filter: blur(40px);
+    opacity: 0.6;
+  }
+}
+

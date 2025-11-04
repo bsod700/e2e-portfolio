@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { HeroComponent } from '../../components/hero/hero';
-import { AboutComponent } from '../../components/about/about';
 import { ServicesComponent } from '../../components/services/services';
 import { TestimonialsComponent } from '../../components/testimonials/testimonials';
 import { CaseStudiesComponent } from '../../components/case-studies/case-studies';
@@ -12,7 +11,6 @@ import { ContactComponent } from '../../components/contact/contact';
   selector: 'app-home',
   imports: [
     HeroComponent,
-    AboutComponent,
     ServicesComponent,
     TestimonialsComponent,
     CaseStudiesComponent,

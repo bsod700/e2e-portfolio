@@ -1,61 +1,55 @@
 <section class="services section" id="services">
+  <div class="background">
+    <div class="glow-red-1"></div>
+    <div class="glow-blue-1"></div>
+    <div class="grid-layer"></div>
+    <div class="stars"></div>
+  </div>
   <div class="container">
     <div class="section-header">
-      <p class="section-subtitle">What We Offer</p>
-      <h2 class="section-title">End-to-end product<br />design & development</h2>
+      <p class="kicker">Don't pay for just pretty pixels</p>
+      <h2 class="section-title">Digital products that perform</h2>
       <p class="section-description">
-        I design and build digital products with smart UX, clean code, and modern tooling that deliver results.
+        From concept to launch, every product I build blends smart UX, modern code, and scalable architecture.
       </p>
     </div>
     
     <div class="services-grid">
-      <!-- Development Card - Row 1, Columns 1-2 -->
-      <div class="service-card service-card-development" (click)="navigateToService('development')">
-        <div class="service-icon-text">{{ services[0].icon }}</div>
-        <h3>{{ services[0].title }}</h3>
-        <p>{{ services[0].description }}</p>
-        <div class="learn-more">
-          Learn More <span class="arrow">→</span>
+      @for (service of services; track service.id) {
+        <div 
+          class="service-card service-card-{{ service.id }}" 
+          (click)="navigateToService(service.id)">
+          <div class="service-visual">
+            @switch (service.id) {
+              @case ('design') {
+                <app-design-visual></app-design-visual>
+              }
+              @case ('development') {
+                <app-development-visual></app-development-visual>
+              }
+              @case ('ai-automation') {
+                <app-ai-automation-visual></app-ai-automation-visual>
+              }
+              @case ('strategy') {
+                <app-strategy-visual></app-strategy-visual>
+              }
+              @case ('brand') {
+                <app-brand-visual></app-brand-visual>
+              }
+              @default {
+                <div class="service-icon-text">{{ service.icon }}</div>
+              }
+            }
+          </div>
+          <div class="service-content">
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+            <div class="learn-more">
+              Learn More <span class="arrow">→</span>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- AI Automation Card - Rows 1-2, Column 3 -->
-      <div class="service-card service-card-ai" (click)="navigateToService('ai-automation')">
-        <div class="service-icon-text">{{ services[2].icon }}</div>
-        <h3>{{ services[2].title }}</h3>
-        <p>{{ services[2].description }}</p>
-        <div class="learn-more">
-          Learn More <span class="arrow">→</span>
-        </div>
-      </div>
-
-      <!-- Strategy Card - Rows 2-3, Column 1 -->
-      <div class="service-card service-card-strategy" (click)="navigateToService('strategy')">
-        <div class="service-icon-text">{{ services[1].icon }}</div>
-        <h3>{{ services[1].title }}</h3>
-        <p>{{ services[1].description }}</p>
-        <div class="learn-more">
-          Learn More <span class="arrow">→</span>
-        </div>
-      </div>
-
-      <!-- Decoration Card - Row 2, Column 2 -->
-      <div class="decoration-card">
-        <div class="decoration-content">
-          <h3 class="decoration-title">Build Your Ideas</h3>
-          <div class="decoration-glow"></div>
-        </div>
-      </div>
-
-      <!-- Design Card - Row 3, Columns 2-3 -->
-      <div class="service-card service-card-design" (click)="navigateToService('design')">
-        <div class="service-icon-text">{{ services[3].icon }}</div>
-        <h3>{{ services[3].title }}</h3>
-        <p>{{ services[3].description }}</p>
-        <div class="learn-more">
-          Learn More <span class="arrow">→</span>
-        </div>
-      </div>
+      }
     </div>
   </div>
 </section>
