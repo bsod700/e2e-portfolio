@@ -18,6 +18,11 @@ export class ProjectInquiryComponent {
   projectDescription = '';
   selectedTypes: Set<string> = new Set();
   showContactForm = false;
+  inputGlowStyle: { [key: string]: string } = {
+    '--px': '-1000px',
+    '--py': '-1000px',
+    '--hover': '0'
+  };
   
   // Contact form fields
   contactName = '';
@@ -81,6 +86,27 @@ export class ProjectInquiryComponent {
 
   closeContactForm(): void {
     this.showContactForm = false;
+  }
+
+  onInputPointerMove(event: MouseEvent): void {
+    const target = event.currentTarget as HTMLElement | null;
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    this.inputGlowStyle = {
+      ...this.inputGlowStyle,
+      '--px': `${x}px`,
+      '--py': `${y}px`
+    };
+  }
+
+  onInputEnter(): void {
+    this.inputGlowStyle = { ...this.inputGlowStyle, '--hover': '1' };
+  }
+
+  onInputLeave(): void {
+    this.inputGlowStyle = { ...this.inputGlowStyle, '--hover': '0' };
   }
 
   submitInquiry(): void {

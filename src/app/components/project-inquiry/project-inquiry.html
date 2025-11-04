@@ -10,7 +10,13 @@
   </div>
   <!-- Main Inquiry Form -->
   <div class="inquiry-form" [class.hidden]="showContactForm">
-    <div class="input-wrapper shiny-corners">
+    <div
+      class="input-wrapper shiny-corners"
+      [ngStyle]="inputGlowStyle"
+      (mousemove)="onInputPointerMove($event)"
+      (mouseenter)="onInputEnter()"
+      (mouseleave)="onInputLeave()"
+    >
       <input
         type="text"
         class="project-input"
@@ -49,7 +55,7 @@
       </button>
     </div>
 
-    <p class="inquiry-hint">Describe your project, select types, or both to get started</p>
+    <!-- <p class="inquiry-hint">Describe your project, select types, or both to get started</p> -->
   </div>
 
   <!-- Contact Form Modal -->

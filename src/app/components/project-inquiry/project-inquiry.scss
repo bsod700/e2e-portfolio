@@ -32,13 +32,17 @@
   inset: -120px 0 0 0; // extend up to allow glow overflow above
   pointer-events: none;
   z-index: 0;
+  opacity: 0;
+  animation: glowLayerFadeIn 0.6s ease-out 2.05s forwards;
 
   .glow {
     position: absolute;
     border-radius: 9999px;
     filter: blur(100px);
-    opacity: 0.9;
+    opacity: 0;
     mix-blend-mode: screen;
+    will-change: opacity, transform;
+    animation: glowBounceIn 0.9s ease-out 2.15s forwards;
   }
 
   .glow--blue-1 {
@@ -47,6 +51,7 @@
     width: 215px;
     height: 215px;
     background-color: var(--color-secondary);  
+    animation-delay: 2.7s;
   }
   .glow--blue-2 {
     left: calc(50% + 280px);
@@ -55,6 +60,7 @@
     height: 77px;
     background-color: var(--color-secondary);  
     filter: blur(30px);
+    animation-delay: 2.8s;
   }
   .glow--blue-3 {
     left: calc(50% + 324px);
@@ -64,6 +70,7 @@
     transform: rotate(35deg);
     background-color: var(--color-secondary);
     filter: blur(5px);
+    animation-delay: 2.9s;
   }
 
   .glow--red-1 {
@@ -72,6 +79,7 @@
     width: 150px;
     height: 150px;
     background-color: var(--color-primary-light);  
+    animation-delay: 2.2s;
   }
   .glow--red-2 {
     right: calc(50% + 280px);
@@ -80,6 +88,7 @@
     height: 77px;
     background-color: var(--color-primary-light); 
     filter: blur(30px);
+    animation-delay: 2.3s;
   }
   .glow--red-3 {
     right: calc(50% + 324px);
@@ -89,6 +98,7 @@
     transform: rotate(35deg);
     background-color: var(--color-primary-light); 
     filter: blur(5px);
+    animation-delay: 2.4s;
   }
 }
 
@@ -114,6 +124,51 @@
   width: 100%;
   padding: 4px; // outer padding matches Figma container
   border-radius: 18px;
+  // cursor-following border light
+  --px: -1000px; // pointer x
+  --py: -1000px; // pointer y
+  --hover: 0;    // 0..1 opacity gate
+
+  // ambient outer glow halo (like a soft shadow but glowing)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -10px; // extend beyond to read as shadow
+    border-radius: 22px;
+    pointer-events: none;
+    background: radial-gradient(
+      220px 220px at var(--px) var(--py),
+      rgba(102, 126, 234, 0.38),
+      rgba(102, 126, 234, 0.16) 40%,
+      transparent 70%
+    );
+    filter: blur(18px);
+    opacity: calc(0 * (1 - var(--hover)) + 1 * var(--hover));
+    transition: opacity 180ms ease;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    padding: 1px; // border thickness of the light
+    pointer-events: none;
+    // Only draw the border by masking out the inner content box
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    background: radial-gradient(
+      140px 140px at var(--px) var(--py),
+      rgba(102, 126, 234, 0.95),
+      rgba(102, 126, 234, 0.45) 35%,
+      rgba(102, 126, 234, 0.15) 55%,
+      transparent 70%
+    );
+    opacity: calc(0.12 + 0.88 * var(--hover));
+    transition: opacity 180ms ease;
+  }
 
   .project-input {
     width: 100%;
@@ -135,8 +190,7 @@
     }
     
     &:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+      box-shadow:0 0 15px 10px rgb(106 130 241 / 15%), 0 0 24px rgba(102, 126, 234, 0.15)
     }
     &:before {
       content: '';
@@ -149,7 +203,8 @@
       background: var(--shiny-corners);
     }
   }
-  
+
+
   .input-icon-btn {
     position: absolute;
     right: 12px;
@@ -502,6 +557,27 @@
   }
 }
 
+// Glow Layer + Glow Items
+@keyframes glowLayerFadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes glowBounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.92);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-4px) scale(1.04);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes bounce {
   0%, 100% {
     transform: scale(1);
@@ -562,5 +638,17 @@
     padding: 1.5rem 1rem;
     max-height: 95vh;
   }
+}
+
+// Respect reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .glow-layer,
+  .glow-layer .glow,
+  .inquiry-form {
+    animation: none !important;
+    transition: none !important;
+  }
+  .glow-layer { opacity: 1; }
+  .glow-layer .glow { opacity: 0.9; }
 }
 
