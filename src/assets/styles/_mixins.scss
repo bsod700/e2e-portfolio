@@ -1,0 +1,88 @@
+@use "./variables" as *;
+@use "sass:map";
+
+// Text truncation
+@mixin text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// breakpoints min-width
+@mixin respond-to($breakpoint) {
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: map.get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint #{$breakpoint} not found in $breakpoints map.";
+  }
+}
+
+// Dynamic spacing mixin
+@mixin spacing($property, $multiplier) {
+  #{$property}: $spacing-unit * $multiplier;
+}
+
+// Utility classes for margin and padding
+@mixin generate-spacing-utilities($property, $css-property) {
+  @for $i from 1 through 10 {
+    .#{$property}-#{$i} {
+      @include spacing($css-property, $i);
+    }
+  }
+}
+
+@mixin container() {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include respond-to(sm) {
+    max-width: 540px;
+  }
+  
+  @include respond-to(md) {
+    max-width: 720px;
+  }
+
+  @include respond-to(lg) {
+    max-width: 960px;
+  }
+
+  @include respond-to(xl) {
+    max-width: 1140px;
+  }
+
+  @include respond-to(xxl) {
+    max-width: 1320px;
+  }
+}
+/* Mixin for custom scrollbar styles */
+@mixin custom-scrollbar {
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: $scrollbar-thumb-color $scrollbar-track-color;
+
+  /* WebKit Browsers */
+  &::-webkit-scrollbar {
+    width: $scrollbar-width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $scrollbar-track-color;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb-color;
+    border-radius: 10px;
+    border: 3px solid $scrollbar-track-color;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: $scrollbar-thumb-hover-color;
+  }
+}

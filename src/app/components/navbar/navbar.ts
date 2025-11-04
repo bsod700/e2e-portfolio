@@ -24,11 +24,24 @@ export class NavbarComponent {
     }
   }
 
+  @HostListener('window:resize', [])
+  onWindowResize() {
+    if (this.isBrowser) {
+      this.closeMenu();
+    }
+  }
+
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+    if (this.isBrowser) {
+      document.body.classList.toggle('no-scroll', this.menuOpen);
+    }
   }
 
   closeMenu() {
     this.menuOpen = false;
+    if (this.isBrowser) {
+      document.body.classList.remove('no-scroll');
+    }
   }
 }

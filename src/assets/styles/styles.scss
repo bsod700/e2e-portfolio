@@ -1,0 +1,135 @@
+@use "./globals" as *;
+@use "./mixins" as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* Global styles for Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) var(--color-bg-primary);
+}
+
+::-webkit-scrollbar {
+  width: 6px; // Adjust as needed
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-bg-primary);
+  border-radius: 4px; 
+
+  &:hover {
+    background: var(--color-primary-light);
+  }
+}
+
+
+* {
+  font-family: var(--font-family);
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+// styles
+
+// Font weight list
+$font-weights: 100, 200, 300, 400, 500, 600, 700, 800, 900;
+$font-sizes: 12, 14, 16, 18, 20, 24, 32, 40, 48, 56, 64, 72, 80;
+$breakpoint-suffixes: ("": "", "-sm": sm, "-md": md, "-lg": lg, "-xl": xl, "-xxl": xxl);
+
+// Generate font-weight classes
+@each $weight in $font-weights {
+  .fw-#{$weight} {
+    font-weight: $weight;
+  }
+  
+  @each $suffix, $breakpoint in $breakpoint-suffixes {
+    @if $suffix != "" {
+      @include respond-to($breakpoint) {
+        .fw-#{$weight}#{$suffix} {
+          font-weight: $weight;
+        }
+      }
+    }
+  }
+}
+
+.noise-overlay {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9"/></filter><rect width="100%25" height="100%25" filter="url(%23noise)"/></svg>');
+    opacity: 0.74;
+    z-index: 1;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.shiny-corners {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    background: var(--shiny-corners);
+  }
+}
