@@ -1,13 +1,13 @@
 <nav class="navbar" [class.scrolled]="isScrolled" [class.open]="menuOpen">
   <div class="navbar-container">
       <div class="navbar-left">
-        <a routerLink="/" class="logo" (click)="closeMenu()">
+        <a href="#" class="logo" (click)="scrollToTop($event)">
          <img src="assets/images/logo-red.svg" alt="Logo" class="logo-icon">
         </a>
         
         <ul class="nav-links">
-          <li><a routerLink="/services" (click)="closeMenu()">Services</a></li>
-          <li><a routerLink="/testimonials" (click)="closeMenu()">Testimonials</a></li>
+          <li><a href="#services" (click)="scrollToSection('services', $event)">Services</a></li>
+          <li><a href="#testimonials" (click)="scrollToSection('testimonials', $event)">Testimonials</a></li>
           <li>
             <a routerLink="/projects" (click)="closeMenu()">
               <span>Projects</span>
@@ -31,10 +31,10 @@
           <span></span>
         </button>
       </div>
-      <div class="menu-mobile" [class.active]="menuOpen" (click)="closeMenu()">
+      <div class="menu-mobile" [class.active]="menuOpen">
         <ul class="nav-links mobile" >
-          <li><a routerLink="/services" (click)="closeMenu()">Services</a></li>
-          <li><a routerLink="/testimonials" (click)="closeMenu()">Testimonials</a></li>
+          <li><a href="#services" (click)="scrollToSection('services', $event)">Services</a></li>
+          <li><a href="#testimonials" (click)="scrollToSection('testimonials', $event)">Testimonials</a></li>
           <li>
             <a routerLink="/projects" (click)="closeMenu()">
               <span>Projects</span>

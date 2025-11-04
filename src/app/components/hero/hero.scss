@@ -3,10 +3,12 @@
 .hero {
   position: relative;
   width: 100%;
-  padding: 164px 0 164px;
+  padding: 136px 0;
   overflow: hidden;
   min-height: 675px;
-
+  @include respond-to(md) {
+    padding: 164px 0;
+  }
   .hero-background {
     position: absolute;
     inset: 0;
@@ -498,12 +500,12 @@
             .conic-bg {
               background: conic-gradient(
                 from 20deg,
-                rgba(0, 0, 0, 0.9) 57deg,
+                #050A27 57deg,
                 #70b9ee 70deg,
-                rgba(0, 0, 0, 0.9) 72deg,
-                rgba(0, 0, 0, 0.9) 302deg,
+                #050A27 72deg,
+                #050A27 302deg,
                 #69b8f1 328deg,
-                rgba(0, 0, 0, 0.9) 139deg
+                #050A27 139deg
               );
               height: 100%;
               width: 100%;
@@ -518,12 +520,12 @@
                 height: 100%;
                 background: conic-gradient(
                   from 20deg,
-                  rgba(0, 0, 0, 0.9) 57deg,
+                  #050A27 57deg,
                   #70b9ee 70deg,
-                  rgba(0, 0, 0, 0.9) 72deg,
-                  rgba(0, 0, 0, 0.9) 302deg,
+                  #050A27 72deg,
+                  #050A27 302deg,
                   #69b8f1 328deg,
-                  rgba(0, 0, 0, 0.9) 139deg
+                  #050A27 139deg
                 );
               }
             }
