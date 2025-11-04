@@ -1,16 +1,106 @@
+
+
 .project-inquiry {
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
+  position: relative; // enable absolute background layer
+}
+
+// Enable smooth animation for conic-gradient angle
+@property --ring-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 180deg;
+}
+
+@property --ring-c1 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: #2B2B2B;
+}
+
+@property --ring-c2 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: rgba(145, 145, 145, 0.57);
+}
+
+// Background glows derived from Figma Hero CTA
+.glow-layer {
+  position: absolute;
+  inset: -120px 0 0 0; // extend up to allow glow overflow above
+  pointer-events: none;
+  z-index: 0;
+
+  .glow {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(100px);
+    opacity: 0.9;
+    mix-blend-mode: screen;
+  }
+
+  .glow--blue-1 {
+    left: calc(50% + 200px);
+    top: 43px;
+    width: 215px;
+    height: 215px;
+    background-color: var(--color-secondary);  
+  }
+  .glow--blue-2 {
+    left: calc(50% + 280px);
+    top: 114px;
+    width: 77px;
+    height: 77px;
+    background-color: var(--color-secondary);  
+    filter: blur(30px);
+  }
+  .glow--blue-3 {
+    left: calc(50% + 324px);
+    top: 115px;
+    width: 25px;
+    height: 40px;
+    transform: rotate(35deg);
+    background-color: var(--color-secondary);
+    filter: blur(5px);
+  }
+
+  .glow--red-1 {
+    right: calc(50% + 225px);
+    top: 43px;
+    width: 150px;
+    height: 150px;
+    background-color: var(--color-primary-light);  
+  }
+  .glow--red-2 {
+    right: calc(50% + 280px);
+    top: 114px;
+    width: 77px;
+    height: 77px;
+    background-color: var(--color-primary-light); 
+    filter: blur(30px);
+  }
+  .glow--red-3 {
+    right: calc(50% + 324px);
+    top: 150px;
+    width: 25px;
+    height: 40px;
+    transform: rotate(35deg);
+    background-color: var(--color-primary-light); 
+    filter: blur(5px);
+  }
 }
 
 // Main Inquiry Form
 .inquiry-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 16px; 
   animation: fadeIn 1s ease-out 1s backwards;
   transition: opacity 0.3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 1; // render above glows
 
   &.hidden {
     opacity: 0;
@@ -22,59 +112,78 @@
 .input-wrapper {
   position: relative;
   width: 100%;
-  
+  padding: 4px; // outer padding matches Figma container
+  border-radius: 18px;
+
   .project-input {
     width: 100%;
-    padding: 1.2rem 4rem 1.2rem 1.5rem;
-    font-size: 1.1rem;
-    background: rgba(26, 27, 53, 0.6);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(102, 126, 234, 0.3);
-    border-radius: 1rem;
-    color: var(--color-text-primary);
-    transition: all 0.3s ease;
+    min-height: 59px;
+    padding: 12px 64px 12px 24px; // leave space for button
+    font-size: 18px;
+    font-weight: 300;
+    background: #080c1a;
+    border: 1px solid #2b2b2b; // ~0.5px on high-DPI
+    border-radius: 9px;
+    color: #fcfcfc;
+    transition: all 0.2s ease;
     outline: none;
+    border: 1px solid var(--Shiny-Corners, #2B2B2B);
+    position: relative;
 
     &::placeholder {
-      color: var(--color-text-muted);
+      color: rgba(252, 252, 252, 0.5);
     }
-
+    
     &:focus {
       border-color: var(--color-primary);
-      background: rgba(26, 27, 53, 0.8);
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
     }
-
-    &:hover:not(:focus) {
-      border-color: rgba(102, 126, 234, 0.5);
+    &:before {
+      content: '';
+      position: absolute;
+      top: 2.5px;
+      left: 2.5px;
+      width: calc(100% - 5px);
+      height: calc(100% - 5px);
+      border-radius: 9px;
+      background: var(--shiny-corners);
     }
   }
-
+  
   .input-icon-btn {
     position: absolute;
-    right: 0.5rem;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 2.5rem;
-    height: 2.5rem;
-    background: var(--gradient-primary);
+    width: 35px;
+    height: 35px;
+    background-color: #FCFCFC;
     border: none;
-    border-radius: 0.75rem;
-    color: white;
-    font-size: 1.5rem;
+    border-radius: 25px;
+    color: #080C1A;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: #080C1A;
     }
-
-    &:active {
-      transform: translateY(-50%) scale(0.95);
+    
+    &:hover { transform: translateY(-50%) scale(1.06); }
+    &:active { transform: translateY(-50%) scale(0.95); }
+  }
+  &.shiny-corners {
+    &:before {
+      top: 2.5px;
+      left: 2.5px;
+      width: calc(100% - 5px);
+      height: calc(100% - 5px);
+      border-radius: 9px;
     }
   }
 }
@@ -83,56 +192,101 @@
 .project-types {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;
   justify-content: center;
 
   .type-btn {
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    background: rgba(26, 27, 53, 0.6);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.05);
-    border-radius: 0.75rem;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    font-weight: 500;
-
-    .type-icon {
-      font-size: 1.2rem;
+    justify-content: center;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    position: relative;
+    transition: transform 1s ease;
+    &:before {
+      content: '';
+      position: absolute;
+      top: -1.5px;
+      left: -1.5px;
+      width: calc(100% + 3px);
+      height: calc(100% + 3px);
+      border-radius: 5px;
+      transition: --ring-angle 1s ease, --ring-c1 1s ease, --ring-c2 1s ease;
+      --ring-angle: 180deg;
+      --ring-c1: #2B2B2B;
+      --ring-c2: #91919191;
+      background: conic-gradient(
+        from var(--ring-angle) at 50% 50%,
+        var(--ring-c1) 46deg,
+        var(--ring-c2) 70deg,
+        var(--ring-c1) 100deg,
+        var(--ring-c1) 230deg,
+        var(--ring-c1) 225deg,
+        var(--ring-c2) 255deg,
+        var(--ring-c1) 280deg);
+        transform: scale(1);
     }
-
     &:hover {
-      border-color: rgba(102, 126, 234, 0.5);
-      transform: translateY(-2px);
-      color: var(--color-text-primary);
+      transform: scale(1.05);
+      &:before {
+        --ring-angle: 30deg;
+        --ring-c2: var(--color-primary);  
+      }
+      .type-btn-content {
+        color: #fcfcfc;
+      }
     }
 
     &.selected {
-      background: rgba(102, 126, 234, 0.2);
-      border-color: var(--color-primary);
-      color: var(--color-text-primary);
-      box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 0 20px var(--color-primary);
+      &:before {
+        --ring-angle: 30deg;
+        --ring-c2: var(--color-primary);  
+      }
 
-      .type-icon {
-        animation: bounce 0.5s ease;
+      .type-btn-content {
+        background: #360508;
+        color: #fcfcfc;
       }
     }
 
     &:active {
       transform: translateY(0);
     }
+
+    .type-btn-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #080c1a;
+      padding: 8px 12px;
+      border-radius: 5px;
+      color: #fcfcfcbe;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .type-icon {
+      font-size: 1.2rem;
+    }
   }
 }
 
 .inquiry-hint {
   text-align: center;
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  margin: 0;
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  margin: 8px 0 0 0;
 }
 
 // Contact Form Modal

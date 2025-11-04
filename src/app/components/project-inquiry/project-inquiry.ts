@@ -25,13 +25,17 @@ export class ProjectInquiryComponent {
   contactPhone = '';
   generatedMessage = '';
 
+  // Synchronized with Figma "cta input" labels
   projectTypes: ProjectType[] = [
-    { id: 'website', label: 'Website', icon: '🌐' },
-    { id: 'application', label: 'Application', icon: '📱' },
-    { id: 'ai-automation', label: 'AI Automation', icon: '🤖' },
-    { id: 'ecommerce', label: 'E-commerce', icon: '🛒' },
-    { id: 'design', label: 'Design', icon: '🎨' },
-    { id: 'consulting', label: 'Consulting', icon: '💡' }
+    { id: 'website', label: 'Website', icon: '' },
+    { id: 'application', label: 'Application', icon: '' },
+    { id: 'ai-automation', label: 'Ai automation', icon: '' },
+    { id: 'landing-page', label: 'Landing page', icon: '' },
+    { id: 'logo', label: 'Logo', icon: '' },
+    { id: 'mobile-app', label: 'Mobile App', icon: '' },
+    { id: 'web-extension', label: 'Web Extension', icon: '' },
+    { id: 'design-system', label: 'Design System', icon: '' },
+    { id: 'other', label: 'Other', icon: '' }
   ];
 
   toggleProjectType(typeId: string): void {

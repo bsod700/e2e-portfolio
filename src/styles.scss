@@ -3,19 +3,18 @@
 
 :root {
   /* Color Palette */
-  --color-primary: #4A90E2;
-  --color-primary-light: #64B5F6;
-  --color-secondary: #9C27B0;
+  --color-primary: #CD4739;
+  --color-primary-dark: #610A10;
+  --color-primary-light: #FF7474;
+  --color-secondary: #70B9EE;
   --color-accent: #E91E63;
   
   /* Dark Theme Colors */
-  --color-bg-primary: #0A0B1E;
-  --color-bg-secondary: #131428;
-  --color-bg-tertiary: #1A1B35;
-  --color-bg-card: rgba(26, 27, 53, 0.6);
+  --color-bg-primary: #050A27;
+  --color-bg-secondary: #080C1A;
   
   /* Text Colors */
-  --color-text-primary: #FFFFFF;
+  --color-text-primary: #FCFCFC;
   --color-text-secondary: #B8B9D0;
   --color-text-muted: #787A9D;
   
@@ -46,6 +45,9 @@
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
+
+  --shiny-corners: conic-gradient(from 180deg at 50% 50%, #2B2B2B 78deg, #919191 89deg, #2B2B2B 92deg, #2B2B2B 260deg, #2B2B2B 259deg, #919191 269deg, #2B2B2B 273deg);
+
 }
 
 * {
@@ -237,5 +239,14 @@ a {
   
   &:hover {
     background: var(--color-primary-light);
+  }
+}
+
+.shiny-corners {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    background: var(--shiny-corners);
   }
 }

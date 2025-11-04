@@ -1,40 +1,55 @@
 <div class="project-inquiry">
+  <!-- Background glows behind the CTA (from Figma Hero) -->
+  <div class="glow-layer" aria-hidden="true">
+    <span class="glow glow--blue-1"></span>
+    <span class="glow glow--blue-2"></span>
+    <span class="glow glow--blue-3"></span>
+    <span class="glow glow--red-1"></span>
+    <span class="glow glow--red-2"></span>
+    <span class="glow glow--red-3"></span>
+  </div>
   <!-- Main Inquiry Form -->
   <div class="inquiry-form" [class.hidden]="showContactForm">
-    <div class="input-wrapper">
-      <input 
-        type="text" 
+    <div class="input-wrapper shiny-corners">
+      <input
+        type="text"
         class="project-input"
         placeholder="What are we building?"
         [(ngModel)]="projectDescription"
         (keyup.enter)="generateInquiry()"
         aria-label="Describe your project"
       />
-      <button 
-        class="input-icon-btn" 
-        (click)="generateInquiry()"
-        aria-label="Submit inquiry"
-      >
-        <span>→</span>
+      <button class="input-icon-btn" (click)="generateInquiry()" aria-label="Submit inquiry">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+        >
+          <path
+            d="M3.33301 9.99967L4.50801 11.1747L9.16634 6.52467V16.6663H10.833V6.52467L15.483 11.183L16.6663 9.99967L9.99967 3.33301L3.33301 9.99967Z"
+            fill="#080C1A"
+          />
+        </svg>
       </button>
     </div>
 
     <div class="project-types">
       <button
         *ngFor="let type of projectTypes"
-        class="type-btn"
+        class="type-btn shiny-corners"
         [class.selected]="isSelected(type.id)"
         (click)="toggleProjectType(type.id)"
         [attr.aria-pressed]="isSelected(type.id)"
       >
-        <span class="type-icon">{{ type.icon }}</span>
-        <span class="type-label">{{ type.label }}</span>
+        <div class="type-btn-content">
+          <span class="type-label">{{ type.label }}</span>
+        </div>
       </button>
     </div>
 
-    <p class="inquiry-hint">
-      Describe your project, select types, or both to get started
-    </p>
+    <p class="inquiry-hint">Describe your project, select types, or both to get started</p>
   </div>
 
   <!-- Contact Form Modal -->
@@ -55,9 +70,9 @@
       <div class="contact-fields">
         <div class="field-group">
           <label for="contact-name">Name</label>
-          <input 
+          <input
             id="contact-name"
-            type="text" 
+            type="text"
             class="contact-input"
             placeholder="Your name"
             [(ngModel)]="contactName"
@@ -66,9 +81,9 @@
 
         <div class="field-group">
           <label for="contact-email">Email</label>
-          <input 
+          <input
             id="contact-email"
-            type="email" 
+            type="email"
             class="contact-input"
             placeholder="your@email.com"
             [(ngModel)]="contactEmail"
@@ -77,9 +92,9 @@
 
         <div class="field-group">
           <label for="contact-phone">Phone <span class="optional">(optional)</span></label>
-          <input 
+          <input
             id="contact-phone"
-            type="tel" 
+            type="tel"
             class="contact-input"
             placeholder="+1 (555) 000-0000"
             [(ngModel)]="contactPhone"
@@ -88,14 +103,9 @@
       </div>
 
       <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="closeContactForm()">
-          Go Back
-        </button>
-        <button class="btn btn-primary" (click)="submitInquiry()">
-          Send Inquiry
-        </button>
+        <button class="btn btn-secondary" (click)="closeContactForm()">Go Back</button>
+        <button class="btn btn-primary" (click)="submitInquiry()">Send Inquiry</button>
       </div>
     </div>
   </div>
 </div>
-
