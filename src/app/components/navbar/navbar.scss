@@ -124,6 +124,7 @@
     gap: 24px;
     height: calc(100% - 160px);
     justify-content: space-between;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   
   }
   .nav-links {
@@ -205,14 +206,26 @@
   }
   &.mobile {
     display: inline-flex;
-    width: 100%;
+    width: calc(100% - 32px);
     padding: 16px 32px;
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    z-index: 1400;
     @include respond-to(md) {
       display: none;
     }
     .arrow-icon {
       display: block;
     }
+  }
+}
+
+/* Slightly increase bottom offset on Android devices */
+body.android-os {
+  .cta-nav.mobile {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
   }
 }
 

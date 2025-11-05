@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isScrolled = false;
   menuOpen = false;
   private isBrowser: boolean;
@@ -18,6 +18,12 @@ export class NavbarComponent {
     private router: Router
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  ngOnInit(): void {
+    if (!this.isBrowser) return;
+    const isAndroid = /Android/i.test(navigator.userAgent || '');
+    document.body.classList.toggle('android-os', isAndroid);
   }
 
   @HostListener('window:scroll', [])
