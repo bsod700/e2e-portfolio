@@ -315,7 +315,7 @@
         var(--ring-c1) 280deg);
         transform: scale(1);
     }
-    &:hover {
+    &:hover, &:focus {
       transform: scale(1.05);
       &:before {
         --ring-angle: 30deg;

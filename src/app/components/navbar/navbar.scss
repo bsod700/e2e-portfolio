@@ -211,6 +211,8 @@
     bottom: 1rem;
     left: 1rem;
     right: 1rem;
+    transform: translateY(0);
+    
     @include respond-to(md) {
       display: none;
     }
