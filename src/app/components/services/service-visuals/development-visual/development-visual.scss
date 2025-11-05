@@ -75,8 +75,7 @@
     &::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background-image: url('http://localhost:3845/assets/b5218da5eae0bf357baf9d0f0d5ab6ce41f386f4.png');
+      inset: 0; 
       background-size: cover;
       background-position: center;
       opacity: 0.3;
