@@ -40,7 +40,6 @@
   justify-content: space-between;
   min-width: 90%;
   flex-wrap: wrap;
-  
   @include respond-to(md) {
     min-width: auto;
     flex-wrap: nowrap;
@@ -55,7 +54,6 @@
     backdrop-filter: blur(12px);
     border: none;
     align-content: flex-start;
-    min-height: 385px;
   }
 }
 
@@ -126,7 +124,6 @@
     gap: 24px;
     height: calc(100% - 160px);
     justify-content: space-between;
-    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
   
   }
   .nav-links {
@@ -208,13 +205,12 @@
   }
   &.mobile {
     display: inline-flex;
-    width: calc(100% - 32px);
+    width: calc(100% - 2rem);
     padding: 16px 32px;
     position: fixed;
-    left: 16px;
-    right: 16px;
-    bottom: var(--cta-bottom-offset, calc(env(safe-area-inset-bottom, 0px) + 16px));
-    z-index: 1400;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     @include respond-to(md) {
       display: none;
     }
@@ -222,11 +218,6 @@
       display: block;
     }
   }
-}
-
-/* Ensure CTA clears Android browser and system navigation bars */
-body.android-os {
-  --cta-bottom-offset: 96px;
 }
 
 .menu-toggle {
