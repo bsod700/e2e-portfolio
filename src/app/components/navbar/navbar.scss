@@ -40,6 +40,7 @@
   justify-content: space-between;
   min-width: 90%;
   flex-wrap: wrap;
+  
   @include respond-to(md) {
     min-width: auto;
     flex-wrap: nowrap;
@@ -54,6 +55,7 @@
     backdrop-filter: blur(12px);
     border: none;
     align-content: flex-start;
+    min-height: 385px;
   }
 }
 
@@ -211,7 +213,7 @@
     position: fixed;
     left: 16px;
     right: 16px;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    bottom: var(--cta-bottom-offset, calc(env(safe-area-inset-bottom, 0px) + 16px));
     z-index: 1400;
     @include respond-to(md) {
       display: none;
@@ -222,11 +224,9 @@
   }
 }
 
-/* Slightly increase bottom offset on Android devices */
+/* Ensure CTA clears Android browser and system navigation bars */
 body.android-os {
-  .cta-nav.mobile {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 24px);
-  }
+  --cta-bottom-offset: 96px;
 }
 
 .menu-toggle {
