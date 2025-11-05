@@ -1,8 +1,6 @@
 @use "./globals" as *;
 @use "./mixins" as *;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
 /* Global styles for Firefox */
 html {
   scrollbar-width: thin;
@@ -32,7 +30,6 @@ html {
 }
 
 body {
-  font-family: var(--font-family);
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   line-height: 1.6;

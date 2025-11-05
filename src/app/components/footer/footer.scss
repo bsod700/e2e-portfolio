@@ -1,14 +1,14 @@
 .footer {
   background: var(--color-bg-primary);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding: var(--spacing-3xl) 0 var(--spacing-lg);
+  padding: 12px 0 12px;
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: 1.5fr 2fr;
   gap: 4rem;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: 12px;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -80,7 +80,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: var(--spacing-lg);
+  padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 
   @media (max-width: 768px) {

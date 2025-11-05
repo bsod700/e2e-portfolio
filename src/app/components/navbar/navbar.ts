@@ -12,6 +12,7 @@ export class NavbarComponent implements OnInit {
   isScrolled = false;
   menuOpen = false;
   private isBrowser: boolean;
+  private detachViewportListeners?: () => void;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: object,
@@ -24,6 +25,57 @@ export class NavbarComponent implements OnInit {
     if (!this.isBrowser) return;
     const isAndroid = /Android/i.test(navigator.userAgent || '');
     document.body.classList.toggle('android-os', isAndroid);
+
+    // Set a sensible default; JS will refine based on visual viewport
+    if (!document.body.style.getPropertyValue('--cta-bottom-offset')) {
+      document.body.style.setProperty('--cta-bottom-offset', isAndroid ? '96px' : '24px');
+    }
+
+    this.attachViewportListeners();
+    this.updateCtaBottomOffset();
+  }
+
+  private attachViewportListeners(): void {
+    const update = this.updateCtaBottomOffset.bind(this);
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('orientationchange', update, { passive: true });
+    const vv = (window as any).visualViewport as VisualViewport | undefined;
+    if (vv) {
+      vv.addEventListener('resize', update, { passive: true });
+      vv.addEventListener('scroll', update, { passive: true });
+      this.detachViewportListeners = () => {
+        window.removeEventListener('resize', update as any);
+        window.removeEventListener('orientationchange', update as any);
+        vv.removeEventListener('resize', update as any);
+        vv.removeEventListener('scroll', update as any);
+      };
+    } else {
+      this.detachViewportListeners = () => {
+        window.removeEventListener('resize', update as any);
+        window.removeEventListener('orientationchange', update as any);
+      };
+    }
+  }
+
+  private updateCtaBottomOffset(): void {
+    if (!this.isBrowser) return;
+    try {
+      const vv = (window as any).visualViewport as VisualViewport | undefined;
+      const basePadding = 16; // design bottom gap above any UI
+      let bottomUi = 0;
+      if (vv) {
+        // Space occupied by browser chrome at bottom
+        const bottomOccupied = window.innerHeight - (vv.height + vv.offsetTop);
+        bottomUi = Math.max(0, Math.round(bottomOccupied));
+      } else {
+        // Fallback: estimate using layout vs visual height difference
+        bottomUi = Math.max(0, window.innerHeight - document.documentElement.clientHeight);
+      }
+      const offset = Math.max(24, basePadding + bottomUi);
+      document.body.style.setProperty('--cta-bottom-offset', `${offset}px`);
+    } catch {
+      // Keep existing value if calculation fails
+    }
   }
 
   @HostListener('window:scroll', [])
