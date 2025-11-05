@@ -205,14 +205,9 @@
   }
   &.mobile {
     display: inline-flex;
-    width: calc(100% - 2rem);
+    width: 100%;
     padding: 16px 32px;
-    position: fixed;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    transform: translateY(0);
-    
+  
     @include respond-to(md) {
       display: none;
     }
