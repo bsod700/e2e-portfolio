@@ -9,159 +9,236 @@
   .glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.3;
+   
     pointer-events: none;
-
+    z-index: 1;
+    top: 16px;
+    left: 16px;
     &.glow-blue-1 {
-      width: 219px;
-      height: 206px;
-      top: 263px;
-      left: 91px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+      width: 205px;
+      height: 205px;
+      transform: translate(75px, 240px);
+      background-color: var(--color-secondary);
+      filter: blur(200px);
     }
-
+    &.glow-blue-2 {
+      width: 205px;
+      height: 205px;
+      transform: translate(-20px, -65px);
+      background-color: var(--color-secondary);
+      filter: blur(50px);
+      z-index: -1;
+      opacity: .3;
+    }
     &.glow-red-1 {
       width: 205px;
       height: 205px;
-      top: 376px;
-      left: 285px;
-      background: radial-gradient(circle, rgba(209, 75, 59, 0.4) 0%, transparent 70%);
+      transform: translate(205px, 355px);
+      background-color: var(--color-primary-light);
+      filter: blur(200px);
+    }
+
+    &.glow-red-2 {
+      width: 205px;
+      height: 205px;
+      transform: translate(240px, 160px);
+      background-color: var(--color-primary-light);
+      filter: blur(200px);
+    }
+    &.glow-red-3 {
+      width: 205px;
+      height: 205px;
+      transform: translate(-45px, 100px);
+      background-color: var(--color-primary-light);
+      filter: blur(100px);
+      opacity: .2;
+    }
+    &.glow-red-4 {
+      width: 205px;
+      height: 205px;
+      transform: translate(85px, 45px);
+      background-color: var(--color-primary-light);
+      filter: blur(100px);
+      opacity: 0.5;
     }
 
     &.glow-big-blue-1 {
-      width: 692px;
-      height: 692px;
-      top: 113px;
-      left: -127px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-      mix-blend-mode: soft-light;
+      width: 600px;
+      height: 600px;
+      transform: translate(-75px, 110px);
+      background-color: #1d4ca796;
+      filter: blur(200px);
+    }
+    &.glow-dark-1 {
+      width: 205px;
+      height: 205px;
+      transform: translate(275px, -45px);
+      background-color: #09102E;
+      filter: blur(80px);
+    }
+    &.glow-dark-2 {
+      width: 205px;
+      height: 205px;
+      transform: translate(-70px, -70px);
+      background-color: #09102E;
+      filter: blur(80px);
+    }
+    &.glow-big-light-blue-1 {
+      width: 725px;
+      height: 205px;
+      transform: translate(-70px, -70px);
+      background-color: #8de6ff33;
+      filter: blur(100px);
+    }
+  
+    &.glow-dark-3 {
+      width: 205px;
+      height: 205px;
+      transform: translate(-45px, 165px);
+      background-color: #09102E;
+      filter: blur(100px);;
+    }
+    &.glow-dark-4 {
+      width: 205px;
+      height: 140px;
+      transform: translate(55px, 165px) rotate(-20deg);
+      background-color: #09102E;
+      filter: blur(100px);
     }
   }
 
   .dots-pattern {
     position: absolute;
-    top: -159px;
+    top: 0;
     left: 0;
-    width: 659px;
-    height: 659px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
     background-size: 20px 20px;
     opacity: 0.3;
+    z-index: 1;
   }
 
   .mockup-container {
     position: absolute;
-    top: 26px;
-    left: 47px;
-    width: 574px;
-    height: 426px;
-  }
-
-  .mockup-card {
-    position: absolute;
-    background: rgba(47, 50, 64, 0.25);
-    backdrop-filter: blur(3px);
-    border-radius: 16px;
-    border: 0.5px solid rgba(0, 0, 0, 0.2);
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.25);
-    padding: 12px;
-
-    &.mockup-card-1 {
-      width: 311px;
-      height: 174px;
-      top: 159px;
-      left: 55px;
-      transform: rotate(-21deg);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    img {
+      position: absolute;
     }
 
-    &.mockup-card-2 {
-      width: 150px;
-      height: 190px;
-      top: 155px;
-      left: 420px;
-      transform: rotate(39deg);
+    .mockup-card {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      img {
+        backdrop-filter: blur(4px);
+        box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.25), 0 0 30px 0 rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+      }
+      &.mockup-card-1 {
+        width: 310px;
+        height: 174px;  
+        transform: translate(45px, 95px) rotate(345deg);
+        z-index: 1;
+        img {
+          width: 310px;
+          height: 174px;
+          border-radius: 14px;
+        }
+      }
+      &.mockup-card-2 {
+        width: 200px;
+        height: 300px;
+        transform: translate(195px, 25px) rotate(0deg); 
+        z-index: 3;
+        img:nth-child(1) {
+          width: 200px;
+          height: 300px;
+          border-radius: 24px;
+        }
+        img:nth-child(2) {
+          width: 261px;
+          height: 72px;
+          transform: translate(16px, 64px) rotate(0deg);
+          border-radius: 17px;
+        }
+      }
+      &.mockup-card-3 {
+        width: 150px;
+        height: 190px;
+        transform: translate(340px, 170px) rotate(30deg);
+        z-index: 2;
+        img {
+          width: 150px;
+          height: 190px;
+          border-radius: 23px;
+        }
+      }
     }
 
-    &.mockup-card-3 {
-      width: 262px;
-      height: 73px;
-      top: 97px;
-      left: 230px;
-      transform: rotate(-2deg);
-    }
-  }
-
-  .mockup-header {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 8px;
-  }
-
-  .mockup-dot {
-    width: 11px;
-    height: 11px;
-    border-radius: 4px;
-    background: linear-gradient(to right, rgba(112, 185, 238, 0.2) 0%, rgba(112, 185, 238, 0) 100%);
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .mockup-content {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .mockup-line {
-    height: 5px;
-    border-radius: 4px;
-    background: linear-gradient(to right, rgba(112, 185, 238, 0.2) 0%, rgba(112, 185, 238, 0) 100%);
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
-
-    &.mockup-line-long {
-      width: 100%;
+    .logos-circles {
+      position: absolute;
+      z-index: 4;
+      img {
+        width: 150px;
+        height: 150px;
+      }
+      .logo-circle {
+        width: 150px;
+        height: 150px;
+        top: 16px;
+        left: 16px;
+        &.logo-circle-1 {
+          transform: translate(420px, 100px) rotate(30deg);
+        }
+        &.logo-circle-2 {
+          transform: translate(10px, -15px) rotate(-35deg);
+        }
+        &.logo-circle-3 {
+          transform: translate(50px, -295px) rotate(-50deg);
+        }
+      }
     }
 
-    &.mockup-line-medium {
-      width: 44px;
+    .circles {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 4;
+      .circle {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #D9D9D9;
+        filter: blur(.5px);
+        box-shadow: 0 0 4px #D9D9D9, 0 0 20px rgba(0, 0, 0, 0.5);
+        &.circle-1 {
+          transform: translate(430px, 175px);
+        }
+        &.circle-2 {
+          transform: translate(525px, 215px);
+        }
+        &.circle-3 {
+          transform:translate(405px, 50px);
+        }
+        &.circle-4 {
+          transform: translate(160px, 35px);
+        }
+        &.circle-5 {
+          transform: translate(120px, 75px);
+        }
+        &.circle-6 {
+          transform: translate(165px, 130px);
+        }
+        &.circle-7 {
+          transform: translate(80px, 210px);
+        }
+      }
     }
-
-    &.mockup-line-short {
-      width: 33px;
-    }
-  }
-
-  .mockup-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 16px;
-    background: rgba(47, 50, 64, 0.25);
-    border: 1px solid #252b47;
-    margin-bottom: 8px;
-  }
-
-  .floating-element {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0.6;
-
-    &.floating-element-1 {
-      top: 58px;
-      left: 178px;
-    }
-
-    &.floating-element-2 {
-      top: 99px;
-      left: 151px;
-    }
-
-    &.floating-element-3 {
-      top: 433px;
-      left: 100px;
-    }
-  }
+  } 
 }
 
