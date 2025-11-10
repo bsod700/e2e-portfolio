@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DesignVisualComponent } from './service-visuals/design-visual/design-visual';
@@ -31,8 +31,72 @@ export interface Service {
   templateUrl: './services.html',
   styleUrl: './services.scss'
 })
-export class ServicesComponent {
+export class ServicesComponent implements OnInit {
   constructor(private router: Router) {}
+
+  // Track glow styles for each service card
+  cardGlowStyles: { [key: string]: { [key: string]: string } } = {};
+  // Enable interactive effects only for desktop/mouse
+  private interactiveEnabled = false;
+
+  ngOnInit(): void {
+    // Initialize glow styles for each service card
+    if (typeof window !== 'undefined') {
+      const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+      this.interactiveEnabled = mq.matches;
+      // Update if the media query changes (e.g., device mode switches)
+      if (typeof mq.addEventListener === 'function') {
+        mq.addEventListener('change', (e) => { this.interactiveEnabled = e.matches; });
+      } else if (typeof mq.addListener === 'function') {
+        // Safari fallback
+        mq.addListener((e) => { this.interactiveEnabled = e.matches; });
+      }
+    }
+
+    this.services.forEach(service => {
+      this.cardGlowStyles[service.id] = {
+        '--px': '-1000px',
+        '--py': '-1000px',
+        '--hover': '0'
+      };
+    });
+  }
+
+  onCardPointerMove(event: MouseEvent, serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    const target = event.currentTarget as HTMLElement | null;
+    if (!target) return;
+    const rect = target.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    // normalized direction from center (-1..1)
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const ndx = Math.max(-1, Math.min(1, (x - cx) / cx));
+    const ndy = Math.max(-1, Math.min(1, (y - cy) / cy));
+    this.cardGlowStyles[serviceId] = {
+      ...this.cardGlowStyles[serviceId],
+      '--px': `${x}px`,
+      '--py': `${y}px`,
+      '--dx': `${ndx}`,
+      '--dy': `${ndy}`
+    };
+  }
+
+  onCardEnter(serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    this.cardGlowStyles[serviceId] = { ...this.cardGlowStyles[serviceId], '--hover': '1' };
+  }
+
+  onCardLeave(serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    this.cardGlowStyles[serviceId] = { 
+      ...this.cardGlowStyles[serviceId], 
+      '--hover': '0',
+      '--dx': '0',
+      '--dy': '0'
+    };
+  }
 
   services: Service[] = [
     {

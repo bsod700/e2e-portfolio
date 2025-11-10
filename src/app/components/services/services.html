@@ -18,6 +18,10 @@
       @for (service of services; track service.id) {
         <div 
           class="service-card service-card-{{ service.id }}" 
+          [ngStyle]="cardGlowStyles[service.id]"
+          (mousemove)="onCardPointerMove($event, service.id)"
+          (mouseenter)="onCardEnter(service.id)"
+          (mouseleave)="onCardLeave(service.id)"
           (click)="navigateToService(service.id)">
           <div class="service-visual">
             @switch (service.id) {

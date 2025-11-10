@@ -46,6 +46,7 @@
             },
             "stylePreprocessorOptions": {
               "includePaths": [
+                "src",
                 "src/assets/styles"
               ]
             }

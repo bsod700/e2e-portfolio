@@ -1,3 +1,5 @@
+@use "mixins" as *;
+
 .design-visual {
   position: absolute;
   top: 0;
@@ -126,6 +128,8 @@
     width: 100%;
     height: 100%;
     z-index: 2;
+    transform-style: preserve-3d;
+    will-change: transform;
     img {
       position: absolute;
     }
@@ -134,6 +138,7 @@
       position: absolute;
       top: 16px;
       left: 16px;
+      transition: transform 300ms ease, filter 300ms ease;
       img {
         backdrop-filter: blur(4px);
         box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.25), 0 0 30px 0 rgba(0, 0, 0, 0.25);
@@ -144,6 +149,14 @@
         height: 174px;  
         transform: translate(45px, 95px) rotate(345deg);
         z-index: 1;
+        @media (hover: hover) and (pointer: fine) {
+          
+          transform: translate(45px, 95px) rotate(345deg)
+                     translate3d(calc(var(--hover) * var(--dx) * 6px), calc(var(--hover) * var(--dy) * 6px), 0)
+                     rotateX(calc(var(--hover) * var(--dy) * -6deg))
+                     rotateY(calc(var(--hover) * var(--dx) * 6deg))
+                     translateZ(calc(var(--hover) * 80px));
+        }
         img {
           width: 310px;
           height: 174px;
@@ -155,6 +168,13 @@
         height: 300px;
         transform: translate(195px, 25px) rotate(0deg); 
         z-index: 3;
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(195px, 25px) rotate(0deg)
+                     translate3d(calc(var(--hover) * var(--dx) * 5px), calc(var(--hover) * var(--dy) * 5px), 0)
+                     rotateX(calc(var(--hover) * var(--dy) * -5deg))
+                     rotateY(calc(var(--hover) * var(--dx) * 5deg))
+                     translateZ(calc(var(--hover) * 160px));
+        }
         img:nth-child(1) {
           width: 200px;
           height: 300px;
@@ -172,6 +192,13 @@
         height: 190px;
         transform: translate(340px, 170px) rotate(30deg);
         z-index: 2;
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(340px, 170px) rotate(30deg)
+                     translate3d(calc(var(--hover) * var(--dx) * 4px), calc(var(--hover) * var(--dy) * 4px), 0)
+                     rotateX(calc(var(--hover) * var(--dy) * -4deg))
+                     rotateY(calc(var(--hover) * var(--dx) * 4deg))
+                     translateZ(calc(var(--hover) * 120px));
+        }
         img {
           width: 150px;
           height: 190px;
@@ -183,6 +210,9 @@
     .logos-circles {
       position: absolute;
       z-index: 4;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 300ms ease;
       img {
         width: 150px;
         height: 150px;
@@ -192,14 +222,36 @@
         height: 150px;
         top: 16px;
         left: 16px;
+        transition: transform 300ms ease;
         &.logo-circle-1 {
           transform: translate(420px, 100px) rotate(30deg);
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(420px, 100px) rotate(30deg)
+                       translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -2deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 2deg))
+                       translateZ(calc(var(--hover) * 240px));
+          }
         }
         &.logo-circle-2 {
           transform: translate(10px, -15px) rotate(-35deg);
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(10px, -15px) rotate(-35deg)
+                       translate3d(calc(var(--hover) * var(--dx) * 4px), calc(var(--hover) * var(--dy) * 4px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -4deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 4deg))
+                       translateZ(calc(var(--hover) * 200px));
+          }
         }
         &.logo-circle-3 {
           transform: translate(50px, -295px) rotate(-50deg);
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(50px, -295px) rotate(-50deg)
+                       translate3d(calc(var(--hover) * var(--dx) * 3px), calc(var(--hover) * var(--dy) * 3px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -3deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 3deg))
+                       translateZ(calc(var(--hover) * 70px));
+          }
         }
       }
     }
@@ -209,36 +261,136 @@
       top: 16px;
       left: 16px;
       z-index: 4;
+      transform-style: preserve-3d;
+      will-change: transform;
       .circle {
         width: 5px;
         height: 5px;
         border-radius: 50%;
-        background: #D9D9D9;
-        filter: blur(.5px);
-        box-shadow: 0 0 4px #D9D9D9, 0 0 20px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        // floating animation controls
+        --floatAmp: 10px;
+        --floatDur: 6s;
+        --floatDelay: 0s;
+        // smooth return on mouse exit
+        transition: transform 300ms ease;
+        // visual rendered via pseudo to decouple base transform from float animation
+        &::before {
+          content: '';
+          display: block;
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #D9D9D9;
+          filter: blur(.5px);
+          box-shadow: 0 0 4px #D9D9D9, 0 0 20px rgba(0, 0, 0, 0.5);
+          transform: translateY(0);
+          animation: circle-float var(--floatDur) ease-in-out var(--floatDelay) infinite;
+          will-change: transform;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          &::before { animation: none; }
+        }
         &.circle-1 {
           transform: translate(430px, 175px);
+          --floatAmp: 12px;
+          --floatDur: 5.5s;
+          --floatDelay: 0s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(430px, 175px)
+                       translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -2deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 2deg))
+                       translateZ(calc(var(--hover) * 280px));
+          }
         }
         &.circle-2 {
           transform: translate(525px, 215px);
+          --floatAmp: 10px;
+          --floatDur: 6.2s;
+          --floatDelay: .2s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(525px, 215px)
+                       translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -2deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 2deg))
+                       translateZ(calc(var(--hover) * 270px));
+          }
         }
         &.circle-3 {
-          transform:translate(405px, 50px);
+          transform: translate(405px, 50px);
+          --floatAmp: 9px;
+          --floatDur: 5.8s;
+          --floatDelay: .4s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(405px, 50px)
+                       translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -2deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 2deg))
+                       translateZ(calc(var(--hover) * 260px));
+          }
         }
         &.circle-4 {
           transform: translate(160px, 35px);
+          --floatAmp: 8px;
+          --floatDur: 6.6s;
+          --floatDelay: .1s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(160px, 35px)
+                       translate3d(calc(var(--hover) * var(--dx) * 1.5px), calc(var(--hover) * var(--dy) * 1.5px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -1.5deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 1.5deg))
+                       translateZ(calc(var(--hover) * 250px));
+          }
         }
         &.circle-5 {
           transform: translate(120px, 75px);
+          --floatAmp: 7px;
+          --floatDur: 6.9s;
+          --floatDelay: .35s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(120px, 75px)
+                       translate3d(calc(var(--hover) * var(--dx) * 1.5px), calc(var(--hover) * var(--dy) * 1.5px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -1.5deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 1.5deg))
+                       translateZ(calc(var(--hover) * 240px));
+          }
         }
         &.circle-6 {
           transform: translate(165px, 130px);
+          --floatAmp: 6px;
+          --floatDur: 7.2s;
+          --floatDelay: .5s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(165px, 130px)
+                       translate3d(calc(var(--hover) * var(--dx) * 1.2px), calc(var(--hover) * var(--dy) * 1.2px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -1.2deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 1.2deg))
+                       translateZ(calc(var(--hover) * 230px));
+          }
         }
         &.circle-7 {
           transform: translate(80px, 210px);
+          --floatAmp: 5px;
+          --floatDur: 7.5s;
+          --floatDelay: .65s;
+          @media (hover: hover) and (pointer: fine) {
+            transform: translate(80px, 210px)
+                       translate3d(calc(var(--hover) * var(--dx) * 1px), calc(var(--hover) * var(--dy) * 1px), 0)
+                       rotateX(calc(var(--hover) * var(--dy) * -1deg))
+                       rotateY(calc(var(--hover) * var(--dx) * 1deg))
+                       translateZ(calc(var(--hover) * 220px));
+          }
         }
       }
     }
+
+// floating keyframes for circles (applied to ::before only)
+@keyframes circle-float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(calc(var(--floatAmp) * -1)); }
+  100% { transform: translateY(0); }
+}
   } 
 }
 
