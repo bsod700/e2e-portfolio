@@ -9,142 +9,294 @@
   .glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.3;
+
     pointer-events: none;
-
+    z-index: 1;
+    top: 16px;
+    left: 16px;
     &.glow-blue-1 {
-      width: 277px;
-      height: 261px;
-      top: 106px;
-      left: calc(50% - 9px);
-      transform: translateX(-50%);
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
-    }
-
-    &.glow-red-1 {
-      width: 204px;
-      height: 204px;
-      top: 376px;
-      left: 285px;
-      background: radial-gradient(circle, rgba(209, 75, 59, 0.4) 0%, transparent 70%);
-    }
-
-    &.glow-big-blue-1 {
-      width: 692px;
-      height: 692px;
-      top: 113px;
-      left: -127px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-      mix-blend-mode: soft-light;
+      width: 205px;
+      height: 205px;
+      transform: translate(75px, 240px);
+      background-color: var(--color-secondary);
+      filter: blur(200px);
     }
   }
 
   .dots-pattern {
     position: absolute;
-    top: -77px;
-    left: -81px;
-    width: 633px;
-    height: 633px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
-    opacity: 0.3;
-  }
-
-  .code-visualization {
-    position: absolute;
-    top: -45px;
-    left: 111px;
-    width: 533px;
-    height: 405px;
-  }
-
-  .api-call-visual {
-    position: absolute;
     top: 0;
-    left: 154px;
-    width: 589px;
-    height: 330px;
-    background: linear-gradient(90deg, rgba(42, 131, 201, 0.1) 0%, rgba(42, 131, 201, 0.1) 100%),
-                linear-gradient(261deg, rgba(9, 16, 46, 0.8) 59.2%, rgba(9, 16, 46, 0) 95.3%);
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-    transform: rotate(-4.8deg);
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0; 
-      background-size: cover;
-      background-position: center;
-      opacity: 0.3;
-    }
-  }
-
-  .api-line {
-    width: 100%;
-    height: 2px;
-    background: rgba(112, 185, 238, 0.3);
-    margin: 8px 0;
-    border-radius: 2px;
-  }
-
-  .api-response {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  .response-block {
-    flex: 1;
-    height: 50px;
-    background: rgba(112, 185, 238, 0.1);
-    border-radius: 4px;
-    border: 0.5px solid rgba(112, 185, 238, 0.2);
-  }
-
-  .code-icon {
-    position: absolute;
-    width: 41px;
-    height: 43px;
-
-    &.code-icon-1 {
-      top: 69px;
-      left: 17px;
-    }
-
-    &.code-icon-2 {
-      top: 272px;
-      left: 17px;
-    }
-  }
-
-  .icon-circle {
+    left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    z-index: 1;
   }
 
-  .floating-element {
+  .logos-circles {
     position: absolute;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0.6;
-
-    &.floating-element-1 {
-      top: 188px;
-      left: 57px;
+    z-index: 4;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    img {
+      width: 150px;
+      height: 150px;
     }
+    .logo-circle {
+      width: 150px;
+      height: 150px;
+      top: 16px;
+      left: 16px;
+      transition: transform 300ms ease;
+      &.logo-circle-1 {
+        transform: translate(75px, -40px) rotate(0deg);
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(75px, -40px) rotate(0deg)
+            translate3d(
+              calc(var(--hover) * var(--dx) * 2px),
+              calc(var(--hover) * var(--dy) * 2px),
+              0
+            )
+            rotateX(calc(var(--hover) * var(--dy) * -2deg))
+            rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 240px));
+        }
+      }
+      &.logo-circle-2 {
+        transform: translate(75px, 35px) rotate(0deg);
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(75px, 35px) rotate(0deg)
+            translate3d(
+              calc(var(--hover) * var(--dx) * 4px),
+              calc(var(--hover) * var(--dy) * 4px),
+              0
+            )
+            rotateX(calc(var(--hover) * var(--dy) * -4deg))
+            rotateY(calc(var(--hover) * var(--dx) * 4deg)) translateZ(calc(var(--hover) * 200px));
+        }
+      }
+    }
+  }
 
-    &.floating-element-2 {
-      top: 124px;
-      left: 76px;
+  .circles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    transform-style: preserve-3d;
+    will-change: transform;
+    // Center point of the line_circle (110px, 110px for a 220px circle)
+    --circle-center-x: 110px;
+    --circle-center-y: 110px;
+    --circle-radius: 110px;
+    
+    .circle {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      position: absolute;
+      // circular orbit animation controls
+      --orbitDur: 5s;
+      --orbitDelay: 0s;
+      --startAngle: 0deg;
+      // small arc amplitude (angle). For r=110px, 1–3px ≈ 0.5–1.6deg
+      --deltaAngle: 1.2deg;
+      // smooth return on mouse exit
+      transition: transform 300ms ease;
+      // visual rendered via pseudo to decouple base transform from orbit animation
+      &::before {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #d9d9d9;
+        filter: blur(0.5px);
+        box-shadow: 0 0 4px #d9d9d9, 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+      }
+      &.circle-1 {
+        // Initial position: translate(22px, 45px) relative to line_circle
+        // Convert to angle: atan2(45-110, 22-110) = atan2(-65, -88) ≈ 216deg
+        --startAngle: 216deg;
+        --orbitDur: 5s;
+        --orbitDelay: 0s;
+        // 3px arc length on 110px radius = ~1.56deg, using 1.6deg
+        --deltaAngle: 1.6deg;
+        transform: translate(var(--circle-center-x), var(--circle-center-y))
+          rotate(var(--startAngle))
+          translateX(var(--circle-radius))
+          rotate(calc(-1 * var(--startAngle)));
+        animation: circle-orbit-small var(--orbitDur) ease-in-out var(--orbitDelay) infinite;
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(var(--circle-center-x), var(--circle-center-y))
+            rotate(var(--startAngle))
+            translateX(var(--circle-radius))
+            rotate(calc(-1 * var(--startAngle)))
+            translate3d(
+              calc(var(--hover) * var(--dx) * 2px),
+              calc(var(--hover) * var(--dy) * 2px),
+              0
+            )
+            rotateX(calc(var(--hover) * var(--dy) * -2deg))
+            rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 280px));
+        }
+      }
+      &.circle-2 {
+        // Initial position: translate(-3px, 115px) relative to line_circle
+        // Convert to angle: atan2(115-110, -3-110) = atan2(5, -113) ≈ 177deg
+        --startAngle: 177deg;
+        --orbitDur: 5s;
+        --orbitDelay: 0.2s;
+        // 3px arc length on 110px radius = ~1.56deg, using 1.6deg
+        --deltaAngle: 1.6deg;
+        transform: translate(var(--circle-center-x), var(--circle-center-y))
+          rotate(var(--startAngle))
+          translateX(var(--circle-radius))
+          rotate(calc(-1 * var(--startAngle)));
+        animation: circle-orbit-small var(--orbitDur) ease-in-out var(--orbitDelay) infinite;
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(var(--circle-center-x), var(--circle-center-y))
+            rotate(var(--startAngle))
+            translateX(var(--circle-radius))
+            rotate(calc(-1 * var(--startAngle)))
+            translate3d(
+              calc(var(--hover) * var(--dx) * 2px),
+              calc(var(--hover) * var(--dy) * 2px),
+              0
+            )
+            rotateX(calc(var(--hover) * var(--dy) * -2deg))
+            rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 270px));
+        }
+      }
+      &.circle-3 {
+        // Initial position: translate(22px, 185px) relative to line_circle
+        // Convert to angle: atan2(185-110, 22-110) = atan2(75, -88) ≈ 140deg
+        --startAngle: 140deg;
+        --orbitDur: 20s;
+        --orbitDelay: 0.4s;
+        // 3px arc length on 110px radius = ~1.56deg, using 1.6deg
+        --deltaAngle: 1.6deg;
+        transform: translate(var(--circle-center-x), var(--circle-center-y))
+          rotate(var(--startAngle))
+          translateX(var(--circle-radius))
+          rotate(calc(-1 * var(--startAngle)));
+        animation: circle-orbit-small var(--orbitDur) ease-in-out var(--orbitDelay) infinite;
+        @media (hover: hover) and (pointer: fine) {
+          transform: translate(var(--circle-center-x), var(--circle-center-y))
+            rotate(var(--startAngle))
+            translateX(var(--circle-radius))
+            rotate(calc(-1 * var(--startAngle)))
+            translate3d(
+              calc(var(--hover) * var(--dx) * 2px),
+              calc(var(--hover) * var(--dy) * 2px),
+              0
+            )
+            rotateX(calc(var(--hover) * var(--dy) * -2deg))
+            rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 260px));
+        }
+      }
+    }
+  }
+
+  .bubble {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 5;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    transform: translate(calc(50% + 115px), 65px);
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate(calc(50% + 115px), 65px)
+        translate3d(
+          calc(var(--hover) * var(--dx) * 3px),
+          calc(var(--hover) * var(--dy) * 3px),
+          0
+        )
+        rotateX(calc(var(--hover) * var(--dy) * -3deg))
+        rotateY(calc(var(--hover) * var(--dx) * 3deg)) translateZ(calc(var(--hover) * 120px));
+    }
+    img {
+      width: 136px;
+      height: 166px;
+    }
+  }
+
+  .code {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 4;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    transform: translate(260px, -50px) rotate(-5deg);
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate(260px, -50px) rotate(-5deg)
+        translate3d(
+          calc(var(--hover) * var(--dx) * 4px),
+          calc(var(--hover) * var(--dy) * 4px),
+          0
+        )
+        rotateX(calc(var(--hover) * var(--dy) * -4deg))
+        rotateY(calc(var(--hover) * var(--dx) * 4deg)) translateZ(calc(var(--hover) * 140px));
+    }
+    img {
+      width: 590px;
+      height: 330px;
+    }
+  }
+
+  .line_circles {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 4;
+    transform-style: preserve-3d;
+    will-change: transform;
+    .line_circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid #e2e3e84b;
+
+      &.circle-1 {
+        width: 220px;
+        height: 220px;
+        transform: translate(155px, 20px);
+      }
+      &.circle-2 {
+        width: 350px;
+        height: 350px;
+        transform: translate(90px, -43px);
+      }
     }
   }
 }
 
+// small arc oscillation along circumference (3px up and down from starting position)
+@keyframes circle-orbit-small {
+  0% {
+    transform: translate(var(--circle-center-x), var(--circle-center-y))
+      rotate(calc(var(--startAngle) - var(--deltaAngle)))
+      translateX(var(--circle-radius))
+      rotate(calc(-1 * (var(--startAngle) - var(--deltaAngle))));
+  }
+  50% {
+    transform: translate(var(--circle-center-x), var(--circle-center-y))
+      rotate(calc(var(--startAngle) + var(--deltaAngle)))
+      translateX(var(--circle-radius))
+      rotate(calc(-1 * (var(--startAngle) + var(--deltaAngle))));
+  }
+  100% {
+    transform: translate(var(--circle-center-x), var(--circle-center-y))
+      rotate(calc(var(--startAngle) - var(--deltaAngle)))
+      translateX(var(--circle-radius))
+      rotate(calc(-1 * (var(--startAngle) - var(--deltaAngle))));
+  }
+}
