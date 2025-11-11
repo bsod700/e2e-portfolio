@@ -9,153 +9,30 @@
   .glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(60px);
-    opacity: 0.3;
+   
     pointer-events: none;
-
+    z-index: 1;
+    top: 16px;
+    left: 16px;
     &.glow-blue-1 {
-      width: 219px;
-      height: 206px;
-      top: 263px;
-      left: 91px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
-    }
-
-    &.glow-red-1 {
-      width: 204px;
-      height: 204px;
-      top: 376px;
-      left: 285px;
-      background: radial-gradient(circle, rgba(209, 75, 59, 0.4) 0%, transparent 70%);
-    }
-
-    &.glow-big-blue-1 {
-      width: 334px;
-      height: 334px;
-      top: 12px;
-      left: 378px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-      mix-blend-mode: soft-light;
+      width: 205px;
+      height: 205px;
+      transform: translate(75px, 240px);
+      background-color: var(--color-secondary);
+      filter: blur(200px);
     }
   }
 
   .dots-pattern {
     position: absolute;
-    top: -159px;
+    top: 0;
     left: 0;
-    width: 659px;
-    height: 659px;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 2px, transparent 2px);
     background-size: 20px 20px;
     opacity: 0.3;
-  }
-
-  .brand-elements {
-    position: absolute;
-    top: -8px;
-    left: 13px;
-    width: 375px;
-    height: 377px;
-  }
-
-  .logo-shape {
-    position: absolute;
-    border-radius: 50%;
-    border: 2px solid rgba(102, 126, 234, 0.3);
-
-    &.logo-shape-1 {
-      width: 191px;
-      height: 191px;
-      top: 84px;
-      left: 115px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, transparent 70%);
-    }
-
-    &.logo-shape-2 {
-      width: 239px;
-      height: 239px;
-      top: 296px;
-      left: 91px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
-      transform: rotate(180deg);
-    }
-
-    &.logo-shape-3 {
-      width: 287px;
-      height: 287px;
-      top: 320px;
-      left: 354px;
-      background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
-    }
-  }
-
-  .shape-inner {
-    width: 65px;
-    height: 74px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(102, 126, 234, 0.1);
-    border-radius: 8px;
-  }
-
-  .color-palette {
-    position: absolute;
-    top: 122px;
-    left: 153px;
-    display: flex;
-    gap: 8px;
-  }
-
-  .color-swatch {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
-    &.color-swatch-1 {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    &.color-swatch-2 {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
-    }
-
-    &.color-swatch-3 {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
-    }
-
-    &.color-swatch-4 {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-    }
-  }
-
-  .typography-sample {
-    position: absolute;
-    top: 211px;
-    left: 34px;
-    width: 148px;
-    height: 121px;
-  }
-
-  .text-line {
-    height: 12px;
-    background: linear-gradient(to right, rgba(112, 185, 238, 0.3) 0%, rgba(112, 185, 238, 0) 100%);
-    border-radius: 4px;
-    margin-bottom: 8px;
-
-    &.text-line-1 {
-      width: 100%;
-    }
-
-    &.text-line-2 {
-      width: 70%;
-    }
-
-    &.text-line-3 {
-      width: 85%;
-    }
+    z-index: 1;
   }
 }
 
