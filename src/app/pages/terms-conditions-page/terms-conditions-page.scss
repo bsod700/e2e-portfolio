@@ -1,4 +1,4 @@
-@import '../../../assets/styles/variables';
+@use "mixins" as *;
 
 .legal-page {
   min-height: 100vh;
