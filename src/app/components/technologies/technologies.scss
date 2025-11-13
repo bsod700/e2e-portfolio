@@ -1,6 +1,7 @@
 .technologies {
   background: var(--color-bg-secondary);
   position: relative;
+  padding: 64px 0;
 }
 
 .section-header {
@@ -8,22 +9,24 @@
   max-width: 700px;
   margin: 0 auto 12px;
 
-  .section-subtitle {
-    color: var(--color-primary);
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-  }
-
   .section-title {
-    margin-bottom: 12px;
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -1.68px;
+    margin-bottom: 16px;
+    color: var(--color-text-primary);
   }
-
-  .section-description {
-    font-size: 1.05rem;
-    color: var(--color-text-secondary);
+}
+.undertext {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 12px;
+  p {
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: -0.4px;
+    color: rgba(252, 252, 252, 0.8);
   }
 }
 
@@ -66,25 +69,11 @@
   svg {
     display: block;
   }
-
-  @media (max-width: 768px) {
-    top: 12px;
-    right: 12px;
-    padding: 0.6rem;
-
-    svg {
-      width: 16px;
-      height: 16px;
-    }
-  }
 }
 
 // Carousel Container
 .carousel-container {
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
   position: relative;
   padding: 1rem 0;
 
@@ -109,33 +98,173 @@
     right: 0;
     background: linear-gradient(to left, var(--color-bg-secondary), transparent);
   }
-
-  @media (max-width: 768px) {
-    &::before,
-    &::after {
-      width: 40px;
-    }
-  }
 }
 
 // Carousel Row
 .carousel-row {
   display: flex;
   width: 100%;
+  position: relative;
+  align-items: center;
+}
+
+// Carousel Half (Left and Right sides)
+.carousel-half {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+// Center Divider - Logo Pulse
+.center-divider {
+  height: 250px;
+  flex-shrink: 0;
+  z-index: 3;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin ripple-animation($duration, $delay, $number) {
+  @for $i from 1 through $number {
+    &.ripple-#{$i} {
+      animation: ripple $duration ease-out infinite #{$i - 1}s;
+    }
+  }
+}
+
+// Ripple Circles
+.ripple-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 100%;
+  background: #FF7474;
+  opacity: 0.1;
+  pointer-events: none;
+  width: 200px;
+  height: 200px;
+
+  @include ripple-animation(10s, 0s, 10);
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+// Logo Circle
+.logo-circle {
+  width: 125px;
+  height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 0 31px rgba(0, 0, 0, 0.50);
+  border-radius: 100%;
+  background: #961515;
   overflow: hidden;
 }
 
-.carousel-track {
-  display: flex;
-  gap: 1.5rem;
-  will-change: transform;
+// Glow circles inside logo-circle
+.glow-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 100%;
+  pointer-events: none;
 
-  .scroll-left & {
-    animation: scrollLeft 60s linear infinite;
+  &.glow-1 {
+    width: 110px;
+    height: 110px;
+  transform: translate(-50%, -100%);
+    opacity: 0.2;
+    background: #8CE7D0;
+    filter: blur(25px);
+  }
+  
+  &.glow-2 {
+    width: 110px;
+    height: 110px;
+    transform: translate(-50%, 0%);
+opacity: 0.2;
+background: #B27DDA;
+filter: blur(25px);
+  }
+  
+  &.glow-3 {
+    width: 110px;
+    height: 110px;
+    transform: translate(-50%, -100%);
+background: #FF7474;
+filter: blur(25px);
   }
 
-  .scroll-right & {
-    animation: scrollRight 60s linear infinite;
+  &.glow-4 {
+    width: 70px;
+    height: 70px;
+    transform: translate(-50%, -100%);
+    background: #FF7474;
+    filter: blur(25px);
+  }
+    
+  &.glow-5 {
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, 0%);
+    background: #961416;
+    filter: blur(25px);
+  }
+
+   &.glow-6 {
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, 45%);
+    background: #610A10;
+    filter: blur(25px);
+  }
+}
+
+
+.logo-icon {
+  width: 60px;
+  height: 55px;
+  object-fit: contain;
+  position: relative;
+  z-index: 3;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6)) drop-shadow(-1px 1px 3px rgba(0, 0, 0, 0.08)) drop-shadow(-2px 5px 5px rgba(0, 0, 0, 0.07)) drop-shadow(-5px 11px 7px rgba(0, 0, 0, 0.04)) drop-shadow(-9px 20px 9px rgba(0, 0, 0, 0.01)) drop-shadow(-14px 31px 10px rgba(0, 0, 0, 0.00));
+  margin-top: 12px;
+
+}
+
+
+.carousel-track {
+  display: flex;
+  gap: 8px;
+  will-change: transform;
+  position: relative;
+
+  &.scroll-to-center {
+   align-items: flex-end;
+    animation: scrollToCenter reverse 60s linear infinite;
+  }
+
+  &.scroll-to-center-reverse {
+  
+    animation: scrollToCenterReverse reverse 60s linear infinite;
   }
 
   // Pause animation on hover or when button is clicked
@@ -144,62 +273,45 @@
   }
 }
 
-// Keyframe animations for seamless infinite scroll
-@keyframes scrollLeft {
+// Keyframe animations for converging scroll
+// Left side: scrolls right (towards center) - moves from left to right
+// Right side: scrolls left (towards center) - moves from right to left
+// Animation distance is set dynamically via CSS custom property --animation-distance
+@keyframes scrollToCenter {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(calc(-200px * 12 - 1.5rem * 12));
+    // Use CSS variable for dynamic distance calculation (set via Angular binding)
+    transform: translateX(var(--animation-distance));
   }
 }
 
-@keyframes scrollRight {
+@keyframes scrollToCenterReverse {
   from {
-    transform: translateX(calc(-200px * 12 - 1.5rem * 12));
+    // Start from negative position (one set width)
+    transform: translateX(var(--animation-distance));
   }
   to {
+    // Move to 0 (towards center)
     transform: translateX(0);
   }
 }
 
-// Responsive animation for mobile
-@media (max-width: 768px) {
-  @keyframes scrollLeft {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(-150px * 12 - 1.5rem * 12));
-    }
-  }
-
-  @keyframes scrollRight {
-    from {
-      transform: translateX(calc(-150px * 12 - 1.5rem * 12));
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-}
 
 // Technology Card
 .tech-card {
-  flex: 0 0 200px;
-  min-width: 200px;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  background: var(--color-bg-card);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: var(--radius-md);
-  transition: var(--transition-normal);
-  cursor: pointer;
+  padding: 12px 1px;
+  border-radius: 100px;
+  background: rgba(112, 185, 238, 0.10);
+  position: relative;
 
   &:hover {
     transform: translateY(-5px);
@@ -209,33 +321,79 @@
     .tech-icon {
       transform: scale(1.2);
     }
+
   }
 
   .tech-icon {
-    font-size: 2.5rem;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     transition: var(--transition-normal);
   }
+}
 
-  .tech-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    text-align: center;
-    white-space: nowrap;
+// Tooltip
+.tech-tooltip {
+  position: fixed;
+  transform: translate(-50%, -100%) translateY(-8px);
+  background: var(--color-bg-card);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: tooltipFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Tooltip arrow
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--color-bg-card);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  // Tooltip arrow border
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid rgba(255, 255, 255, 0.1);
+    z-index: -1;
   }
 
   @media (max-width: 768px) {
-    flex: 0 0 150px;
-    min-width: 150px;
-    padding: 1rem;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
 
-    .tech-icon {
-      font-size: 2rem;
-    }
-
-    .tech-name {
-      font-size: 0.8rem;
-    }
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%) translateY(-8px);
   }
 }
 

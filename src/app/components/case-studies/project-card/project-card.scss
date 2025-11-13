@@ -30,11 +30,6 @@
   gap: 48px;
   position: relative;
   z-index: 1;
-  
-  @media (max-width: 768px) {
-    padding: 32px 24px;
-    gap: 32px;
-  }
 }
 
 // Background visuals
@@ -49,99 +44,7 @@
   z-index: 0;
 }
 
-// Tierro background images
-.tierro-background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
 
-.tierro-bg-image {
-  position: absolute;
-  pointer-events: none;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-}
-
-.tierro-bg-1 {
-  left: 295.87px;
-  top: 174px;
-  width: 333.594px;
-  height: 938.469px;
-  transform: rotate(166.831deg) scaleY(-1);
-  
-  img {
-    opacity: 0.6;
-  }
-}
-
-.tierro-bg-2 {
-  left: 377px;
-  top: 0;
-  width: 770.301px;
-  height: 661.127px;
-  transform: rotate(20deg);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  
-  .tierro-screenshot-1 {
-    width: 100%;
-    aspect-ratio: 1218 / 198;
-    object-fit: cover;
-    opacity: 0.7;
-  }
-  
-  .tierro-screenshot-2 {
-    width: 447.446px;
-    height: 273.968px;
-    object-fit: cover;
-    opacity: 0.7;
-  }
-}
-
-// Prompt Management phone screenshots
-.prompt-phones {
-  position: absolute;
-  left: 414.08px;
-  top: 17.61px;
-  width: 100%;
-  height: 100%;
-}
-
-.phone-screen {
-  position: absolute;
-  width: 176.38px;
-  height: 309.425px;
-  transform: rotate(15.835deg);
-  pointer-events: none;
-  
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0.8;
-  }
-  
-  &:nth-child(1) {
-    left: 0;
-    top: 0;
-  }
-  
-  &:nth-child(2) {
-    left: 159.84px;
-    top: 82.83px;
-  }
-  
-  &:nth-child(3) {
-    left: 339.21px;
-    top: 96.26px;
-  }
-}
 
 // Glow effects
 .glow-effects {
@@ -193,12 +96,12 @@
   }
 }
 
-.card-text-wrapper {
+.card-wrapper {
   position: relative;
   z-index: 2;
-  flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  height: 100%;
 }
 
 .card-text {
@@ -207,20 +110,15 @@
   gap: 48px;
   position: relative;
   z-index: 2;
-  flex: 1;
   width: 400px;
   justify-content: space-between;
-  
-  @media (max-width: 768px) {
-    width: 100%;
-    gap: 32px;
-  }
+  height: 100%;
+  flex: 0 0 400px;
 }
 
 .project-logo {
-  width: 214.923px;
+  width: 214px;
   height: 80px;
-  flex-shrink: 0;
   
   img {
     width: 100%;
@@ -228,29 +126,12 @@
     object-fit: contain;
   }
   
-  // Prompt Management specific logo styling
-  .prompt-management & {
-    width: 120px;
-    height: 66px;
-    position: relative;
-    
-    img {
-      width: 66.398px;
-      height: 66.398px;
-      object-fit: contain;
-    }
-  }
 }
 
-.text-content {
+.top {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  flex: 1;
-}
-
-.card-actions {
-  margin-top: auto;
+  gap: 48px;
 }
 
 .project-title {
@@ -258,11 +139,6 @@
   font-weight: 600;
   line-height: 1.5;
   color: var(--color-text-primary);
-  margin: 0;
-  
-  @media (max-width: 768px) {
-    font-size: 20px;
-  }
 }
 
 .project-description {
@@ -270,17 +146,5 @@
   font-weight: 300;
   line-height: 1.4;
   color: rgba(252, 252, 252, 0.8);
-  margin: 0;
-  flex-grow: 1;
-  
-  @media (max-width: 768px) {
-    font-size: 13px;
-  }
-}
-
-.btn-view-case-study {
-  align-self: flex-start;
-  
-  // CTA component handles its own styling, this class just provides positioning
 }
 

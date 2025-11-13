@@ -1,11 +1,7 @@
 <section class="technologies section" id="technologies">
   <div class="container">
     <div class="section-header">
-      <p class="section-subtitle">Tech Stack</p>
       <h2 class="section-title">Technologies Behind<br />Every Product</h2>
-      <p class="section-description">
-        I stay ahead of the curve by working with the latest and most powerful technologies to deliver cutting-edge solutions.
-      </p>
     </div>
 
     <!-- Animation Control Button -->
@@ -34,45 +30,69 @@
          (mouseenter)="pauseAnimation()"
          (mouseleave)="resumeAnimation()">
       
-      <!-- First Row - Scrolling Left -->
-      <div class="carousel-row scroll-left">
-        <div class="carousel-track">
-          <!-- Original set -->
-          @for (tech of firstRowTechnologies; track tech.name) {
-            <div class="tech-card">
-              <div class="tech-icon">{{ tech.icon }}</div>
-              <span class="tech-name">{{ tech.name }}</span>
-            </div>
-          }
-          <!-- Duplicate set for seamless loop -->
-          @for (tech of firstRowTechnologies; track tech.name + '_duplicate') {
-            <div class="tech-card">
-              <div class="tech-icon">{{ tech.icon }}</div>
-              <span class="tech-name">{{ tech.name }}</span>
-            </div>
-          }
+      <!-- Single Row - Converging from both sides -->
+      <div class="carousel-row">
+        <!-- Left Side - Scrolling Right (towards center) -->
+        <div class="carousel-half left-side">
+          <div class="carousel-track scroll-to-center"
+               [style.--animation-distance]="leftAnimationDistance">
+            @for (tech of leftSideTechnologiesDuplicated; track $index) {
+              <div class="tech-card"
+                   (mouseenter)="showTooltip($event, tech.name)"
+                   (mouseleave)="hideTooltip()">
+                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" />
+              </div>
+            }
+          </div>
         </div>
-      </div>
 
-      <!-- Second Row - Scrolling Right -->
-      <div class="carousel-row scroll-right">
-        <div class="carousel-track">
-          <!-- Original set -->
-          @for (tech of secondRowTechnologies; track tech.name) {
-            <div class="tech-card">
-              <div class="tech-icon">{{ tech.icon }}</div>
-              <span class="tech-name">{{ tech.name }}</span>
-            </div>
+        <!-- Center Divider - Logo Pulse -->
+        <div class="center-divider logo-pulse">
+          <!-- Ripple Circles -->
+          @for (ripple of rippleArray; track ripple) {
+            <div class="ripple-circle ripple-{{ ripple }}"></div>
           }
-          <!-- Duplicate set for seamless loop -->
-          @for (tech of secondRowTechnologies; track tech.name + '_duplicate') {
-            <div class="tech-card">
-              <div class="tech-icon">{{ tech.icon }}</div>
-              <span class="tech-name">{{ tech.name }}</span>
-            </div>
-          }
+          <!-- Logo Circle with Glow -->
+          <div class="logo-circle">
+            <!-- Glow circles inside -->
+            <div class="glow-circle glow-1"></div>
+            <div class="glow-circle glow-2"></div>
+            <div class="glow-circle glow-3"></div>
+            <div class="glow-circle glow-4"></div>
+            <div class="glow-circle glow-5"></div>
+            <div class="glow-circle glow-6"></div>
+            <!-- Logo Icon -->
+            <img src="assets/images/logo-icon-white.svg" alt="Logo" class="logo-icon">
+          </div>
+        </div>
+
+        <!-- Right Side - Scrolling Left (towards center) -->
+        <div class="carousel-half right-side">
+          <div class="carousel-track scroll-to-center-reverse"
+               [style.--animation-distance]="rightAnimationDistance">
+            @for (tech of rightSideTechnologiesDuplicated; track $index) {
+              <div class="tech-card"
+                   (mouseenter)="showTooltip($event, tech.name)"
+                   (mouseleave)="hideTooltip()">
+                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" />
+              </div>
+            }
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Tooltip -->
+    @if (activeTooltip) {
+      <div class="tech-tooltip"
+           [style.left.px]="activeTooltip.x"
+           [style.top.px]="activeTooltip.y">
+        {{ activeTooltip.name }}
+      </div>
+    }
+
+    <div class="undertext">
+      <p class="undertext-text">I use modern tools across design and development to create fast, scalable and visually consistent digital products.</p>
     </div>
   </div>
 </section>

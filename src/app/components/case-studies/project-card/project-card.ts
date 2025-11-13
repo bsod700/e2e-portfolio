@@ -8,7 +8,11 @@ export interface Project {
   logoUrl?: string;
   backgroundImages?: string[];
   link?: string;
-  type?: 'tierro' | 'prompt-management' | 'default';
+  type: string;
+  img?: {
+    src: string;
+    alt: string;
+  };
 }
 
 @Component({

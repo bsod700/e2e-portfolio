@@ -29,11 +29,13 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
       type: 'tierro',
       title: 'Building a Custom Music Platform from Scratch',
       description: 'Full-scale digital brand for music producer Tierro. Custom website, integrated music player, brand identity, and backend systems built end to end.',
-      logoUrl: 'http://localhost:3845/assets/a13425e7d81a580cb6493828520a19508cdd5a86.svg',
+      logoUrl: 'assets/images/projects/project-logo-tierro.svg',
+      img: {
+        src: 'assets/images/projects/project-card-tierro-img-1.webp',
+        alt: 'Tierro project image',
+      },
       backgroundImages: [
-        'http://localhost:3845/assets/27d2c3a1b418e49e2bd1eff69fe5e46baa849836.svg',
-        'http://localhost:3845/assets/e2efc369d8d7f1403c194da027d1850a5151355b.png',
-        'http://localhost:3845/assets/23c6d379fbeef609d69e9736c6a7314ef5a6b499.png'
+        'assets/images/projects/project-card-tierro-img-2.svg',
       ],
       link: '/projects'
     },
@@ -41,12 +43,33 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
       type: 'prompt-management',
       title: 'Complete Prompt Management Solution',
       description: 'Built a personal prompt library extension for ChatGPT. Custom UI/UX design and full development to organize and manage prompts efficiently.',
-      logoUrl: 'http://localhost:3845/assets/4bae5be990fb3ffa5d9ce05c8527b8ab6fef4c88.svg',
-      backgroundImages: [
-        'http://localhost:3845/assets/66625e66dda1f10b1f0a17b64bee7194a8294bff.png',
-        'http://localhost:3845/assets/14b99bc265ef0e371a490fd8cb1aa5971177ffb1.png',
-        'http://localhost:3845/assets/e700ae5181db35c0f63cb74efc704c72bc02d8bc.png'
-      ],
+      logoUrl: 'assets/images/projects/project-logo-p.webp',
+      img: {
+        src: 'assets/images/projects/project-card-p-img-1.webp',
+        alt: 'Prompt management project image',
+      },
+      link: '/projects'
+    },
+    {
+      type: 'landerx',
+      title: 'End-to-End SaaS Platform for Marketing',
+      description: 'Co-founded and developed an AI-powered marketing platform. Automated workflows generate high-performance landing pages, content, and campaigns for small business clients.',
+      logoUrl: 'assets/images/projects/project-logo-landerx.svg',
+      img: {
+        src: 'assets/images/projects/project-card-landerx-img-1.webp',
+        alt: 'Landerx project image',
+      },
+      link: '/projects'
+    },
+    {
+      type: 'brush along',
+      title: 'Interactive Brushing Tracker for Children',
+      description: 'Created an engaging game app that turns dental care into play. Helps parents track progress while keeping children motivated and consistent.',
+      logoUrl: 'assets/images/projects/project-logo-brushalong.webp',
+      img: {
+        src: 'assets/images/projects/project-card-brushalong-img-1.webp',
+        alt: 'Brush along project image',
+      },
       link: '/projects'
     }
   ];
