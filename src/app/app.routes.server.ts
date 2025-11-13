@@ -26,5 +26,21 @@ export const serverRoutes: ServerRoute[] = [
       { id: 'ai-automation' },
       { id: 'design' }
     ]
+  },
+  {
+    path: 'terms-conditions',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'privacy-policy',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'accessibility-statement',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'sitemap',
+    renderMode: RenderMode.Prerender
   }
 ];

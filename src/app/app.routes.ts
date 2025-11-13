@@ -25,5 +25,25 @@ export const routes: Routes = [
     path: 'projects',
     loadComponent: () => import('./pages/projects-page/projects-page').then(m => m.ProjectsPageComponent),
     title: 'Projects & Case Studies - Guy Tagger'
+  },
+  {
+    path: 'terms-conditions',
+    loadComponent: () => import('./pages/terms-conditions-page/terms-conditions-page').then(m => m.TermsConditionsPageComponent),
+    title: 'Terms & Conditions - Guy Tagger'
+  },
+  {
+    path: 'privacy-policy',
+    loadComponent: () => import('./pages/privacy-policy-page/privacy-policy-page').then(m => m.PrivacyPolicyPageComponent),
+    title: 'Privacy Policy - Guy Tagger'
+  },
+  {
+    path: 'accessibility-statement',
+    loadComponent: () => import('./pages/accessibility-statement-page/accessibility-statement-page').then(m => m.AccessibilityStatementPageComponent),
+    title: 'Accessibility Statement - Guy Tagger'
+  },
+  {
+    path: 'sitemap',
+    loadComponent: () => import('./pages/sitemap-page/sitemap-page').then(m => m.SitemapPageComponent),
+    title: 'Sitemap - Guy Tagger'
   }
 ];

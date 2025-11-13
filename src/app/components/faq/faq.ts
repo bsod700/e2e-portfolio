@@ -16,28 +16,28 @@ interface FAQ {
 export class FaqComponent {
   faqs: FAQ[] = [
     {
-      question: "What's your typical project scope?",
-      answer: "I work on a wide range of projects, from small landing pages to complex full-stack applications. Each project is unique, and I tailor my approach to meet your specific needs, whether it's a complete build from scratch or enhancing an existing system.",
+      question: "What's the typical project scope?",
+      answer: "I take on full-cycle product builds that include UX, interface design, frontend and backend development, and automation. The focus is always on delivering complete, polished, and scalable digital solutions.",
+      isOpen: true
+    },
+    {
+      question: "Can you work with existing code or designs?",
+      answer: "Yes, absolutely. I can seamlessly integrate with your existing codebase, design systems, or design files. Whether you need enhancements, refactoring, or building new features on top of existing work, I adapt to your current setup and maintain consistency with your established patterns.",
       isOpen: false
     },
     {
-      question: "Can you provide web development and UX design?",
-      answer: "Absolutely! I specialize in both development and design, offering end-to-end solutions. I can handle everything from wireframing and UI/UX design to frontend and backend development, ensuring a seamless and cohesive final product.",
+      question: "Do you handle everything in-house?",
+      answer: "Yes, I handle the full product lifecycle in-house. From initial concept and UX design to frontend and backend development, AI integration, and deployment—everything is managed by me. This ensures consistency, faster iteration, and a unified vision throughout the project.",
       isOpen: false
     },
     {
-      question: "Do you offer support after project?",
-      answer: "Yes, I provide ongoing support and maintenance after project completion. This includes bug fixes, updates, and technical assistance to ensure your application runs smoothly and stays up-to-date with the latest technologies.",
+      question: "Do you offer support after launch?",
+      answer: "Yes, I provide ongoing support and maintenance after launch. This includes bug fixes, performance optimizations, feature updates, and technical assistance. I'm committed to ensuring your product continues to run smoothly and evolves with your business needs.",
       isOpen: false
     },
     {
-      question: "Can you integrate AI or automation processes?",
-      answer: "Definitely! I have experience integrating AI capabilities, machine learning models, and automation workflows into applications. Whether it's chatbots, recommendation systems, or process automation, I can help you leverage AI to enhance your product.",
-      isOpen: false
-    },
-    {
-      question: "How do I request other services?",
-      answer: "Simply reach out through the contact form or email me directly. We'll discuss your requirements, timeline, and budget to create a custom solution that fits your needs. I'm flexible and happy to accommodate various project types and scopes.",
+      question: "Can you integrate AI or automate processes?",
+      answer: "Definitely. I specialize in integrating AI capabilities and automation workflows into digital products. This includes LLM integration, RAG pipelines, vector databases, chatbots, recommendation systems, and custom automation solutions that streamline operations and enhance user experiences.",
       isOpen: false
     }
   ];

@@ -1,21 +1,27 @@
 <section class="faq section">
   <div class="container">
     <div class="section-header">
-      <p class="section-subtitle">FAQ</p>
-      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">Still not convinced?</p>
+      <h2 class="section-title">You've got questions, we have the answers</h2>
       <p class="section-description">
-        Find answers to common questions about my work process, availability, and services.
+        Don't see the answer you're looking for? <a href="#contact" class="contact-link">Get in touch</a>.
       </p>
     </div>
     
     <div class="faq-list">
       <div class="faq-item" *ngFor="let item of faqs; let i = index" [class.active]="item.isOpen">
-        <button class="faq-question" (click)="toggleFaq(i)">
-          <span>{{ item.question }}</span>
-          <span class="faq-icon">{{ item.isOpen ? '−' : '+' }}</span>
-        </button>
-        <div class="faq-answer" [class.open]="item.isOpen">
-          <p>{{ item.answer }}</p>
+        <div class="faq-content">
+          <button class="faq-question" (click)="toggleFaq(i)">
+            <span class="faq-question-text">{{ item.question }}</span>
+            <span class="faq-icon-wrapper">
+              <svg class="faq-icon" [class.rotated]="item.isOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-answer" [class.open]="item.isOpen">
+            <p>{{ item.answer }}</p>
+          </div>
         </div>
       </div>
     </div>
