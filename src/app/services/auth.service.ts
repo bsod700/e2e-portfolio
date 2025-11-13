@@ -164,12 +164,18 @@ export class AuthService {
     }
 
     try {
-      // Get the redirect URL - prefer environment.siteUrl if set, otherwise use window.location.origin
+      // Get the redirect URL - always prefer environment.siteUrl if set, otherwise use window.location.origin
       // This ensures production uses the correct domain even if window.location.origin is incorrect
-      const baseUrl = (environment.production && environment.siteUrl) 
-        ? environment.siteUrl 
+      // IMPORTANT: Also ensure Supabase Dashboard → Authentication → URL Configuration has the production URL whitelisted
+      const baseUrl = environment.siteUrl && environment.siteUrl.trim() !== ''
+        ? environment.siteUrl
         : (typeof window !== 'undefined' ? window.location.origin : '');
       const redirectUrl = `${baseUrl}/admin`;
+      
+      // Debug logging (remove in production if needed)
+      if (environment.production) {
+        console.log('[Auth] Using redirect URL:', redirectUrl, 'from siteUrl:', environment.siteUrl);
+      }
       
       const { error } = await client.auth.signInWithOtp({
         email: normalizedEmail,
@@ -251,12 +257,18 @@ export class AuthService {
     }
 
     try {
-      // Get the redirect URL - prefer environment.siteUrl if set, otherwise use window.location.origin
+      // Get the redirect URL - always prefer environment.siteUrl if set, otherwise use window.location.origin
       // This ensures production uses the correct domain even if window.location.origin is incorrect
-      const baseUrl = (environment.production && environment.siteUrl) 
-        ? environment.siteUrl 
+      // IMPORTANT: Also ensure Supabase Dashboard → Authentication → URL Configuration has the production URL whitelisted
+      const baseUrl = environment.siteUrl && environment.siteUrl.trim() !== ''
+        ? environment.siteUrl
         : (typeof window !== 'undefined' ? window.location.origin : '');
       const redirectUrl = `${baseUrl}/admin/reset-password`;
+      
+      // Debug logging (remove in production if needed)
+      if (environment.production) {
+        console.log('[Auth] Using redirect URL:', redirectUrl, 'from siteUrl:', environment.siteUrl);
+      }
       
       const { error } = await client.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl
