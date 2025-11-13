@@ -46,9 +46,5 @@ Thumbs.db
 .env.local
 .env.*.local
 
-# Generated environment files (should be generated from .env)
-src/environments/environment.ts
-src/environments/environment.prod.ts
-
 # Supabase
 .supabase

@@ -11,8 +11,8 @@ export class SupabaseService {
   private platformId = inject(PLATFORM_ID);
 
   constructor() {
-    if (isPlatformBrowser(this.platformId) && environment.supabaseUrl && environment.supabaseAnonKey) {
-      this.supabase = createClient(environment.supabaseUrl, environment.supabaseAnonKey);
+    if (isPlatformBrowser(this.platformId) && environment.supabase.anonKey && environment.supabase.url) {
+      this.supabase = createClient(environment.supabase.url, environment.supabase.anonKey);
     }
   }
 
