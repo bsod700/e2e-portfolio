@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, from } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { SupabaseService } from './supabase.service';
 import { User } from '@supabase/supabase-js';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -163,10 +164,17 @@ export class AuthService {
     }
 
     try {
+      // Get the redirect URL - prefer environment.siteUrl if set, otherwise use window.location.origin
+      // This ensures production uses the correct domain even if window.location.origin is incorrect
+      const baseUrl = (environment.production && environment.siteUrl) 
+        ? environment.siteUrl 
+        : (typeof window !== 'undefined' ? window.location.origin : '');
+      const redirectUrl = `${baseUrl}/admin`;
+      
       const { error } = await client.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
-          emailRedirectTo: `${window.location.origin}/admin`
+          emailRedirectTo: redirectUrl
         }
       });
 
@@ -243,8 +251,15 @@ export class AuthService {
     }
 
     try {
+      // Get the redirect URL - prefer environment.siteUrl if set, otherwise use window.location.origin
+      // This ensures production uses the correct domain even if window.location.origin is incorrect
+      const baseUrl = (environment.production && environment.siteUrl) 
+        ? environment.siteUrl 
+        : (typeof window !== 'undefined' ? window.location.origin : '');
+      const redirectUrl = `${baseUrl}/admin/reset-password`;
+      
       const { error } = await client.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/admin/reset-password`
+        redirectTo: redirectUrl
       });
 
       if (error) {
