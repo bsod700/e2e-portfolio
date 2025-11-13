@@ -42,24 +42,26 @@
     </div>
 
     <div class="project-types">
-      <button
-        *ngFor="let type of projectTypes"
-        class="type-btn shiny-corners"
-        [class.selected]="isSelected(type.id)"
-        (click)="toggleProjectType(type.id)"
-        [attr.aria-pressed]="isSelected(type.id)"
-      >
-        <div class="type-btn-content">
-          <span class="type-label">{{ type.label }}</span>
-        </div>
-      </button>
+      @for (type of projectTypes; track type.id) {
+        <button
+          class="type-btn shiny-corners"
+          [class.selected]="isSelected(type.id)"
+          (click)="toggleProjectType(type.id)"
+          [attr.aria-pressed]="isSelected(type.id)"
+        >
+          <div class="type-btn-content">
+            <span class="type-label">{{ type.label }}</span>
+          </div>
+        </button>
+      }
     </div>
 
     <!-- <p class="inquiry-hint">Describe your project, select types, or both to get started</p> -->
   </div>
 
   <!-- Contact Form Modal -->
-  <div class="contact-modal" *ngIf="showContactForm" (click)="closeContactForm()">
+  @if (showContactForm) {
+    <div class="contact-modal" (click)="closeContactForm()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <button class="close-btn" (click)="closeContactForm()" aria-label="Close">
         <span>×</span>
@@ -113,5 +115,6 @@
         <button class="btn btn-primary" (click)="submitInquiry()">Send Inquiry</button>
       </div>
     </div>
-  </div>
+    </div>
+  }
 </div>

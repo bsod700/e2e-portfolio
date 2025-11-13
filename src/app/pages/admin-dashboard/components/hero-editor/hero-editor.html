@@ -1,0 +1,85 @@
+<div class="tab-content">
+  <div class="content-grid">
+    <div class="content-section">
+      <h2>Hero Section</h2>
+      <p class="section-description">Edit the hero section content</p>
+
+      <form (ngSubmit)="saveContent()" class="content-form">
+        <div class="form-group">
+          <label for="badge_text">Badge Text</label>
+          <input
+            type="text"
+            id="badge_text"
+            [(ngModel)]="content.badge_text"
+            name="badge_text"
+            required
+            placeholder="From Vision to Infrastructure"
+            class="form-input"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="hero_title">Hero Title</label>
+          <textarea
+            id="hero_title"
+            [(ngModel)]="content.hero_title"
+            name="hero_title"
+            required
+            rows="3"
+            placeholder="End-to-End&#10;Digital Solutions"
+            class="form-textarea"
+          ></textarea>
+          <small class="form-hint">Use line breaks (Enter) to create multi-line titles</small>
+        </div>
+
+        <div class="form-group">
+          <label for="hero_description">Hero Description</label>
+          <textarea
+            id="hero_description"
+            [(ngModel)]="content.hero_description"
+            name="hero_description"
+            required
+            rows="4"
+            placeholder="I design and build intuitive apps and websites..."
+            class="form-textarea"
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="saving" class="btn-primary">
+            @if (saving) {
+              <span>Saving...</span>
+            }
+            @if (!saving) {
+              <span>Save Changes</span>
+            }
+          </button>
+        </div>
+      </form>
+
+      @if (error) {
+        <div class="error-message">
+          {{ error }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="success-message">
+          {{ successMessage }}
+        </div>
+      }
+    </div>
+
+    <div class="preview-section">
+      <h2>Preview</h2>
+      <div class="preview-card">
+        <div class="preview-badge">
+          <span>{{ content.badge_text }}</span>
+        </div>
+        <h1 class="preview-title" [innerHTML]="previewTitle()"></h1>
+        <p class="preview-description">{{ content.hero_description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

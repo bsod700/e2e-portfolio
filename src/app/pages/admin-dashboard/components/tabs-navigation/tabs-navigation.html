@@ -1,0 +1,16 @@
+@if (tabs.length > 0) {
+  <div class="tabs-container">
+    <div class="tabs">
+      @for (tab of tabs; track tab) {
+        <button
+          [class.active]="activeTab === tab"
+          (click)="onTabClick(tab)"
+          class="tab-button"
+        >
+          {{ tab.charAt(0).toUpperCase() + tab.slice(1) }}
+        </button>
+      }
+    </div>
+  </div>
+}
+

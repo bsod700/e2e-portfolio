@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentService, TestimonialContent } from '../../services/content.service';
 
 interface Testimonial {
   name: string;
@@ -29,12 +30,15 @@ interface CarouselRow {
   templateUrl: './testimonials.html',
   styleUrl: './testimonials.scss'
 })
-export class TestimonialsComponent {
+export class TestimonialsComponent implements OnInit {
+  private contentService = inject(ContentService);
+  
   isAnimationPaused = false;
   readonly loopCopies = ['original', 'duplicate'] as const;
   readonly ratingStars = [1, 2, 3, 4, 5];
 
-  testimonials: Testimonial[] = [
+  // Fallback testimonials if database is empty
+  private fallbackTestimonials: Testimonial[] = [
     {
       name: 'Dor',
       role: 'CEO, Pointline',
@@ -72,6 +76,38 @@ export class TestimonialsComponent {
       text: 'Amazing collaboration! Guy bridges the gap between design and development seamlessly. The final product was pixel-perfect and performant.'
     }
   ];
+
+  testimonials: Testimonial[] = [];
+
+  ngOnInit(): void {
+    this.loadTestimonialsFromDatabase();
+  }
+
+  private loadTestimonialsFromDatabase(): void {
+    this.contentService.getTestimonialsContent().subscribe({
+      next: (testimonialsFromDb: TestimonialContent[]) => {
+        if (testimonialsFromDb && testimonialsFromDb.length > 0) {
+          // Convert database testimonials to component format
+          this.testimonials = testimonialsFromDb
+            .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+            .map((dbTestimonial): Testimonial => ({
+              name: dbTestimonial.name,
+              role: dbTestimonial.role,
+              text: dbTestimonial.text,
+              avatar: dbTestimonial.avatar
+            }));
+        } else {
+          // Use fallback if database is empty
+          this.testimonials = [...this.fallbackTestimonials];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading testimonials from database:', error);
+        // Use fallback if database fails
+        this.testimonials = [...this.fallbackTestimonials];
+      }
+    });
+  }
 
   get carouselRows(): CarouselRow[] {
     const midpoint = Math.ceil(this.testimonials.length / 2);

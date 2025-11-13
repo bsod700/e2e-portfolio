@@ -1,87 +1,94 @@
-<div class="service-detail" *ngIf="service">
-  <!-- Hero Section -->
-  <section class="service-hero">
-    <div class="container">
-      <button class="back-button" (click)="goBack()">
-        <span class="arrow">←</span> Back to Services
-      </button>
-      
-      <div class="hero-content">
-        <div class="service-icon-large" [innerHTML]="service.icon"></div>
-        <h1 class="service-title">{{ service.title }}</h1>
-        <p class="service-subtitle">{{ service.description }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Overview Section -->
-  <section class="service-overview section">
-    <div class="container">
-      <div class="overview-content">
-        <h2>Overview</h2>
-        <p class="overview-text">{{ service.fullDescription }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services List Section -->
-  <section class="services-list section">
-    <div class="container">
-      <h2>What's Included</h2>
-      <p class="section-intro">Here are the specific services I provide under {{ service.title }}:</p>
-      
-      <div class="services-grid">
-        <div class="service-item" *ngFor="let item of service.services; let i = index">
-          <div class="service-number">{{ (i + 1).toString().padStart(2, '0') }}</div>
-          <p class="service-text">{{ item }}</p>
+@if (service) {
+  <div class="service-detail">
+    <!-- Hero Section -->
+    <section class="service-hero">
+      <div class="container">
+        <button class="back-button" (click)="goBack()">
+          <span class="arrow">←</span> Back to Services
+        </button>
+        
+        <div class="hero-content">
+          <h1 class="service-title">{{ service.title }}</h1>
+          <p class="service-subtitle">{{ service.description }}</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Benefits Section -->
-  <section class="benefits-section section">
-    <div class="container">
-      <h2>Key Benefits</h2>
-      <p class="section-intro">Why choose this service:</p>
-      
-      <div class="benefits-grid">
-        <div class="benefit-card" *ngFor="let benefit of service.benefits">
-          <div class="benefit-icon">✓</div>
-          <p class="benefit-text">{{ benefit }}</p>
+    <!-- Overview Section -->
+    <section class="service-overview section">
+      <div class="container">
+        <div class="overview-content">
+          <h2>Overview</h2>
+          <p class="overview-text">{{ service.fullDescription }}</p>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Code Example Section (if available) -->
-  <section class="code-example-section section" *ngIf="service.codeExample">
-    <div class="container">
-      <h2>Code Example</h2>
-      <p class="section-intro">A glimpse of how I work:</p>
-      
-      <div class="code-block">
-        <pre><code>{{ service.codeExample }}</code></pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Section -->
-  <section class="cta-section section">
-    <div class="container">
-      <div class="cta-card">
-        <h2>Ready to Get Started?</h2>
-        <p>Let's discuss how {{ service.title }} can help bring your project to life.</p>
-        <div class="cta-buttons">
-          <button class="cta-button primary" (click)="navigateToContact()">
-            Get in Touch
-          </button>
-          <button class="cta-button secondary" (click)="navigateToServices()">
-            View All Services
-          </button>
+    <!-- Services List Section -->
+    <section class="services-list section">
+      <div class="container">
+        <h2>What's Included</h2>
+        <p class="section-intro">Here are the specific services I provide under {{ service.title }}:</p>
+        
+        <div class="services-grid">
+          @for (item of service.services; track $index) {
+            <div class="service-item">
+              <div class="service-number">{{ ($index + 1).toString().padStart(2, '0') }}</div>
+              <p class="service-text">{{ item }}</p>
+            </div>
+          }
         </div>
       </div>
-    </div>
-  </section>
-</div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section section">
+      <div class="container">
+        <h2>Key Benefits</h2>
+        <p class="section-intro">Why choose this service:</p>
+        
+        <div class="benefits-grid">
+          @for (benefit of service.benefits; track $index) {
+            <div class="benefit-card">
+              <div class="benefit-icon">✓</div>
+              <p class="benefit-text">{{ benefit }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Code Example Section (if available) -->
+    @if (service.codeExample) {
+      <section class="code-example-section section">
+        <div class="container">
+          <h2>Code Example</h2>
+          <p class="section-intro">A glimpse of how I work:</p>
+          
+          <div class="code-block">
+            <pre><code>{{ service.codeExample }}</code></pre>
+          </div>
+        </div>
+      </section>
+    }
+
+    <!-- CTA Section -->
+    <section class="cta-section section">
+      <div class="container">
+        <div class="cta-card">
+          <h2>Ready to Get Started?</h2>
+          <p>Let's discuss how {{ service.title }} can help bring your project to life.</p>
+          <div class="cta-buttons">
+            <button class="cta-button primary" (click)="navigateToContact()">
+              Get in Touch
+            </button>
+            <button class="cta-button secondary" (click)="navigateToServices()">
+              View All Services
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+}
 

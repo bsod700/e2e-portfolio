@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ContentService, FAQContent } from '../../services/content.service';
 
 interface FAQ {
   question: string;
@@ -13,8 +14,11 @@ interface FAQ {
   templateUrl: './faq.html',
   styleUrl: './faq.scss'
 })
-export class FaqComponent {
-  faqs: FAQ[] = [
+export class FaqComponent implements OnInit {
+  private contentService = inject(ContentService);
+
+  // Fallback FAQs if database is empty
+  private fallbackFAQs: FAQ[] = [
     {
       question: "What's the typical project scope?",
       answer: "I take on full-cycle product builds that include UX, interface design, frontend and backend development, and automation. The focus is always on delivering complete, polished, and scalable digital solutions.",
@@ -41,6 +45,37 @@ export class FaqComponent {
       isOpen: false
     }
   ];
+
+  faqs: FAQ[] = [];
+
+  ngOnInit(): void {
+    this.loadFAQsFromDatabase();
+  }
+
+  private loadFAQsFromDatabase(): void {
+    this.contentService.getFAQContent().subscribe({
+      next: (faqsFromDb: FAQContent[]) => {
+        if (faqsFromDb && faqsFromDb.length > 0) {
+          // Convert database FAQs to component format
+          this.faqs = faqsFromDb
+            .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+            .map((dbFAQ): FAQ => ({
+              question: dbFAQ.question,
+              answer: dbFAQ.answer,
+              isOpen: dbFAQ.is_open || false
+            }));
+        } else {
+          // Use fallback if database is empty
+          this.faqs = [...this.fallbackFAQs];
+        }
+      },
+      error: (error) => {
+        console.error('Error loading FAQs from database:', error);
+        // Use fallback if database fails
+        this.faqs = [...this.fallbackFAQs];
+      }
+    });
+  }
 
   toggleFaq(index: number) {
     this.faqs[index].isOpen = !this.faqs[index].isOpen;

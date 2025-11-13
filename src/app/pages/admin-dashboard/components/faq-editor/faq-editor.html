@@ -1,0 +1,147 @@
+<div class="tab-content">
+  <div class="content-section">
+    <div class="section-header">
+      <div>
+        <h2>FAQ</h2>
+        <p class="section-description">Edit FAQ questions and answers. Drag cards to reorder.</p>
+      </div>
+      <button (click)="addNewFAQ()" class="btn-add">
+        <span>+</span> Add New FAQ
+      </button>
+    </div>
+
+    @if (sortedFAQs.length > 0) {
+      <div class="faq-cards-container">
+        @for (faq of sortedFAQs; track faq.id || $index) {
+          <div
+            class="faq-card"
+            [class.editing]="isEditing(faq)"
+            [class.dragging]="draggedIndex === $index"
+            [class.drag-over]="dragOverIndex === $index"
+            [draggable]="!isEditing(faq)"
+            (dragstart)="onDragStart($event, $index)"
+            (dragover)="onDragOver($event, $index)"
+            (dragleave)="onDragLeave()"
+            (drop)="onDrop($event, $index)"
+          >
+            <div class="faq-card-header">
+              @if (!isEditing(faq)) {
+                <div class="drag-handle">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4H10M6 8H10M6 12H10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+              }
+              <div class="faq-card-actions">
+                @if (!isEditing(faq)) {
+                  <button
+                    (click)="startEdit(faq)"
+                    class="btn-icon"
+                    title="Edit"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M11.333 2.667a1.333 1.333 0 0 1 1.885 1.885L5.333 12.667l-2.667.667.667-2.667L11.333 2.667z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                }
+                <button
+                  (click)="deleteFAQ(faq)"
+                  [disabled]="isDeleting(faq)"
+                  class="btn-icon btn-delete"
+                  title="Delete"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            @if (!isEditing(faq)) {
+              <div class="faq-card-content">
+                <h3 class="faq-question">{{ faq.question }}</h3>
+                <p class="faq-answer">{{ faq.answer }}</p>
+                <div class="faq-meta">
+                  <span class="faq-badge" [class.open]="faq.is_open">
+                    {{ faq.is_open ? 'Open by default' : 'Closed by default' }}
+                  </span>
+                </div>
+              </div>
+            }
+
+            @if (isEditing(faq)) {
+              <div class="faq-card-edit">
+                <div class="form-group">
+                  <label>Question</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="faq.question"
+                    name="question-{{ faq.id }}"
+                    class="form-input"
+                    placeholder="Enter question..."
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label>Answer</label>
+                  <textarea
+                    [(ngModel)]="faq.answer"
+                    name="answer-{{ faq.id }}"
+                    rows="4"
+                    class="form-textarea"
+                    placeholder="Enter answer..."
+                  ></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-checkbox">
+                    <input type="checkbox" [(ngModel)]="faq.is_open" name="is_open-{{ faq.id }}" />
+                    <span>Open by default</span>
+                  </label>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    (click)="saveFAQ(faq)"
+                    [disabled]="isSaving(faq) || !faq.question || !faq.answer"
+                    class="btn-primary"
+                  >
+                    {{ isSaving(faq) ? 'Saving...' : 'Save' }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="cancelEdit(faq)"
+                    [disabled]="isSaving(faq)"
+                    class="btn-secondary"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (sortedFAQs.length === 0) {
+      <div class="empty-state">
+        <p>No FAQs found. Click "Add New FAQ" to create one.</p>
+      </div>
+    }
+
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
+      </div>
+    }
+
+    @if (successMessage) {
+      <div class="success-message">
+        {{ successMessage }}
+      </div>
+    }
+  </div>
+</div>
+

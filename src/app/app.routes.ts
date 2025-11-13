@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -45,5 +46,16 @@ export const routes: Routes = [
     path: 'sitemap',
     loadComponent: () => import('./pages/sitemap-page/sitemap-page').then(m => m.SitemapPageComponent),
     title: 'Sitemap - Guy Tagger'
+  },
+  {
+    path: 'admin/login',
+    loadComponent: () => import('./pages/admin-login/admin-login').then(m => m.AdminLoginComponent),
+    title: 'Admin Login - Guy Tagger'
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard').then(m => m.AdminDashboardComponent),
+    title: 'Admin Dashboard - Guy Tagger',
+    canActivate: [authGuard]
   }
 ];

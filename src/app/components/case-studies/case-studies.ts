@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProjectCardComponent, Project } from './project-card/project-card';
+import { ContentService, ProjectContent } from '../../services/content.service';
 
 @Component({
   selector: 'app-case-studies',
@@ -10,6 +11,8 @@ import { ProjectCardComponent, Project } from './project-card/project-card';
   styleUrl: './case-studies.scss'
 })
 export class CaseStudiesComponent implements OnInit, OnDestroy {
+  private contentService = inject(ContentService);
+  
   displayedProjects: Project[] = [];
   displayedIndexMap: number[] = []; // Maps displayedProjects index to originalProjects index
   currentIndex = 0; // Current center position in displayedProjects array
@@ -81,6 +84,9 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
+    // Load projects from database
+    this.loadProjectsFromDatabase();
+    
     // Initialize with 7 cards: [3 buffer left] + [1 center] + [3 buffer right]
     this.initializeCarousel();
     
@@ -91,6 +97,71 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
         this.startAutoPlay();
       }, 100);
     }
+  }
+
+  private loadProjectsFromDatabase(): void {
+    this.contentService.getProjectsContent().subscribe({
+      next: (projectsFromDb: ProjectContent[]) => {
+        if (projectsFromDb && projectsFromDb.length > 0) {
+          // Update originalProjects with data from database
+          projectsFromDb.forEach((dbProject) => {
+            const existingProject = this.originalProjects.find(
+              p => p.type === dbProject.project_id
+            );
+            
+            if (existingProject) {
+              // Update existing project with database data
+              existingProject.title = dbProject.title || existingProject.title;
+              existingProject.description = dbProject.description || existingProject.description;
+              
+              if (dbProject.logo_url) {
+                existingProject.logoUrl = dbProject.logo_url;
+              }
+              
+              if (dbProject.image_src) {
+                existingProject.img = {
+                  src: dbProject.image_src,
+                  alt: dbProject.image_alt || dbProject.title || 'Project image'
+                };
+              }
+              
+              if (dbProject.link) {
+                existingProject.link = dbProject.link;
+              }
+            } else {
+              // Add new project from database
+              const newProject: Project = {
+                type: dbProject.project_id,
+                title: dbProject.title,
+                description: dbProject.description,
+                logoUrl: dbProject.logo_url || '',
+                img: {
+                  src: dbProject.image_src || '',
+                  alt: dbProject.image_alt || dbProject.title || 'Project image'
+                },
+                backgroundImages: dbProject.background_images || [],
+                link: dbProject.link || '/projects'
+              };
+              this.originalProjects.push(newProject);
+            }
+          });
+          
+          // Sort by display_order if available
+          this.originalProjects.sort((a, b) => {
+            const aOrder = projectsFromDb.find(p => p.project_id === a.type)?.display_order || 999;
+            const bOrder = projectsFromDb.find(p => p.project_id === b.type)?.display_order || 999;
+            return aOrder - bOrder;
+          });
+          
+          // Reinitialize carousel with updated data
+          this.initializeCarousel();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading projects from database:', error);
+        // Continue with hardcoded data if database fails
+      }
+    });
   }
 
   ngOnDestroy(): void {

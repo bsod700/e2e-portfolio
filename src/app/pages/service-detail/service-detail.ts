@@ -19,7 +19,6 @@ export class ServiceDetailComponent implements OnInit {
   private allServices: Service[] = [
     {
       id: 'development',
-      icon: '</>',
       title: 'Development',
       description: 'Building fast, scalable web apps with modern frameworks, performance-first code, and clean architecture.',
       fullDescription: 'I specialize in building high-performance web applications using cutting-edge technologies and best practices. From single-page applications to complex full-stack systems, I deliver clean, maintainable code that scales with your business.',
@@ -54,8 +53,7 @@ export class FeatureComponent {
 }`
     },
     {
-      id: 'strategy',
-      icon: '🎯',
+      id: 'strategy', 
       title: 'Strategy',
       description: 'Product planning, feature architecture, and design direction aligned with real user and business needs.',
       fullDescription: 'Strategic planning is crucial for successful digital products. I help you define clear goals, choose the right technology stack, and create a roadmap that aligns technical decisions with business objectives.',
@@ -79,7 +77,6 @@ export class FeatureComponent {
     },
     {
       id: 'ai-automation',
-      icon: '⚙️',
       title: 'AI Automation',
       description: 'Implementing AI and workflow automation to reduce manual work, speed up delivery, and scale efficiently.',
       fullDescription: 'Harness the power of artificial intelligence to automate repetitive tasks, enhance user experiences, and gain valuable insights from your data. I integrate modern AI tools and create custom automation workflows that save time and increase efficiency.',
@@ -103,7 +100,6 @@ export class FeatureComponent {
     },
     {
       id: 'design',
-      icon: '✨',
       title: 'Design',
       description: 'UI/UX design that\'s user-centered, scalable, and visually aligned with your brand and product goals.',
       fullDescription: 'I create beautiful, intuitive interfaces that users love. Every design decision is backed by user research and best practices, ensuring your product is not just visually appealing but also highly functional and accessible.',

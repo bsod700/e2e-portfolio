@@ -1,0 +1,173 @@
+<div class="page-content">
+  <div class="content-section">
+    <div class="section-header">
+      <div>
+        <h2>{{ pageName }}</h2>
+        <p class="section-description">Edit sections for this legal page. Click "Edit" on a section to modify it.</p>
+      </div>
+      <button (click)="addLegalSection()" class="btn-add">
+        <span>+</span> Add Section
+      </button>
+    </div>
+
+    @if (sections.length > 0) {
+      <div class="sections-list">
+        @for (section of sections; track section.id || $index) {
+          <div class="section-card-wrapper">
+            <!-- Section Card -->
+            <div class="section-card" [class.editing]="isEditing($index)">
+              <div class="section-card-header">
+                <h3 class="section-heading">{{ section.heading || 'Untitled Section' }}</h3>
+                <div class="section-actions">
+                  <button
+                    (click)="editLegalSection($index)"
+                    class="btn-icon"
+                    [class.active]="isEditing($index)"
+                    title="Edit"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M11.333 2.667a1.333 1.333 0 0 1 1.885 1.885L5.333 12.667l-2.667.667.667-2.667L11.333 2.667z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button
+                    (click)="removeLegalSection($index)"
+                    [disabled]="saving"
+                    class="btn-icon btn-delete"
+                    title="Delete"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              @if (!isEditing($index)) {
+                <div class="section-card-content">
+                  @if (section.content) {
+                    <div class="section-preview-content">
+                      <p>{{ section.content }}</p>
+                    </div>
+                  }
+                  @if (section.list_items && section.list_items.length > 0) {
+                    <div class="section-preview-list">
+                      <ul>
+                        @for (item of section.list_items; track $index) {
+                          <li>{{ item }}</li>
+                        }
+                      </ul>
+                    </div>
+                  }
+                  @if (!section.content && (!section.list_items || section.list_items.length === 0)) {
+                    <div class="section-preview-empty">
+                      <p class="empty-hint">No content yet. Click "Edit" to add content.</p>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Inline Edit Form (appears after the card) -->
+            @if (isEditing($index) && editingSection) {
+              <div class="section-edit-form">
+                <h4>Edit Section: {{ editingSection.heading || 'Untitled Section' }}</h4>
+                <form class="content-form">
+                  <div class="form-group">
+                    <label>Heading</label>
+                    <input
+                      type="text"
+                      [(ngModel)]="editingSection.heading"
+                      (ngModelChange)="onSectionFieldChange()"
+                      name="heading-{{$index}}"
+                      required
+                      class="form-input"
+                      placeholder="Enter section heading..."
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Content</label>
+                    <textarea
+                      [(ngModel)]="editingSection.content"
+                      (ngModelChange)="onSectionFieldChange()"
+                      name="content-{{$index}}"
+                      rows="6"
+                      class="form-textarea"
+                      placeholder="Enter section content..."
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label>List Items</label>
+                    <div class="array-input">
+                      @for (item of editingSection.list_items; track $index) {
+                        <div class="array-item">
+                          <input
+                            type="text"
+                            [(ngModel)]="editingSection.list_items![$index]"
+                            (ngModelChange)="onSectionFieldChange()"
+                            name="list_item_{{$index}}_{{$index}}"
+                            class="form-input"
+                          />
+                          <button type="button" (click)="removeLegalListItem($index)" class="btn-remove">×</button>
+                        </div>
+                      }
+                      <div class="add-item">
+                        <input
+                          type="text"
+                          [(ngModel)]="newListItem"
+                          (keyup.enter)="addLegalListItem()"
+                          placeholder="Add list item and press Enter"
+                          class="form-input"
+                        />
+                        <button type="button" (click)="addLegalListItem()" class="btn-add">Add</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button
+                      type="button"
+                      (click)="saveSection($index)"
+                      [disabled]="saving || !editingSection.heading"
+                      class="btn-primary"
+                    >
+                      {{ saving ? 'Saving...' : 'Save Section' }}
+                    </button>
+                    <button
+                      type="button"
+                      (click)="cancelEdit()"
+                      [disabled]="saving"
+                      class="btn-secondary"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    @if (sections.length === 0) {
+      <div class="empty-state">
+        <p>No sections yet. Click "Add Section" to get started.</p>
+      </div>
+    }
+
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
+      </div>
+    }
+
+    @if (successMessage) {
+      <div class="success-message">
+        {{ successMessage }}
+      </div>
+    }
+  </div>
+</div>
+

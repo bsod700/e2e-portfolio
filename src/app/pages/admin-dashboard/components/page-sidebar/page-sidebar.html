@@ -1,0 +1,15 @@
+<div class="pages-sidebar">
+  <h2>Pages</h2>
+  <nav class="pages-nav">
+    @for (page of pages; track page.id) {
+      <button
+        [class.active]="activePage === page.id"
+        (click)="onPageClick(page.id)"
+        class="page-button"
+      >
+        {{ page.name }}
+      </button>
+    }
+  </nav>
+</div>
+

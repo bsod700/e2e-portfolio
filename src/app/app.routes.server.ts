@@ -42,5 +42,13 @@ export const serverRoutes: ServerRoute[] = [
   {
     path: 'sitemap',
     renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'admin/login',
+    renderMode: RenderMode.Server
+  },
+  {
+    path: 'admin',
+    renderMode: RenderMode.Server
   }
 ];

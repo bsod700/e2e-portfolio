@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ContentService } from '../../services/content.service';
 import { DesignVisualComponent } from './service-visuals/design-visual/design-visual';
 import { DevelopmentVisualComponent } from './service-visuals/development-visual/development-visual';
 import { AiAutomationVisualComponent } from './service-visuals/ai-automation-visual/ai-automation-visual';
@@ -9,7 +10,6 @@ import { BrandVisualComponent } from './service-visuals/brand-visual/brand-visua
 
 export interface Service {
   id: string;
-  icon: string;
   title: string;
   description: string;
   fullDescription: string;
@@ -33,6 +33,7 @@ export interface Service {
 })
 export class ServicesComponent implements OnInit {
   constructor(private router: Router) {}
+  private contentService = inject(ContentService);
 
   // Track glow styles for each service card
   cardGlowStyles: { [key: string]: { [key: string]: string } } = {};
@@ -59,6 +60,29 @@ export class ServicesComponent implements OnInit {
         '--py': '-1000px',
         '--hover': '0'
       };
+    });
+
+    // Load updated content from database
+    this.loadUpdatedContent();
+  }
+
+  private loadUpdatedContent(): void {
+    this.contentService.getHomeServicesSection().subscribe({
+      next: (data) => {
+        if (data && data.length > 0) {
+          // Update only title, description, and icon from database
+          data.forEach(card => {
+            const existingService = this.services.find(s => s.id === card.service_id);
+            if (existingService) {
+              if (card.title) existingService.title = card.title;
+              if (card.description) existingService.description = card.description;
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error loading updated services:', error);
+      }
     });
   }
 
@@ -101,7 +125,6 @@ export class ServicesComponent implements OnInit {
   services: Service[] = [
     {
       id: 'design',
-      icon: '✨',
       title: 'Digital Product Design',
       description: 'From mobile apps to complex systems, every product is crafted from the ground up - no templates, no shortcuts. Tailored to your goals, built to perform, and designed to stand out.',
       fullDescription: 'I create beautiful, intuitive interfaces that users love. Every design decision is backed by user research and best practices, ensuring your product is not just visually appealing but also highly functional and accessible.',
@@ -125,7 +148,6 @@ export class ServicesComponent implements OnInit {
     },
     {
       id: 'development',
-      icon: '</>',
       title: 'FullStack Development',
       description: 'Reliable, high-performance systems built with modern frameworks. From scalable APIs to dynamic front-ends, software engineered to evolve and grow with every business need.',
       fullDescription: 'I specialize in building high-performance web applications using cutting-edge technologies and best practices. From single-page applications to complex full-stack systems, I deliver clean, maintainable code that scales with your business.',
@@ -161,7 +183,6 @@ export class FeatureComponent {
     },
     {
       id: 'ai-automation',
-      icon: '⚙️',
       title: 'AI Automation',
       description: 'Intelligent workflows that evolve with your business. Custom AI solutions automate tasks, enhance decisions, and create smarter operations.',
       fullDescription: 'Harness the power of artificial intelligence to automate repetitive tasks, enhance user experiences, and gain valuable insights from your data. I integrate modern AI tools and create custom automation workflows that save time and increase efficiency.',
@@ -185,7 +206,6 @@ export class FeatureComponent {
     },
     {
       id: 'strategy',
-      icon: '🎯',
       title: 'Digital Strategy',
       description: 'Data-driven direction that connects design, technology, and growth. Every move focused on clarity, consistency, and measurable results.',
       fullDescription: 'Strategic planning is crucial for successful digital products. I help you define clear goals, choose the right technology stack, and create a roadmap that aligns technical decisions with business objectives.',
@@ -209,7 +229,6 @@ export class FeatureComponent {
     },
     {
       id: 'brand',
-      icon: '🎨',
       title: 'Brand Identity',
       description: 'Distinct visuals and language that define who you are. From logo to palette, every element built to express purpose and leave a mark.',
       fullDescription: 'I create distinctive brand identities that communicate your unique value proposition. From logo design to comprehensive brand guidelines, every element is crafted to express your purpose and leave a lasting impression.',

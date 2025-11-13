@@ -70,14 +70,18 @@
     </div>
 
     <div class="additional-grid">
-      <div class="additional-card" *ngFor="let service of additionalServices">
-        <div class="additional-icon">{{ service.icon }}</div>
-        <h3>{{ service.title }}</h3>
-        <p>{{ service.description }}</p>
-        <ul class="additional-points">
-          <li *ngFor="let point of service.points">{{ point }}</li>
-        </ul>
-      </div>
+      @for (service of additionalServices; track service.title) {
+        <div class="additional-card">
+          <div class="additional-icon">{{ service.icon }}</div>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description }}</p>
+          <ul class="additional-points">
+            @for (point of service.points; track $index) {
+              <li>{{ point }}</li>
+            }
+          </ul>
+        </div>
+      }
     </div>
   </div>
 </section>
@@ -93,13 +97,15 @@
     </div>
 
     <div class="process-timeline">
-      <div class="process-step" *ngFor="let step of process">
-        <div class="step-number">{{ step.number }}</div>
-        <div class="step-content">
-          <h3>{{ step.title }}</h3>
-          <p>{{ step.description }}</p>
+      @for (step of process; track step.number) {
+        <div class="process-step">
+          <div class="step-number">{{ step.number }}</div>
+          <div class="step-content">
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </div>
 </section>

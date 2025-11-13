@@ -1,0 +1,106 @@
+<div class="tab-content">
+  <div class="content-grid">
+    <div class="content-section">
+      <h2>Testimonials</h2>
+      <p class="section-description">Edit testimonial cards displayed on the testimonials section</p>
+
+      @if (testimonials.length > 0) {
+        <div class="form-group">
+          <app-custom-dropdown
+            [options]="dropdownOptions"
+            [selectedValue]="selectedTestimonialId"
+            [placeholder]="'-- Select a testimonial --'"
+            [label]="'Select Testimonial to Edit'"
+            [id]="'testimonial-select'"
+            (valueChange)="onTestimonialSelect($event)"
+          ></app-custom-dropdown>
+        </div>
+      }
+
+      @if (testimonials.length === 0) {
+        <div class="empty-state">
+          <p>No testimonials found. Content will appear here once loaded from the database.</p>
+        </div>
+      }
+
+      <!-- Edit Testimonial Form -->
+      @if (editingTestimonial) {
+        <div class="edit-form">
+        <h3>Edit Testimonial: {{ editingTestimonial.name }}</h3>
+        <p class="form-note">These fields control what appears on the testimonial cards.</p>
+        
+        <form (ngSubmit)="saveTestimonial()" class="content-form">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" [(ngModel)]="editingTestimonial.name" name="name" required class="form-input" />
+            <small class="form-hint">Name of the person giving the testimonial</small>
+          </div>
+
+          <div class="form-group">
+            <label>Role</label>
+            <input type="text" [(ngModel)]="editingTestimonial.role" name="role" required class="form-input" />
+            <small class="form-hint">Role or title of the person</small>
+          </div>
+
+          <div class="form-group">
+            <label>Testimonial Text</label>
+            <textarea [(ngModel)]="editingTestimonial.text" name="text" required rows="4" class="form-textarea"></textarea>
+            <small class="form-hint">The testimonial content</small>
+          </div>
+
+          <div class="form-group">
+            <label>Avatar URL</label>
+            <input type="text" [(ngModel)]="editingTestimonial.avatar" name="avatar" class="form-input" />
+            <small class="form-hint">URL to the person's avatar image</small>
+          </div>
+
+          <div class="form-group">
+            <label>Display Order</label>
+            <input type="number" [(ngModel)]="editingTestimonial.display_order" name="display_order" class="form-input" min="0" />
+            <small class="form-hint">Order in which this testimonial appears (lower numbers appear first)</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="saving" class="btn-primary">Save</button>
+            <button type="button" (click)="cancelEditTestimonial()" class="btn-secondary">Cancel</button>
+          </div>
+        </form>
+        </div>
+      }
+
+      @if (error) {
+        <div class="error-message">
+          {{ error }}
+        </div>
+      }
+
+      @if (successMessage) {
+        <div class="success-message">
+          {{ successMessage }}
+        </div>
+      }
+    </div>
+
+    @if (editingTestimonial) {
+      <div class="preview-section">
+        <h2>Preview</h2>
+        <div class="preview-card preview-testimonial-card">
+          <div class="preview-testimonial-content">
+            @if (editingTestimonial.avatar) {
+              <div class="preview-testimonial-avatar">
+                <img [src]="editingTestimonial.avatar" [alt]="editingTestimonial.name" class="preview-avatar" />
+              </div>
+            }
+            <div class="preview-testimonial-text">
+              <p class="preview-testimonial-quote">{{ editingTestimonial.text || 'Testimonial text will appear here...' }}</p>
+            </div>
+            <div class="preview-testimonial-author">
+              <h4 class="preview-testimonial-name">{{ editingTestimonial.name || 'Name' }}</h4>
+              <p class="preview-testimonial-role">{{ editingTestimonial.role || 'Role' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

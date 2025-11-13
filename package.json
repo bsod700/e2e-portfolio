@@ -3,11 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "node scripts/load-env.js",
     "start": "ng serve",
+    "prebuild": "node scripts/load-env.js",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:e2e-portfolio": "node dist/e2e-portfolio/server/server.mjs"
+    "serve:ssr:e2e-portfolio": "node dist/e2e-portfolio/server/server.mjs",
+    "load-env": "node scripts/load-env.js",
+    "setup-supabase": "node scripts/quick-setup.js",
+    "setup-supabase-sql": "cat scripts/setup-supabase-sql.sql",
+    "verify-supabase": "node scripts/quick-setup.js"
   },
   "prettier": {
     "printWidth": 100,
@@ -32,6 +38,7 @@
     "@angular/platform-server": "^20.3.0",
     "@angular/router": "^20.3.0",
     "@angular/ssr": "^20.3.6",
+    "@supabase/supabase-js": "^2.81.1",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -44,6 +51,7 @@
     "@types/express": "^5.0.1",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
+    "dotenv": "^17.2.3",
     "jasmine-core": "~5.9.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

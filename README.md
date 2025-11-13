@@ -35,54 +35,14 @@ npm run build
 npm run serve:ssr:e2e-portfolio
 ```
 
-## 🎨 Customization
-
-### Add Your Profile Image
-
-Add your profile photo to `/public/profile.jpg` (recommended size: 800x1000px)
-
-### Update Content
-
-All content can be updated in the component TypeScript files:
-- Personal info: `src/app/components/hero/`
-- About text: `src/app/components/about/`
-- Services: `src/app/components/services/services.ts`
-- Testimonials: `src/app/components/testimonials/testimonials.ts`
-- Projects: `src/app/components/case-studies/case-studies.ts`
-
-### Update Colors
-
-Modify the color palette in `src/styles.scss`:
-```scss
-:root {
-  --color-primary: #4A90E2;
-  --color-secondary: #9C27B0;
-  // ... more colors
-}
-```
-
-## 🚀 Deployment to Vercel
-
-### Option 1: Vercel CLI
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Option 2: GitHub Integration
-
-1. Push your code to GitHub
-2. Go to [vercel.com](https://vercel.com)
-3. Import your repository
-4. Vercel will auto-detect Angular and deploy
-
+#
 ### Environment Variables
 
-No environment variables are required for basic deployment.
+For Supabase integration, you need to set up environment variables:
+
+1. **Create a `.env` file** in the project root:
+
+
 
 ## 📊 Performance Optimization
 
