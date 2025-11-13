@@ -1,10 +1,11 @@
 import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { CtaButtonComponent } from '../cta-button/cta-button';
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, CtaButtonComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })

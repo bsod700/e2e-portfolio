@@ -34,5 +34,191 @@
     opacity: 0.3;
     z-index: 1;
   }
+
+  .circles {
+    position: absolute;
+    top: 155px;
+    left: 190px;
+    z-index: 2;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate3d(
+        calc(var(--hover) * var(--dx) * 2px),
+        calc(var(--hover) * var(--dy) * 2px),
+        0
+      )
+      rotateX(calc(var(--hover) * var(--dy) * -2deg))
+      rotateY(calc(var(--hover) * var(--dx) * 2deg))
+      translateZ(calc(var(--hover) * 200px));
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(47, 50, 64, 0.25);
+      box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.25), 0 0 30px 0 rgba(0, 0, 0, 0.25);
+      filter: blur(0.25px);
+      transform-origin: center;
+      animation: circle-rotate 20s linear infinite;
+      overflow: visible;
+      top: 50%;
+      left: 50%;
+
+      .circle-stroke {
+        position: absolute;
+        top: -5%;
+        left: -5%;
+        width: 110%;
+        height: 110%;
+        pointer-events: none;
+      }
+
+      &.circle-1 {
+        width: 160px;
+        height: 160px;
+        transform: translate(-50%, -50%);
+        animation-duration: 20s;
+        z-index: 5;
+      }
+
+      &.circle-2 {
+        width: 350px;
+        height: 350px;
+        transform: translate(-50%, -50%);
+        animation-duration: 25s;
+        animation-direction: reverse;
+        z-index: 1;
+      }
+
+      &.circle-3 {
+        width: 220px;
+        height: 220px;
+        transform: translate(-50%, -50%);
+        animation-duration: 18s;
+        z-index: 3;
+      }
+
+      &.circle-4 {
+        width: 280px;
+        height: 280px;
+        transform: translate(-50%, -50%);
+        animation-duration: 22s;
+        animation-direction: reverse;
+        z-index: 2;
+      }
+    }
+  }
+
+  @keyframes circle-rotate {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
+  .thumb {
+    position: absolute;
+    top: 155px;
+    left: 190px;
+    width: 114.77px;
+    height: 114.77px;
+    z-index: 2;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    transform: translate(-50%, -50%);
+    
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate(-50%, -50%)
+        translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
+        rotateX(calc(var(--hover) * var(--dy) * -2deg))
+        rotateY(calc(var(--hover) * var(--dx) * 2deg))
+        translateZ(calc(var(--hover) * 200px));
+    }
+    .thumb-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      img {
+        width: 65px;
+        height: 74px;
+      }
+    }
+   
+
+    .thumb-glow-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle at center,
+        rgba(205, 71, 57, 0.6) 0%,
+        rgba(205, 71, 57, 0.3) 40%,
+        rgba(205, 71, 57, 0.1) 60%,
+        transparent 100%
+      );
+      filter: blur(15px);
+      z-index: 3;
+      pointer-events: none;
+
+      &.thumb-glow-1 {
+        width: 80px;
+        height: 80px;
+        top: 10%;
+        left: 15%;
+        animation: thumb-glow-pulse 3s ease-in-out infinite;
+      }
+
+      &.thumb-glow-2 {
+        width: 60px;
+        height: 60px;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+        animation: thumb-glow-pulse 3.5s ease-in-out infinite 0.5s;
+      }
+
+      &.thumb-glow-3 {
+        width: 70px;
+        height: 70px;
+        bottom: 15%;
+        left: 25%;
+        animation: thumb-glow-pulse 4s ease-in-out infinite 1s;
+      }
+
+      &.thumb-glow-4 {
+        width: 50px;
+        height: 50px;
+        top: 30%;
+        right: 20%;
+        animation: thumb-glow-pulse 3.2s ease-in-out infinite 0.3s;
+      }
+
+      &.thumb-glow-5 {
+        width: 45px;
+        height: 45px;
+        bottom: 25%;
+        right: 15%;
+        animation: thumb-glow-pulse 3.8s ease-in-out infinite 0.8s;
+      }
+    }
+
+    @keyframes thumb-glow-pulse {
+      0%, 100% {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+    }
+  }
 }
 

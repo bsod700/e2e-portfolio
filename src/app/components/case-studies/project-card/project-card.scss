@@ -1,0 +1,286 @@
+.project-card {
+  width: 100%;
+  height: 500px;
+  background: #080c1a;
+  border: 1px solid #2b2b2b;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  
+  @media (max-width: 768px) {
+    height: auto;
+    min-height: 400px;
+  }
+
+  &.active {
+    border-color: rgba(223, 86, 62, 0.5);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    transform: scale(1.02);
+  }
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 48px;
+  gap: 48px;
+  position: relative;
+  z-index: 1;
+  
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+    gap: 32px;
+  }
+}
+
+// Background visuals
+.card-visual {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+// Tierro background images
+.tierro-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.tierro-bg-image {
+  position: absolute;
+  pointer-events: none;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.tierro-bg-1 {
+  left: 295.87px;
+  top: 174px;
+  width: 333.594px;
+  height: 938.469px;
+  transform: rotate(166.831deg) scaleY(-1);
+  
+  img {
+    opacity: 0.6;
+  }
+}
+
+.tierro-bg-2 {
+  left: 377px;
+  top: 0;
+  width: 770.301px;
+  height: 661.127px;
+  transform: rotate(20deg);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  
+  .tierro-screenshot-1 {
+    width: 100%;
+    aspect-ratio: 1218 / 198;
+    object-fit: cover;
+    opacity: 0.7;
+  }
+  
+  .tierro-screenshot-2 {
+    width: 447.446px;
+    height: 273.968px;
+    object-fit: cover;
+    opacity: 0.7;
+  }
+}
+
+// Prompt Management phone screenshots
+.prompt-phones {
+  position: absolute;
+  left: 414.08px;
+  top: 17.61px;
+  width: 100%;
+  height: 100%;
+}
+
+.phone-screen {
+  position: absolute;
+  width: 176.38px;
+  height: 309.425px;
+  transform: rotate(15.835deg);
+  pointer-events: none;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.8;
+  }
+  
+  &:nth-child(1) {
+    left: 0;
+    top: 0;
+  }
+  
+  &:nth-child(2) {
+    left: 159.84px;
+    top: 82.83px;
+  }
+  
+  &:nth-child(3) {
+    left: 339.21px;
+    top: 96.26px;
+  }
+}
+
+// Glow effects
+.glow-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  
+  &.glow-blue-1 {
+    left: 92.59px;
+    top: 282.17px;
+    width: 219.094px;
+    height: 205.773px;
+    background: radial-gradient(ellipse, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+    transform: scale(3.5);
+  }
+  
+  &.glow-red-1 {
+    width: 204.793px;
+    height: 204.793px;
+    background: radial-gradient(circle, rgba(223, 86, 62, 0.3) 0%, transparent 70%);
+    transform: scale(2.18);
+    
+    &:nth-of-type(2) {
+      left: 285.34px;
+      top: 376.55px;
+    }
+    
+    &:nth-of-type(3) {
+      left: 311.68px;
+      top: -55.9px;
+    }
+  }
+  
+  &.glow-big-blue-1 {
+    left: -127.18px;
+    top: 113px;
+    width: 692.362px;
+    height: 692.362px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+    transform: scale(1.58);
+  }
+}
+
+.card-text-wrapper {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  width: 400px;
+  justify-content: space-between;
+  
+  @media (max-width: 768px) {
+    width: 100%;
+    gap: 32px;
+  }
+}
+
+.project-logo {
+  width: 214.923px;
+  height: 80px;
+  flex-shrink: 0;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  // Prompt Management specific logo styling
+  .prompt-management & {
+    width: 120px;
+    height: 66px;
+    position: relative;
+    
+    img {
+      width: 66.398px;
+      height: 66.398px;
+      object-fit: contain;
+    }
+  }
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.card-actions {
+  margin-top: auto;
+}
+
+.project-title {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  margin: 0;
+  
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
+}
+
+.project-description {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.4;
+  color: rgba(252, 252, 252, 0.8);
+  margin: 0;
+  flex-grow: 1;
+  
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+}
+
+.btn-view-case-study {
+  align-self: flex-start;
+  
+  // CTA component handles its own styling, this class just provides positioning
+}
+

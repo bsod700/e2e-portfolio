@@ -140,7 +140,19 @@ export class FeatureComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/services']);
+    // Navigate to home page
+    this.router.navigate(['/']).then(() => {
+      // Wait for navigation to complete, then scroll to services section
+      setTimeout(() => {
+        const servicesElement = document.getElementById('services');
+        if (servicesElement) {
+          servicesElement.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
+    });
   }
 
   navigateToContact(): void {

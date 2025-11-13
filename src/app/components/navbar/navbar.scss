@@ -155,67 +155,6 @@
   }
 }
 
-@property --cta-deg-gradient {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 230deg;
-}
-
-.cta-nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  gap: 8px;
-  border-radius: 8px;
-  --cta-deg-gradient: 230deg;
-  background: linear-gradient(var(--cta-deg-gradient), #ea624a -15.19%, #961416 73.3%);
-  text-decoration: none;
-  transition: --cta-deg-gradient 0.5s ease, transform 0.5s ease;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: -14px 31px 10px 0 rgba(0, 0, 0, 0), -9px 20px 9px 0 rgba(0, 0, 0, 0.01),
-    -5px 11px 7px 0 rgba(0, 0, 0, 0.04), -2px 5px 5px 0 rgba(0, 0, 0, 0.07),
-    -1px 1px 3px 0 rgba(0, 0, 0, 0.08);
-  border: 0.5px solid #df563e;
-  max-width: 400px;
-  @include respond-to(md) {
-    padding: 12px 12px 12px 16px;
-  }
-  span {
-    color: var(--color-text-primary);
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 110%;
-  }
-
-  .arrow-icon {
-    width: 17px;
-    height: 9px;
-    flex-shrink: 0;
-    display: none;
-    @include respond-to(md) {
-      display: block;
-    }
-  }
-
-  &:hover {
-    --cta-deg-gradient: 330deg;
-    transform: scale(1.05);
-  }
-  &.mobile {
-    display: inline-flex;
-    width: 100%;
-    padding: 16px 32px;
-  
-    @include respond-to(md) {
-      display: none;
-    }
-    .arrow-icon {
-      display: block;
-    }
-  }
-}
 
 .menu-toggle {
   display: flex;

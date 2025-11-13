@@ -21,10 +21,12 @@
       </div>
       
       <div class="navbar-right">
-        <a href="/#contact" (click)="closeMenu()" class="cta-nav">
-          <span>Let’s Talk</span>
-          <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" />
-        </a>
+        <app-cta-button 
+          size="small" 
+          href="/#contact" 
+          (clicked)="closeMenu()"
+          class="cta-nav">
+        </app-cta-button>
         <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen">
           <span></span>
           <span></span>
@@ -44,10 +46,12 @@
             </a>
           </li>
         </ul>
-        <a href="/contact" (click)="closeMenu()" class="cta-nav mobile">
-          <span>Let’s Talk</span>
-          <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" />
-        </a>
+        <app-cta-button 
+          size="small" 
+          href="/#contact" 
+          (clicked)="closeMenu()"
+          class="cta-nav mobile">
+        </app-cta-button>
       </div>  
     </div>
 </nav>

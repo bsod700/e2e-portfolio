@@ -1,19 +1,11 @@
 import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
-interface Project {
-  emoji: string;
-  title: string;
-  description: string;
-  details: string;
-  tags: string[];
-  badge?: string;
-}
+import { ProjectCardComponent, Project } from './project-card/project-card';
 
 @Component({
   selector: 'app-case-studies',
-  imports: [RouterLink],
+  imports: [RouterLink, ProjectCardComponent],
   templateUrl: './case-studies.html',
   styleUrl: './case-studies.scss'
 })
@@ -34,40 +26,28 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
   
   originalProjects: Project[] = [
     {
-      emoji: '🎬',
-      title: 'HEPROD',
-      description: 'Building a Custom Media Platform from Scratch',
-      details: 'A comprehensive media platform built with modern technologies, featuring custom video players, content management, user authentication, and seamless streaming capabilities. The project involved full-stack development, from database design to frontend implementation.',
-      tags: ['Angular', 'Node.js', 'MongoDB', 'AWS', 'TypeScript'],
-      badge: 'Featured Project'
+      type: 'tierro',
+      title: 'Building a Custom Music Platform from Scratch',
+      description: 'Full-scale digital brand for music producer Tierro. Custom website, integrated music player, brand identity, and backend systems built end to end.',
+      logoUrl: 'http://localhost:3845/assets/a13425e7d81a580cb6493828520a19508cdd5a86.svg',
+      backgroundImages: [
+        'http://localhost:3845/assets/27d2c3a1b418e49e2bd1eff69fe5e46baa849836.svg',
+        'http://localhost:3845/assets/e2efc369d8d7f1403c194da027d1850a5151355b.png',
+        'http://localhost:3845/assets/23c6d379fbeef609d69e9736c6a7314ef5a6b499.png'
+      ],
+      link: '/projects'
     },
     {
-      emoji: '🛒',
-      title: 'E-Commerce Platform',
-      description: 'Full-featured online store with payment integration',
-      details: 'Full-featured online store with payment integration, inventory management, and analytics. Built with modern architecture and scalable infrastructure.',
-      tags: ['React', 'Node.js', 'Stripe', 'PostgreSQL']
-    },
-    {
-      emoji: '📊',
-      title: 'Analytics Dashboard',
-      description: 'Real-time data visualization platform',
-      details: 'Real-time data visualization platform with interactive charts and reporting features. Provides actionable insights with beautiful, intuitive interfaces.',
-      tags: ['Angular', 'D3.js', 'Python', 'Redis']
-    },
-    {
-      emoji: '💬',
-      title: 'Social Network App',
-      description: 'Community platform with real-time messaging',
-      details: 'Community platform with real-time messaging, feeds, and user interactions. Designed for scalability and performance with millions of users.',
-      tags: ['React Native', 'Firebase', 'Node.js', 'WebSockets']
-    },
-    {
-      emoji: '🏥',
-      title: 'Healthcare Portal',
-      description: 'Patient management and telemedicine platform',
-      details: 'Secure healthcare platform with patient records, appointment scheduling, and video consultations. HIPAA compliant with enterprise-grade security.',
-      tags: ['Vue.js', 'Python', 'PostgreSQL', 'WebRTC']
+      type: 'prompt-management',
+      title: 'Complete Prompt Management Solution',
+      description: 'Built a personal prompt library extension for ChatGPT. Custom UI/UX design and full development to organize and manage prompts efficiently.',
+      logoUrl: 'http://localhost:3845/assets/4bae5be990fb3ffa5d9ce05c8527b8ab6fef4c88.svg',
+      backgroundImages: [
+        'http://localhost:3845/assets/66625e66dda1f10b1f0a17b64bee7194a8294bff.png',
+        'http://localhost:3845/assets/14b99bc265ef0e371a490fd8cb1aa5971177ffb1.png',
+        'http://localhost:3845/assets/e700ae5181db35c0f63cb74efc704c72bc02d8bc.png'
+      ],
+      link: '/projects'
     }
   ];
 
@@ -331,8 +311,8 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
 
   get transformStyle(): string {
     // Each slide takes full width + margin (2rem)
-    // Calculate based on slide width + gap
-    const slideWidth = 'min(700px, calc(100vw - 160px))';
+    // Calculate based on slide width + gap - updated to match Figma 900px cards
+    const slideWidth = 'min(900px, calc(100vw - 160px))';
     
     // Add drag offset during dragging
     if (this.isDragging && this.dragOffset !== 0) {

@@ -1,0 +1,72 @@
+<div class="project-card" [class.active]="isActive" [class.tierro]="project.type === 'tierro'" [class.prompt-management]="project.type === 'prompt-management'">
+  <div class="card-content">
+    <!-- Background visuals -->
+    <div class="card-visual">
+      @if (project.type === 'tierro' && project.backgroundImages) {
+        <!-- Tierro background images -->
+        <div class="tierro-background">
+          <div class="tierro-bg-image tierro-bg-1">
+            <img [src]="project.backgroundImages[0]" alt="Tierro background" />
+          </div>
+          <div class="tierro-bg-image tierro-bg-2">
+            <img [src]="project.backgroundImages[1]" alt="Tierro screenshot 1" class="tierro-screenshot-1" />
+            <img [src]="project.backgroundImages[2]" alt="Tierro screenshot 2" class="tierro-screenshot-2" />
+          </div>
+        </div>
+      }
+      
+      @if (project.type === 'prompt-management' && project.backgroundImages) {
+        <!-- Prompt Management phone screenshots -->
+        <div class="prompt-phones">
+          @for (image of project.backgroundImages; track $index) {
+            <div class="phone-screen" [style.--index]="$index">
+              <img [src]="image" [alt]="'Screen ' + ($index + 1)" />
+            </div>
+          }
+        </div>
+      }
+    </div>
+    
+    <!-- Glow effects -->
+    <div class="glow-effects">
+      <div class="glow glow-blue-1"></div>
+      <div class="glow glow-red-1"></div>
+      <div class="glow glow-big-blue-1"></div>
+    </div>
+    
+    <!-- Card content -->
+    <div class="card-text-wrapper">
+      <div class="card-text">
+        @if (project.logoUrl) {
+          <div class="project-logo">
+            <img [src]="project.logoUrl" [alt]="project.title + ' logo'" />
+          </div>
+        }
+        
+        <div class="text-content">
+          <h3 class="project-title">{{ project.title }}</h3>
+          <p class="project-description">{{ project.description }}</p>
+        </div>
+        
+        <div class="card-actions">
+          @if (project.link) {
+            <app-cta-button 
+              size="default" 
+              [routerLink]="project.link" 
+              text="View Case Study"
+              class="btn-view-case-study">
+            </app-cta-button>
+          } @else {
+            <app-cta-button 
+              size="default" 
+              href="/#contact" 
+              text="View Case Study"
+              class="btn-view-case-study">
+            </app-cta-button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

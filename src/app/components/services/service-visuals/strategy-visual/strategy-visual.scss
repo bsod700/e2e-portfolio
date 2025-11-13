@@ -34,5 +34,67 @@
     opacity: 0.3;
     z-index: 1;
   }
+
+  .lines {
+    position: absolute;
+    top: -16px;
+    left: -80px;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate(0px, 0px) rotate(0deg)
+        translate3d(
+          calc(var(--hover) * var(--dx) * 2px),
+          calc(var(--hover) * var(--dy) * 2px),
+          0
+        )
+        rotateX(calc(var(--hover) * var(--dy) * -2deg))
+        rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 50px));
+    }
+    img{
+      width: 550px;
+      height: 330px;
+    }
+  }
+
+  .graph {
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: transform 300ms ease;
+    @media (hover: hover) and (pointer: fine) {
+      transform: translate(0px, 0px) rotate(0deg)
+        translate3d(
+          calc(var(--hover) * var(--dx) * 2px),
+          calc(var(--hover) * var(--dy) * 2px),
+          0
+        )
+        rotateX(calc(var(--hover) * var(--dy) * -2deg))
+        rotateY(calc(var(--hover) * var(--dx) * 2deg)) translateZ(calc(var(--hover) * 200px));
+    }
+    svg {
+      &:nth-child(1) {
+        position: absolute;
+        top: 60px;
+        left: -59px;
+        width: 490px;
+        height: 240px;
+      }
+      &:nth-child(2) {
+        position: absolute;
+        top: 72px;
+        left: 50px;
+        width: 270px;
+        height: 77px;
+      }
+      &:nth-child(3) {
+        position: absolute;
+        top: 84px;
+        left: -14px;
+        width: 440px;
+        height: 145px;
+      }
+    }
+  }
 }
 

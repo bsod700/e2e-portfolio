@@ -1,0 +1,102 @@
+@property --cta-deg-gradient {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 230deg;
+}
+
+:host {
+  display: inline-flex;
+  
+  &.mobile {
+    display: inline-flex;
+    width: 100%;
+    
+    @media (min-width: 768px) {
+      display: none;
+    }
+  }
+}
+
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 8px;
+  --cta-deg-gradient: 230deg;
+  background: linear-gradient(var(--cta-deg-gradient), #ea624a -15.19%, #961416 73.3%);
+  text-decoration: none;
+  transition: --cta-deg-gradient 0.5s ease, transform 0.5s ease;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: -14px 31px 10px 0 rgba(0, 0, 0, 0), -9px 20px 9px 0 rgba(0, 0, 0, 0.01),
+    -5px 11px 7px 0 rgba(0, 0, 0, 0.04), -2px 5px 5px 0 rgba(0, 0, 0, 0.07),
+    -1px 1px 3px 0 rgba(0, 0, 0, 0.08);
+  border: 0.5px solid #df563e;
+  max-width: 400px;
+
+  span {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    line-height: 110%;
+  }
+
+  .arrow-icon {
+    width: 17px;
+    height: 9px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    --cta-deg-gradient: 330deg;
+    transform: scale(1.05);
+  }
+
+  // Small size (for navbar)
+  &.small {
+    padding: 12px;
+    
+    @media (min-width: 768px) {
+      padding: 12px 12px 12px 16px;
+    }
+
+    span {
+      font-size: 16px;
+    }
+
+    .arrow-icon {
+      display: none;
+      
+      @media (min-width: 768px) {
+        display: block;
+      }
+    }
+
+    // Mobile variant for small size
+    :host.mobile & {
+      width: 100%;
+      padding: 16px 32px;
+      
+      .arrow-icon {
+        display: block;
+      }
+    }
+  }
+
+  // Default size (bigger)
+  &.default {
+    padding: 16px 24px;
+    gap: 12px;
+
+    span {
+      font-size: 18px;
+    }
+
+    .arrow-icon {
+      width: 20px;
+      height: 11px;
+      display: block;
+    }
+  }
+}
+

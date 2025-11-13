@@ -4,81 +4,80 @@
       <p class="section-subtitle">Case Studies</p>
       <h2 class="section-title">Bringing Ideas to Life</h2>
       <p class="section-description">
-        Explore some of the projects I've worked on, transforming concepts into powerful digital solutions.
+        See how concepts become products. Each one built from scratch with careful design, clean
+        code, and real impact.
       </p>
-      <a routerLink="/projects" class="btn-learn-more">View All Projects</a>
+      <a routerLink="/projects" class="learn-more">More Projects <span class="arrow">→</span></a>
     </div>
-    
-    <div class="carousel-container" 
-         (mouseenter)="onMouseEnter()" 
-         (mouseleave)="onMouseLeave()">
-      
-      <!-- Left fade gradient -->
-      <div class="carousel-gradient carousel-gradient-left"></div>
-      
-      <!-- Right fade gradient -->
-      <div class="carousel-gradient carousel-gradient-right"></div>
-      
-      <!-- Carousel wrapper -->
-      <div class="carousel-wrapper">
-        <div class="carousel-track" 
-             [style.transform]="transformStyle"
-             [class.no-transition]="!isTransitioning"
-             [class.dragging]="isDragging"
-             (mousedown)="onDragStart($event)"
-             (touchstart)="onDragStart($event)"
-             (touchmove)="onDragMove($event)"
-             (touchend)="onDragEnd($event)"
-             (touchcancel)="onDragEnd($event)">
-          @for (project of projects; track $index; let i = $index) {
-            <div class="carousel-slide">
-              <div class="project-card" [class.active]="i === currentIndex">
-                <div class="card-content">
-                  @if (project.badge) {
-                    <div class="case-badge">{{ project.badge }}</div>
-                  }
-                  <div class="project-icon">
-                    <span class="project-emoji">{{ project.emoji }}</span>
-                  </div>
-                  <h3>{{ project.title }}</h3>
-                  <p class="project-description">{{ project.description }}</p>
-                  <p class="project-details">{{ project.details }}</p>
-                  <div class="project-tags">
-                    @for (tag of project.tags; track tag) {
-                      <span class="tech-tag">{{ tag }}</span>
-                    }
-                  </div>
-                  <a href="#contact" class="btn">View case study</a>
-                </div>
-              </div>
-            </div>
-          }
+  </div>
+  <div class="carousel-container" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+    <!-- Left fade gradient -->
+    <div class="carousel-gradient carousel-gradient-left"></div>
+
+    <!-- Right fade gradient -->
+    <div class="carousel-gradient carousel-gradient-right"></div>
+
+    <!-- Carousel wrapper -->
+    <div class="carousel-wrapper">
+      <div
+        class="carousel-track"
+        [style.transform]="transformStyle"
+        [class.no-transition]="!isTransitioning"
+        [class.dragging]="isDragging"
+        (mousedown)="onDragStart($event)"
+        (touchstart)="onDragStart($event)"
+        (touchmove)="onDragMove($event)"
+        (touchend)="onDragEnd($event)"
+        (touchcancel)="onDragEnd($event)"
+      >
+        @for (project of projects; track $index; let i = $index) {
+        <div class="carousel-slide">
+          <app-project-card [project]="project" [isActive]="i === currentIndex"> </app-project-card>
         </div>
-      </div>
-      
-      <!-- Navigation buttons -->
-      <button class="carousel-btn carousel-btn-prev" (click)="previous()" aria-label="Previous project">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-      <button class="carousel-btn carousel-btn-next" (click)="next()" aria-label="Next project">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
-      
-      <!-- Dots indicator -->
-      <div class="carousel-dots">
-        @for (project of originalProjects; track project.title; let i = $index) {
-          <button 
-            class="carousel-dot"
-            [class.active]="i === activeOriginalIndex"
-            (click)="goToSlide(i)"
-            [attr.aria-label]="'Go to project ' + (i + 1)">
-          </button>
         }
       </div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <button
+      class="carousel-btn carousel-btn-prev"
+      (click)="previous()"
+      aria-label="Previous project"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="carousel-btn carousel-btn-next" (click)="next()" aria-label="Next project">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- Dots indicator -->
+    <div class="carousel-dots">
+      @for (project of originalProjects; track project.title; let i = $index) {
+      <button
+        class="carousel-dot"
+        [class.active]="i === activeOriginalIndex"
+        (click)="goToSlide(i)"
+        [attr.aria-label]="'Go to project ' + (i + 1)"
+      ></button>
+      }
     </div>
   </div>
 </section>
