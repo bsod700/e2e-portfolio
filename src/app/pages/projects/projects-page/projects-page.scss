@@ -1,0 +1,159 @@
+.projects-page {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+  padding-top: 80px;
+}
+
+// Hero Section
+.hero-section {
+  padding: 4rem 0;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.05) 0%,
+    rgba(118, 75, 162, 0.05) 100%
+  );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-subtitle {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+  
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+  }
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  @media (max-width: 968px) {
+    font-size: 2.5rem;
+  }
+  
+  @media (max-width: 640px) {
+    font-size: 2rem;
+  }
+}
+
+.hero-description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+// Projects Section
+.projects-section {
+  padding: 4rem 0;
+}
+
+.projects-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 5rem;
+  align-items: center;
+
+  @media (max-width: 968px) {
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    gap: 1rem;
+  }
+}
+
+.project-card-wrapper {
+  width: 100%;
+  max-width: 900px;
+  
+  // Ensure the project card takes full width
+  ::ng-deep app-project-card {
+    display: block;
+    width: 100%;
+    
+    .project-card {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+// CTA Section
+.cta-section {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-xl);
+  padding: 4rem 3rem;
+  text-align: center;
+  margin-top: 3rem;
+
+  @media (max-width: 768px) {
+    padding: 3rem 2rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  .btn-lg {
+    padding: 1.1rem 2.5rem;
+    font-size: 1.1rem;
+    
+    @media (max-width: 768px) {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+    }
+  }
+}
+

@@ -1,0 +1,123 @@
+<div class="admin-dashboard-container">
+  <div class="admin-dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <div class="header-actions">
+      <button (click)="signOut()" class="btn-secondary">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Main Navigation -->
+  <app-main-navigation
+    [activeSection]="activeSection()"
+    (sectionChange)="onSectionChange($event)"
+  ></app-main-navigation>
+
+  <!-- Main Content Area -->
+  <div class="admin-main-content">
+    <!-- Users Section -->
+    @if (activeSection() === 'users') {
+      <div class="section-content">
+        <app-user-management></app-user-management>
+      </div>
+    }
+
+    <!-- Content Section -->
+    @if (activeSection() === 'content') {
+      <div class="content-section">
+        @if (!loading()) {
+          <div class="content-layout">
+            <!-- Left Sidebar - Pages -->
+            <app-page-sidebar
+              [pages]="pages"
+              [activePage]="activePage"
+              (pageChange)="setActivePage($event)"
+            ></app-page-sidebar>
+
+            <!-- Right Content Area -->
+            <div class="content-area">
+              <!-- Tabs Navigation -->
+              @if (currentTabs.length > 0) {
+                <app-tabs-navigation
+                  [tabs]="currentTabs"
+                  [activeTab]="activeTab"
+                  (tabChange)="setActiveTab($event)"
+                ></app-tabs-navigation>
+              }
+
+              <!-- Home Page Content -->
+              @if (activePage === 'home') {
+                <!-- Hero Tab -->
+                @if (activeTab === 'hero') {
+                  <app-hero-editor
+                    [content]="content"
+                    (contentSaved)="onHeroContentSaved($event)"
+                  ></app-hero-editor>
+                }
+
+                <!-- Services Tab -->
+                @if (activeTab === 'services') {
+                  <app-services-editor
+                    [homeServices]="homeServices"
+                    (servicesUpdated)="onServicesUpdated($event)"
+                  ></app-services-editor>
+                }
+
+                <!-- Projects Tab -->
+                @if (activeTab === 'projects') {
+                  <app-projects-editor
+                    [projects]="projects"
+                    (projectsUpdated)="onProjectsUpdated($event)"
+                  ></app-projects-editor>
+                }
+
+                <!-- Testimonials Tab -->
+                @if (activeTab === 'testimonials') {
+                  <app-testimonials-editor
+                    [testimonials]="testimonials"
+                    (testimonialsUpdated)="onTestimonialsUpdated($event)"
+                  ></app-testimonials-editor>
+                }
+
+                <!-- FAQ Tab -->
+                @if (activeTab === 'faq') {
+                  <app-faq-editor
+                    [faqs]="faqs"
+                    (faqsUpdated)="onFAQsUpdated($event)"
+                  ></app-faq-editor>
+                }
+              }
+
+              <!-- Legal Pages Content -->
+              @if (activePage === 'accessibility-statement' || activePage === 'privacy-policy' || activePage === 'terms-conditions') {
+                <app-legal-page-editor
+                  [legalContent]="getCurrentLegalContent()"
+                  [pageType]="activePage"
+                  (contentSaved)="onContentSaved($event)"
+                  (contentError)="onContentError($event)"
+                ></app-legal-page-editor>
+              }
+            </div>
+          </div>
+        }
+
+        @if (loading()) {
+          <div class="loading-state">
+            <p>Loading content...</p>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Settings Section -->
+    @if (activeSection() === 'settings') {
+      <div class="section-content">
+        <div class="settings-panel">
+          <h2>Settings</h2>
+          <div class="settings-content">
+            <app-password-management></app-password-management>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

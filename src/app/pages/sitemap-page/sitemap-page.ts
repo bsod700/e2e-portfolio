@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar';
+import { NavbarComponent } from '../../components/layout';
 
 @Component({
   selector: 'app-sitemap-page',

@@ -1,0 +1,57 @@
+<div class="project-card" [class.active]="isActive" 
+ [class.type]="project.type">
+
+  <div class="card-content">
+    <!-- Background visuals -->
+    <!-- <div class="card-visual">
+      @if (project.backgroundImages) {
+          @for (image of project.backgroundImages; track $index) {
+            <div class="bg" [style.--index]="$index">
+              <img [src]="image" [alt]="'Screen ' + ($index + 1)" />
+            </div>
+          }
+      }
+    </div> -->
+    
+    <!-- Glow effects -->
+    <div class="glow-effects">
+      <div class="glow glow-blue-1"></div>
+      <div class="glow glow-red-1"></div>
+      <div class="glow glow-big-blue-1"></div>
+    </div>
+    
+    <!-- Card content -->
+    <div class="card-wrapper">
+      <div class="card-text">
+        <div class="top">
+          @if (project.logoUrl) {
+            <div class="project-logo">
+              <img [src]="project.logoUrl" [alt]="project.title + ' logo'" />
+            </div>
+          }
+          <div class="text">
+            <h3 class="project-title">{{ project.title }}</h3>
+            <p class="project-description">{{ project.description }}</p>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          @if (project.link) {
+            <app-cta-button 
+              size="default" 
+              [routerLink]="project.link" 
+              text="View Case Study"
+              class="btn-view-case-study">
+            </app-cta-button>
+          }
+        </div>
+      </div>
+    </div>
+    @if (project.img) {
+      <div [ngClass]="['card-img', `project-${project.type}`]">
+        <img [src]="project.img.src" [alt]="project.img.alt" />
+      </div>
+    }
+  </div>
+</div>
+

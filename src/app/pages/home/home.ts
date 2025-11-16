@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { HeroComponent } from '../../components/hero/hero';
-import { ServicesComponent } from '../../components/services/services';
-import { TestimonialsComponent } from '../../components/testimonials/testimonials';
-import { CaseStudiesComponent } from '../../components/case-studies/case-studies';
-import { TechnologiesComponent } from '../../components/technologies/technologies';
-import { FaqComponent } from '../../components/faq/faq';
-import { ContactComponent } from '../../components/contact/contact';
+import {
+  HeroComponent,
+  ServicesComponent,
+  TestimonialsComponent,
+  CaseStudiesComponent,
+  TechnologiesComponent,
+  FaqComponent,
+  ContactComponent
+} from '../../components/sections';
 
 @Component({
   selector: 'app-home',

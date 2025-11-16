@@ -18,6 +18,22 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender
   },
   {
+    path: 'projects/tierro',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'projects/prompt-management',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'projects/landerx',
+    renderMode: RenderMode.Prerender
+  },
+  {
+    path: 'projects/brush-along',
+    renderMode: RenderMode.Prerender
+  },
+  {
     path: 'services/:id',
     renderMode: RenderMode.Prerender,
     getPrerenderParams: async () => [
@@ -45,6 +61,14 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'admin/login',
+    renderMode: RenderMode.Server
+  },
+  {
+    path: 'admin/setup-password',
+    renderMode: RenderMode.Server
+  },
+  {
+    path: 'admin/reset-password',
     renderMode: RenderMode.Server
   },
   {

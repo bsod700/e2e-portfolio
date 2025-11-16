@@ -1,0 +1,120 @@
+<div class="user-management">
+  <div class="header">
+    <h2>User Management</h2>
+    <button 
+      class="btn-primary" 
+      (click)="toggleAddForm()"
+      [disabled]="loading()"
+    >
+      {{ showAddForm() ? 'Cancel' : '+ Add User' }}
+    </button>
+  </div>
+
+  <!-- Messages -->
+  @if (error()) {
+    <div class="alert alert-error">
+      {{ error() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  <!-- Add User Form -->
+  @if (showAddForm()) {
+    <div class="add-user-form">
+      <h3>Add New User</h3>
+      <form (ngSubmit)="addUser()">
+        <div class="form-group">
+          <label for="newUserEmail">Email Address</label>
+          <input
+            type="email"
+            id="newUserEmail"
+            [(ngModel)]="newUserEmail"
+            name="newUserEmail"
+            placeholder="user@example.com"
+            required
+            [disabled]="loading()"
+          />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" [disabled]="loading() || !newUserEmail.trim()">
+            {{ loading() ? 'Adding...' : 'Add User' }}
+          </button>
+          <button type="button" class="btn-secondary" (click)="toggleAddForm()" [disabled]="loading()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  }
+
+  <!-- Users Table -->
+  <div class="users-table-container">
+    @if (loading() && users().length === 0) {
+      <div class="loading-state">
+        <p>Loading users...</p>
+      </div>
+    } @else if (error() && error().includes('admin_users table does not exist')) {
+      <div class="setup-instructions">
+        <h3>⚠️ Setup Required</h3>
+        <p class="error-text">{{ error() }}</p>
+        <div class="instructions">
+          <h4>To fix this:</h4>
+          <ol>
+            <li>Go to your <a href="https://supabase.com/dashboard" target="_blank">Supabase Dashboard</a></li>
+            <li>Select your project</li>
+            <li>Navigate to <strong>SQL Editor</strong> → <strong>New Query</strong></li>
+            <li>Copy and paste the SQL from <code>scripts/create-admin-users-table.sql</code></li>
+            <li>Click <strong>Run</strong> to execute</li>
+            <li>Refresh this page</li>
+          </ol>
+        </div>
+      </div>
+    } @else if (users().length === 0) {
+      <div class="empty-state">
+        <p>No users found. Add your first user to get started.</p>
+      </div>
+    } @else {
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.id) {
+            <tr>
+              <td>{{ user.email }}</td>
+              <td>{{ formatDate(user.created_at) }}</td>
+              <td class="actions">
+                <button
+                  class="btn-link btn-reset"
+                  (click)="sendPasswordReset(user)"
+                  [disabled]="loading()"
+                  title="Send password reset email"
+                >
+                  Reset Password
+                </button>
+                <button
+                  class="btn-link btn-delete"
+                  (click)="deleteUser(user)"
+                  [disabled]="loading()"
+                  title="Delete user"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+

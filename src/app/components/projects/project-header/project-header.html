@@ -1,0 +1,27 @@
+<section class="project-header">
+  <div class="project-header-background">
+    <div class="glow-red-1"></div>
+    <div class="glow-blue-2"></div>
+    <div class="grid-layer"></div>
+    <div class="glow-blue-1"></div>
+    <div class="glow-red-2"></div>
+  </div>
+
+  <div class="container">
+    <div class="project-header-content">
+      <!-- Project Logo -->
+      @if (project.logoUrl) {
+        <div class="project-logo-wrapper">
+          <img [src]="project.logoUrl" [alt]="project.title + ' logo'" class="project-logo" />
+        </div>
+      }
+
+      <!-- Project Title -->
+      <h1 class="project-title">{{ project.title }}</h1>
+
+      <!-- Project Description -->
+      <p class="project-description">{{ project.description }}</p>
+    </div>
+  </div>
+</section>
+

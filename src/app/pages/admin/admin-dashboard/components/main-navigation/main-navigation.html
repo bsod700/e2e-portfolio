@@ -1,0 +1,17 @@
+<nav class="main-navigation">
+  <ul class="nav-list">
+    @for (item of navigationItems; track item.id) {
+      <li>
+        <button
+          class="nav-item"
+          [class.active]="activeSection === item.id"
+          (click)="selectSection(item.id)"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+</nav>
+
