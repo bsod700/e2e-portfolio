@@ -8,14 +8,9 @@ export const routes: Routes = [
     title: 'Guy Tagger | Full Stack Developer & UI/UX Designer'
   },
   {
-    path: 'about',
-    loadComponent: () => import('./pages/about/about-page').then(m => m.AboutPageComponent),
-    title: 'About Me - Guy Tagger | Full Stack Developer'
-  },
-  {
     path: 'services',
-    loadComponent: () => import('./pages/services/services-page/services-page').then(m => m.ServicesPageComponent),
-    title: 'Our Services - Guy Tagger | Full Stack Developer'
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'services/:id',
@@ -68,6 +63,11 @@ export const routes: Routes = [
     title: 'Sitemap - Guy Tagger'
   },
   {
+    path: '404',
+    loadComponent: () => import('./pages/not-found/not-found').then(m => m.NotFoundPageComponent),
+    title: 'Page Not Found - Guy Tagger'
+  },
+  {
     path: 'admin/login',
     loadComponent: () => import('./pages/admin/admin-login/admin-login').then(m => m.AdminLoginComponent),
     title: 'Admin Login - Guy Tagger'
@@ -87,5 +87,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboardComponent),
     title: 'Admin Dashboard - Guy Tagger',
     canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: '404',
+    pathMatch: 'full'
   }
 ];
