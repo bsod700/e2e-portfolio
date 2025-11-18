@@ -2,6 +2,15 @@ import { Component, Input, Output, EventEmitter, Inject, PLATFORM_ID } from '@an
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 
+
+export interface CtaButtonData {
+  text?: string;
+  href?: string;
+  target?: '_blank' | '_self';
+  size?: 'small' | 'default';
+  routerLink?: string;
+  clicked?: EventEmitter<void>;
+}
 @Component({
   selector: 'app-cta-button',
   imports: [CommonModule, RouterLink],
@@ -13,6 +22,7 @@ export class CtaButtonComponent {
   @Input() href: string = '/contact';
   @Input() text: string = "Let's Talk";
   @Input() routerLink?: string;
+  @Input() target: '_blank' | '_self' = '_self';
   @Output() clicked = new EventEmitter<void>();
   private isBrowser: boolean;
 

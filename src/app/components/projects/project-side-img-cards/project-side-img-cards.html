@@ -1,0 +1,38 @@
+<section [ngClass]="['project-side-img-cards','project-'+projectSideImgCardsData.projectName, `side-${projectSideImgCardsData.sideDirection}`]">
+    @if (projectSideImgCardsData.backgroundImages) {
+        <div class="background">
+            @for (image of projectSideImgCardsData.backgroundImages; track $index) {
+                <img [src]="image" alt="background" />
+            }
+        </div>
+    }
+    <div class="container">
+        <div class="text-content">
+            <h3>{{ projectSideImgCardsData.title }}</h3>
+            <p>{{ projectSideImgCardsData.text }}</p>
+
+            <div class="cards">
+                @for (card of projectSideImgCardsData.cards; track card.title) {
+                    <div class="card">
+                        @if (card.backgroundImages) {
+                            <div class="background">
+                                @for (image of card.backgroundImages; track image) {
+                                    <img [src]="image" alt="background" />
+                                }
+                            </div>
+                        }
+                        <img [src]="card.icon" alt="card.title" />
+                        <div class="text">
+                            <h4>{{ card.title }}</h4>
+                            <p>{{ card.text }}</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="img-content">
+            <img [src]="projectSideImgCardsData.image" alt="projectSideImgCardsData.title" />
+        </div>
+    </div>
+</section>

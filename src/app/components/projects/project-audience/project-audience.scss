@@ -1,0 +1,115 @@
+@use "mixins" as *;
+
+.project-audience {
+    padding: 96px 16px;
+    position: relative;
+    overflow: hidden;
+    &.project-tierro {
+        background: #161616;
+        box-shadow: 0 -10px 20px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 20px 0 rgba(0, 0, 0, 0.25) inset;
+
+       
+    }
+
+    .container {
+        display: flex;
+        padding: 0 48px;
+        flex-direction: column;
+        gap: 48px;
+        text-align: center;
+        .text-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: center;
+            h3 {
+                color: #FCFCFC;
+                font-size: 36px;
+                font-weight: 600;
+                line-height: 120%; 
+            }
+            p {
+                color: rgba(252, 252, 252, 0.80);
+                font-size: 18px;
+                font-weight: 300;
+                line-height: 150%;
+            }
+        }
+        .sides {
+            display: flex;
+            flex-direction: row;
+            gap: 96px;
+            text-align: start;
+            .side {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+
+                h4 {
+                    color: #FCFCFC;
+                    font-size: 22px;
+                    font-weight: 600;
+                    line-height: 150%; 
+                }
+                .cards {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+        
+                    .card {
+                        display: flex;
+                        gap: 24px;
+                        border-radius: 5px;
+                      
+                        position: relative;
+                        z-index: 2;
+                       
+                        .background {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            z-index: 1;
+                            img {
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                opacity: 0.1;
+                            }
+                        }
+        
+                        h4 {
+                            color: #FCFCFC;
+                            font-size: 18px;
+                            font-weight: 700;
+                            line-height: 150%;
+                        }
+        
+                        p {
+                            color: rgba(252, 252, 252, 0.80);
+                            font-size: 14px;
+                            font-weight: 300;
+                            line-height: 140%;
+                        }
+        
+                        img {
+                            display: flex;
+                            width: 45px;
+                            height: 45px;
+                            justify-content: center;
+                            align-items: center;
+                        }
+        
+                        .text {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

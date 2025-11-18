@@ -33,31 +33,7 @@ a {
 }
 
 .container {
-  
-    width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    padding-left: 24px;
-    padding-right: 24px;
-  
-  @include respond-to(md) {
-    max-width: 720px;
-  }
-
-  @include respond-to(lg) {
-    max-width: 960px;
-    padding-left: 64px;
-    padding-right: 64px;
-  }
-
-  @include respond-to(xl) {
-    max-width: 1140px;
-  }
-
-  @include respond-to(xxl) {
-    max-width: 1320px;
-  }
-
+   @include container();
 }
 
 img {

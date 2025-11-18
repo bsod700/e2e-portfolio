@@ -1,0 +1,74 @@
+@use 'mixins' as *;
+
+.project-strategic {
+  padding: 48px 16px 96px;
+  position: relative;
+  overflow: hidden;
+  &.project-tierro {
+    .background {
+      img:first-child {
+        width: 1252px;
+        height: 1320px;
+        top: 0px;
+        right: calc(50% - 1390px);
+        position: absolute;
+      }
+      img:last-child {
+       width: 100%;
+       height: 100%;
+       object-fit: cover;
+       top: 0;
+       left: 0;
+       position: absolute;
+       z-index: 1;
+       opacity: 0.1;
+      }
+    }
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    justify-content: center;
+    max-width: 900px;
+    position: relative;
+    z-index: 2;
+  }
+  .cards-strategic {
+    text-align: left;
+    gap: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 48px;
+    @include respond-to(lg) {
+        display: grid;
+      grid-template-columns: repeat(2, 400px);
+    
+    }
+  }
+  h3 {
+    color: #fcfcfc;
+    text-align: center;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+  p {
+    color: rgba(252, 252, 252, 0.8);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 150%;
+  }
+}

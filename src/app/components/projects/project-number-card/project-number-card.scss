@@ -1,0 +1,80 @@
+@use "mixins" as *;
+
+.project-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+
+    @include respond-to(lg) {
+        width: 400px;
+    }
+    &.project-tierro {
+        border: 1px solid rgba(145, 145, 145, 0.60);
+        background: #141313;
+        box-shadow: 3px 74px 21px 0 rgba(0, 0, 0, 0.01), 2px 48px 19px 0 rgba(0, 0, 0, 0.10), 1px 27px 16px 0 rgba(0, 0, 0, 0.34), 0 12px 12px 0 rgba(0, 0, 0, 0.58), 0 3px 7px 0 rgba(0, 0, 0, 0.67);
+
+        .background {
+            img {
+                opacity: 0.1;
+            }
+            &:after {
+                content: '';
+                position: absolute;
+                right: -55px;
+                top: -20px;
+                width: 248px;
+                height: 93px;
+                background-color: #70B9EE;
+                border-radius: 100%;
+                opacity: 0.2;
+                filter: blur(50px);
+                z-index: 2;
+            }
+        }
+
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+      
+    .project-card-content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        z-index: 2;
+    }
+    .project-card-title {
+        color: #FCFCFC;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 150%; 
+        opacity: 0.6;
+    }
+    .project-card-description {
+        color: #FCFCFC;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 150%; 
+    }
+    .project-card-text {
+        color: rgba(252, 252, 252, 0.80);
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 140%; 
+    }
+}

@@ -1,14 +1,34 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Project } from '../../../services/projects.service';
+import { CtaButtonComponent } from '../../ui';
+import { CtaButtonData } from '../../ui/cta-button/cta-button';
+
+export interface ProjectHeaderData {
+  name: string;
+  title: string;
+  description: string;
+  logoUrl: string;
+  cta?: CtaButtonData,
+  img: {
+    src: string;
+    alt: string;
+  };
+  backgroundImages?: string[];
+}
 
 @Component({
   selector: 'app-project-header',
-  imports: [CommonModule],
+  imports: [CommonModule, CtaButtonComponent],
   templateUrl: './project-header.html',
   styleUrl: './project-header.scss'
 })
 export class ProjectHeaderComponent {
-  @Input() project!: Project;
+  @Input() projectHeaderData: ProjectHeaderData = {
+    name: '',
+    title: '',
+    description: '',
+    logoUrl: '',
+    img: { src: '', alt: '' }
+  };
 }
 

@@ -1,0 +1,32 @@
+<section [ngClass]="['project-process', 'project-' + projectProcessData.projectName]">
+  <div class="background">
+    <div class="circle"></div>
+    @for (image of projectProcessData.backgroundImages; track $index) {
+    <img [src]="image" alt="background" />
+    }
+  </div>
+  <div class="container">
+    <div class="text-wrapper">
+      <h2>{{ projectProcessData.title }}</h2>
+      <p>{{ projectProcessData.description }}</p>
+    </div>
+
+    <div class="overflow"></div>
+    <div class="process-steps-wrapper">
+      <div class="process-steps">
+        @for (step of projectProcessData.steps; track step.title; let last = $last) {
+        <div class="step-item">
+          <app-project-number-card [projectNumberCardData]="step"></app-project-number-card>
+          @if (!last) {
+          <div class="step-connector">
+            <div class="connector-line"></div>
+            <div class="connector-dot"></div>
+            <div class="connector-line"></div>
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

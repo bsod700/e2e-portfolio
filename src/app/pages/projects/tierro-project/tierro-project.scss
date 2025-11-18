@@ -1,5 +1,10 @@
 .tierro-project-page {
   min-height: 100vh;
-  background: var(--color-bg-primary);
+  background: #141313;
 }
 
+::ng-deep {
+  body {
+    background: #141313;
+  }
+}

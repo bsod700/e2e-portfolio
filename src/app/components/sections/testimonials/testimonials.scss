@@ -124,7 +124,9 @@
   gap: 16px;
   position: relative;
   padding: 24px 0 64px;
-
+  max-width: 2000px;
+  margin: 0 auto;
+  
   // Fade effect on edges
   &::before,
   &::after {

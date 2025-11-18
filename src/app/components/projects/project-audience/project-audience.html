@@ -1,0 +1,62 @@
+<section [ngClass]="['project-audience','project-'+projectAudienceData.projectName]">
+  <div class="container">
+    <div class="text-content">
+      @if (projectAudienceData.title) {
+        <h3>{{ projectAudienceData.title }}</h3>
+      }
+      @if (projectAudienceData.text) {
+        <p>{{ projectAudienceData.text }}</p>
+      }
+    </div>
+
+    <div class="sides">
+        <div class="side">
+            <h4>{{ projectAudienceData.sideLeftTitle }}</h4>
+            <div class="cards">
+                <div class="cards">
+                    @for (card of projectAudienceData.sideLeftCards; track card.title) {
+                        <div class="card">
+                            @if (card.backgroundImages) {
+                                <div class="background">
+                                    @for (image of card.backgroundImages; track $index) {
+                                        <img [src]="image" alt="background" />
+                                    }
+                                </div>
+                            }
+                            <img [src]="card.icon" alt="card.title" />
+                            <div class="text">
+                                <h4>{{ card.title }}</h4>
+                                <p>{{ card.text }}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="side">
+            <h4>{{ projectAudienceData.sideRightTitle }}</h4>
+            <div class="cards">
+                <div class="cards">
+                    @for (card of projectAudienceData.sideRightCards; track card.title) {
+                        <div class="card">
+                            @if (card.backgroundImages) {
+                                <div class="background">
+                                    @for (image of card.backgroundImages; track $index) {
+                                        <img [src]="image" alt="background" />
+                                    }
+                                </div>
+                            }
+                            <img [src]="card.icon" alt="card.title" />
+                            <div class="text">
+                                <h4>{{ card.title }}</h4>
+                                <p>{{ card.text }}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</section>

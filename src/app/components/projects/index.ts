@@ -9,4 +9,22 @@
  */
 
 export { ProjectHeaderComponent } from './project-header/project-header';
-
+export type { ProjectHeaderData } from './project-header/project-header';
+export { ProjectStacksComponent } from './project-stacks/project-stacks';
+export type { ProjectStacksData } from './project-stacks/project-stacks';
+export { ProjectSideTextsComponent } from './project-side-texts/project-side-texts';
+export type { ProjectSideTextsData } from './project-side-texts/project-side-texts';
+export { ProjectNutshellComponent } from './project-nutshell/project-nutshell';
+export type { ProjectNutshellData } from './project-nutshell/project-nutshell';
+export { ProjectStrategicComponent } from './project-strategic/project-strategic';
+export type { ProjectStrategicData } from './project-strategic/project-strategic';
+export { ProjectNumberCardComponent } from './project-number-card/project-number-card';
+export type { ProjectNumberCardData } from './project-number-card/project-number-card';
+export { ProjectProcessComponent } from './project-process/project-process';
+export type { ProjectProcessData } from './project-process/project-process';
+export { ProjectSideImgCardsComponent } from './project-side-img-cards/project-side-img-cards';
+export type { ProjectSideImgCardsData } from './project-side-img-cards/project-side-img-cards';
+export { ProjectAudienceComponent } from './project-audience/project-audience';
+export type { ProjectAudienceData } from './project-audience/project-audience';
+export { ProjectPersonasComponent } from './project-personas/project-personas';
+export type { ProjectPersonasData } from './project-personas/project-personas';

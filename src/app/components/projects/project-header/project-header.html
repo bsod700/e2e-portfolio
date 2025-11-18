@@ -1,27 +1,44 @@
 <section class="project-header">
-  <div class="project-header-background">
-    <div class="glow-red-1"></div>
-    <div class="glow-blue-2"></div>
-    <div class="grid-layer"></div>
-    <div class="glow-blue-1"></div>
-    <div class="glow-red-2"></div>
+  <!-- Project Background Images -->
+  @if (projectHeaderData.backgroundImages) {
+  <div [ngClass]="['background-images',`project-${projectHeaderData.name}`]">
+    @for (image of projectHeaderData.backgroundImages; track $index) {
+    <img [src]="image" alt="background" />
+    }
   </div>
+  }
 
   <div class="container">
-    <div class="project-header-content">
+    <div class="content">
       <!-- Project Logo -->
-      @if (project.logoUrl) {
-        <div class="project-logo-wrapper">
-          <img [src]="project.logoUrl" [alt]="project.title + ' logo'" class="project-logo" />
-        </div>
+      @if (projectHeaderData.logoUrl) {
+      <div class="project-logo-wrapper">
+        <img
+          [src]="projectHeaderData.logoUrl"
+          [alt]="projectHeaderData.title + ' logo'"
+          class="project-logo"
+        />
+      </div>
       }
 
       <!-- Project Title -->
-      <h1 class="project-title">{{ project.title }}</h1>
+      <h1 class="project-title">{{ projectHeaderData.title }}</h1>
 
       <!-- Project Description -->
-      <p class="project-description">{{ project.description }}</p>
+      <p class="project-description">{{ projectHeaderData.description }}</p>
+
+      <!-- Project CTA -->
+      @if (projectHeaderData.cta) {
+        <app-cta-button
+          [text]="projectHeaderData.cta.text || 'Learn More'"
+          [href]="projectHeaderData.cta.href || '#'"
+          [target]="projectHeaderData.cta.target || '_self'"
+        ></app-cta-button>
+      }
+    </div>
+
+    <div class="img">
+      <img [src]="projectHeaderData.img.src" [alt]="projectHeaderData.img.alt" />
     </div>
   </div>
 </section>
-

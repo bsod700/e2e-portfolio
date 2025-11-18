@@ -1,0 +1,79 @@
+<section [ngClass]="['project-personas', 'project-' + projectPersonasData.projectName]">
+  <div class="background">
+    <div class="circle"></div>
+    @for (image of projectPersonasData.backgroundImages; track $index) {
+        <img [src]="image" alt="background" [class]="[`number-${$index + 1}`]" />
+    }
+  </div>
+  <div class="container">
+    <div class="text-content">
+      <h3>{{ projectPersonasData.title }}</h3>
+      <p>{{ projectPersonasData.text }}</p>
+    </div>
+    <div class="overflow"></div>
+    <div class="personas">
+      <div class="personas-wrapper">
+        @for (persona of projectPersonasData.personas; track $index) {
+        <div class="persona">
+            <div class="background">
+                @if (persona.backgroundImages) {
+                    @for (image of persona.backgroundImages; track $index) {
+                        <img [src]="image" alt="background" />
+                    }
+                }
+            </div>
+          <img [src]="persona.image" alt="persona.title" />
+          <div class="text">
+            <h4>{{ persona.name }}</h4>
+            <div class="top">
+              @for (attribute of persona.attributes; track $index) {
+              <div class="attribute">
+                @if (attribute.icon) {
+                <img [src]="attribute.icon" alt="icon" />
+                } @if(attribute.name) {
+                <h5>{{ attribute.name }}</h5>
+                }
+                <p>{{ attribute.value }}</p>
+              </div>
+              }
+            </div>
+
+            <div class="wants">
+              <h5>Wants & Needs</h5>
+              @for (attribute of persona.wants; track $index) {
+              <div class="attribute">
+                @if (attribute.icon) {
+                <img [src]="attribute.icon" alt="icon" />
+                } @if(attribute.name) {
+                <h5>{{ attribute.name }}</h5>
+                }
+                <p>{{ attribute.value }}</p>
+              </div>
+              }
+            </div>
+
+            <div class="frustrations">
+              <h5>Frustrations</h5>
+              @for (attribute of persona.frustrations; track $index) {
+              <div class="attribute">
+                @if (attribute.icon) {
+                <img [src]="attribute.icon" alt="icon" />
+                } @if(attribute.name) {
+                <h5>{{ attribute.name }}</h5>
+                }
+                <p>{{ attribute.value }}</p>
+              </div>
+              }
+            </div>
+
+            <div class="bio">
+              <h5>Bio</h5>
+              <p>{{ persona.bio }}</p>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

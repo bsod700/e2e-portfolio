@@ -1,0 +1,18 @@
+<section [ngClass]="['project-strategic','project-'+projectStrategicData.projectName]">
+    @if (projectStrategicData.backgroundImages) {
+        <div class="background">
+            @for (image of projectStrategicData.backgroundImages; track $index) {
+                <img [src]="image" alt="background" />
+            }
+        </div>
+    }
+  <div class="container">
+    <h3>{{ projectStrategicData.title }}</h3>
+    <p>{{ projectStrategicData.text }}</p>
+    <div class="cards-strategic">
+        @for (card of projectStrategicData.cards; track card.title) {
+            <app-project-number-card [projectNumberCardData]="card"></app-project-number-card>
+        }
+    </div>
+  </div>
+</section>

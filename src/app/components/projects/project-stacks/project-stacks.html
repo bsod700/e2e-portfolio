@@ -1,0 +1,37 @@
+<section [ngClass]="['project-stacks','project-'+projectStacksData.projectName]">
+  @if (projectStacksData.backgroundImages) {
+    <div class="background">
+      @for (image of projectStacksData.backgroundImages; track $index) {
+        <img [src]="image" alt="background" />
+      }
+    </div>
+  }
+  <div class="container">
+    <div class="services">
+      <h3>Services</h3>
+      <div class="content-stacks">
+        @for (service of projectStacksData.services; track service.name) {
+        <div class="card-stack">
+          <div class="icon">
+            <img [src]="service.icon" [alt]="service.name" />
+          </div>
+          <div class="name">{{ service.name }}</div>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="technologies">
+      <h3>Tech Stack</h3>
+      <div class="content-stacks">
+        @for (technology of projectStacksData.technologies; track technology.name) {
+        <div class="card-stack">
+          <div class="icon">
+            <img [src]="technology.icon" [alt]="technology.name" />
+          </div>
+          <div class="name">{{ technology.name }}</div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

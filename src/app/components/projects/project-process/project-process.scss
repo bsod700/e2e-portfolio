@@ -1,0 +1,177 @@
+@use "mixins" as *;
+
+.project-process {
+    position: relative;
+    padding: 48px 0 96px;
+    overflow: hidden;
+
+    &.project-tierro {
+        --process-dot: #FDC45D;
+        .background {
+            position: relative;
+            z-index: 6;
+            &:after {
+                content: '';
+                position: absolute;
+                top: -350px;
+                left: calc(50% - 1800px / 2);
+                width: 1800px;
+                height: 550px;
+                border-radius: 100%;
+                opacity: 0.05;
+                background: radial-gradient(50% 50% at 50% 50%, #FDC45D 0%, rgba(253, 196, 93, 0) 100%);
+                z-index: 6;
+            }
+        }
+    }
+
+    .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+        .circle {
+            position: absolute;
+            top: calc(50% - 100px);
+            left: calc(50% - 800px/2);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(50% 50% at 50% 50%, #fcfcfc 0%, transparent 100%);
+            border-radius: 100%;
+            opacity: 0.15;
+            filter: blur(20px);
+            z-index: 1;
+        }
+        img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+        }
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+
+    }
+    .text-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    h2 {
+        color: #FCFCFC;
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 150%;
+        text-align: center;
+
+        @include respond-to(lg) {
+            font-size: 48px;
+        }
+    }
+
+    p {
+        color: rgba(252, 252, 252, 0.80);
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 140%;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+
+        @include respond-to(lg) {
+            font-size: 18px;
+        }
+    }
+    .overflow {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to right, #141313 5%,  transparent 50%, #141313 95%);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 4;
+        pointer-events: none;
+    }
+    .process-steps-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-color: transparent transparent;
+        position: relative;
+        position: relative;
+        z-index: 3;
+    }
+
+    .process-steps {
+        display: flex;
+        gap: 0;
+        padding: 48px 0 64px;
+        min-width: min-content;
+        padding-left: calc(50% - 175px);
+        padding-right: calc(50% - 175px);
+    }
+
+    .step-item {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+
+        app-project-card {
+            flex-shrink: 0;
+        }
+    }
+
+    .step-connector {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0 16px;
+    }
+
+    .connector-line {
+        width: 30px;
+        height: 2.5px;
+        position: relative;
+        border-top: 2px solid transparent;
+        border-image: repeating-linear-gradient(
+          to right,
+          #FCFCFC 0 4px,   /* dash length */
+          transparent 4px 10px  /* gap size */
+        ) 1;
+        opacity: 0.2;
+    }
+
+    .connector-dot {
+        width: 12px;
+        height: 12px;
+        background: var(--process-dot);
+        border-radius: 50%;
+        box-shadow: 0 0 20px 0px var(--process-dot);
+    }
+    app-project-number-card {
+        height: 100%;
+        ::ng-deep {
+            .project-card {
+                height: 100%;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,29 @@
+@use "mixins" as *;
+
+.project-nutshell {
+padding: 48px 16px;
+background: #0F0F0F;
+box-shadow: 0 -10px 4px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 4px 0 rgba(0, 0, 0, 0.25) inset;
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 128px;
+        @include respond-to(md) {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+    h3 {
+        color: #FCFCFC;
+        font-size: 36px;
+        font-weight: 600;
+        line-height: 120%; 
+        white-space: nowrap;
+    }
+    p {
+        color: rgba(252, 252, 252, 0.80);
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 150%; 
+    }
+}

@@ -69,6 +69,9 @@
   width: 100%;
   overflow: hidden;
   padding: 3rem 0 5rem;
+
+  max-width: 2000px;
+  margin: 0 auto;
   
   @media (max-width: 968px) {
     padding: 2rem 0 4rem;

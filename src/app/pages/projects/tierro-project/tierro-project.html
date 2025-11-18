@@ -1,6 +1,13 @@
 <main class="tierro-project-page">
-  @if (project) {
-    <app-project-header [project]="project"></app-project-header>
-  }
+  <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
+  <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
+  <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
+  <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
+  <app-project-strategic [projectStrategicData]="projectData.strategicData"></app-project-strategic>
+  <app-project-process [projectProcessData]="projectData.processData"></app-project-process>
+  <app-project-side-img-cards [projectSideImgCardsData]="projectData.producerClientPageData"></app-project-side-img-cards>
+  <app-project-side-img-cards [projectSideImgCardsData]="projectData.adminPageData"></app-project-side-img-cards>
+  <app-project-audience [projectAudienceData]="projectData.audienceData"></app-project-audience>
+  <app-project-personas [projectPersonasData]="projectData.personasData"></app-project-personas>
 </main>
 

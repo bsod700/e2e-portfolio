@@ -1,0 +1,14 @@
+<div [ngClass]="['project-card', `project-${projectNumberCardData.projectName}`]">
+  @if (projectNumberCardData.backgroundImages) {
+    <div class="background">
+      @for (image of projectNumberCardData.backgroundImages; track $index) {
+        <img [src]="image" alt="background" />
+      }
+    </div>
+  }
+  <div class="project-card-content">
+    <h3 class="project-card-title">{{ projectNumberCardData.title }}</h3>
+    <h4 class="project-card-description">{{ projectNumberCardData.subtitle }}</h4>
+    <p class="project-card-text">{{ projectNumberCardData.text }}</p>
+  </div>
+</div>
