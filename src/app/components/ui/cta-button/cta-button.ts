@@ -9,7 +9,6 @@ export interface CtaButtonData {
   target?: '_blank' | '_self';
   size?: 'small' | 'default';
   routerLink?: string;
-  clicked?: EventEmitter<void>;
 }
 @Component({
   selector: 'app-cta-button',
