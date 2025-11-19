@@ -70,5 +70,14 @@
         <div class="project-inquiry">
           <app-project-inquiry></app-project-inquiry>
         </div>
+
+        <!-- Scroll Down Arrow -->
+        <button class="scroll-down-btn" (click)="scrollToNextSection()" aria-label="Scroll to next section">
+          <div class="scroll-arrow-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="scroll-arrow">
+              <path d="M12 5L12 19M12 19L19 12M12 19L5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
       </div>
 </section>

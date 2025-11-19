@@ -42,4 +42,11 @@ export class HeroComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  scrollToNextSection(): void {
+      const nextSection = document.getElementById('services');
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+  }
 }

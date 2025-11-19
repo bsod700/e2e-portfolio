@@ -6,6 +6,11 @@
   padding: 136px 0;
   overflow: hidden;
   min-height: 675px;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 800px;
   @include respond-to(md) {
     padding: 164px 0;
   }
@@ -638,6 +643,9 @@
       @include respond-to(sm) {
         font-size: 64px;
       }
+      @include respond-to(md) {
+        font-size: 78px;
+      }
     }
 
     .hero-description {
@@ -657,6 +665,41 @@
       display: flex;
       justify-content: center;
     }
+
+    .scroll-down-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      animation: float 3s ease-in-out infinite;
+      margin-top: 24px;
+
+      &:hover {
+        .scroll-arrow-wrapper {
+          .scroll-arrow {
+            color: var(--color-text-primary);
+            filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.8));
+          }
+        }
+      }
+
+      .scroll-arrow-wrapper {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+
+        .scroll-arrow {
+          width: 24px;
+          height: 24px;
+          color: rgba(252, 252, 252, 0.8);
+          transition: all 0.3s ease;
+        }
+      }
+    }
   }
 }
 
@@ -675,7 +718,20 @@
   }
 }
 
+// Floating animation for scroll button
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .scroll-down-btn {
+    animation: none !important;
+  }
   .hero {
     .hero-background {
       .lights {
