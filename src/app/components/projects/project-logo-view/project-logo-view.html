@@ -1,0 +1,37 @@
+<section [ngClass]="['project-logo-view',`project-${projectLogoViewData.projectName}`]">
+  @if (projectLogoViewData.backgroundImages) {
+    <div class="background">
+      @for (image of projectLogoViewData.backgroundImages; track $index) {
+        <img [src]="image" alt="background" />
+      }
+    </div>
+  }
+  <div class="container">
+    <h3>{{projectLogoViewData.title}}</h3>
+    <div class="logo-view-container">
+      @for (item of projectLogoViewData.logosView; track $index; let last = $last; let count = $count) {
+        <div class="logo-view-item">
+            @if (typeof item === 'string' || typeof item === 'object') {
+                <div class="logo-item">
+                    @if (typeof item === 'string') {
+                        <span class="logo-item-text">{{ item }}</span>
+                    } @else if (typeof item === 'object') {
+                        <img [class]="`logo-item-img-${$index+1}`" [src]="item.src" [alt]="item.alt" />
+                    }
+                </div>
+            }
+            @if (!last) {
+                @if ($index === count - 2) {
+                    <span class="logo-view-item-separator">=</span>
+                } @else {
+                    <span class="logo-view-item-separator">+</span>
+                }
+            }
+        </div>
+      }
+    </div>
+    @if (projectLogoViewData.text) {
+      <p>{{projectLogoViewData.text}}</p>
+    }
+  </div>
+</section>

@@ -1,7 +1,7 @@
 @use 'mixins' as *;
 
 .project-strategic {
-  padding: 48px 16px 96px;
+  padding: 48px 0 96px;
   position: relative;
   overflow: hidden;
   &.project-tierro {
@@ -53,22 +53,33 @@
     margin-top: 48px;
     @include respond-to(lg) {
         display: grid;
-      grid-template-columns: repeat(2, 400px);
-    
+        grid-template-columns: repeat(2, 400px);
+    }
+    > *:last-child:nth-child(odd) {
+      @include respond-to(lg) {
+        grid-column: 1 / -1;
+        justify-self: center;
+      }
     }
   }
   h3 {
     color: #fcfcfc;
     text-align: center;
-    font-size: 36px;
+    font-size: 24px;
     font-weight: 600;
     line-height: 120%;
+    @include respond-to(md) {
+      font-size: 36px;
+    }
   }
   p {
     color: rgba(252, 252, 252, 0.8);
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 300;
     line-height: 150%;
+    @include respond-to(md) {
+      font-size: 18px;
+    }
   }
 }

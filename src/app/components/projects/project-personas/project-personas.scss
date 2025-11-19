@@ -65,15 +65,21 @@
 
       h3 {
         color: #fcfcfc;
-        font-size: 36px;
+        font-size: 24px;
         font-weight: 600;
         line-height: 120%;
+        @include respond-to(md) {
+          font-size: 36px;
+        }
       }
       p {
         color: rgba(252, 252, 252, 0.8);
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 300;
         line-height: 150%;
+        @include respond-to(md) {
+          font-size: 18px;
+        }
       }
     }
   }

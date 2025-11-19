@@ -5,6 +5,12 @@
   max-width: 700px;
   margin: 0 auto;
   position: relative; // enable absolute background layer
+
+  &:not(.type-default) {
+    .glow-layer {
+      display: none !important;
+    }
+  }
 }
 
 // Enable smooth animation for conic-gradient angle

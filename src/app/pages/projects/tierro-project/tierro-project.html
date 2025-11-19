@@ -1,13 +1,94 @@
 <main class="tierro-project-page">
-  <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
-  <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
-  <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
-  <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
-  <app-project-strategic [projectStrategicData]="projectData.strategicData"></app-project-strategic>
-  <app-project-process [projectProcessData]="projectData.processData"></app-project-process>
-  <app-project-side-img-cards [projectSideImgCardsData]="projectData.producerClientPageData"></app-project-side-img-cards>
-  <app-project-side-img-cards [projectSideImgCardsData]="projectData.adminPageData"></app-project-side-img-cards>
-  <app-project-audience [projectAudienceData]="projectData.audienceData"></app-project-audience>
-  <app-project-personas [projectPersonasData]="projectData.personasData"></app-project-personas>
+  <app-table-of-contents [sections]="tocSections"></app-table-of-contents>
+  
+  <div id="header">
+    <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
+  </div>
+  
+  <div id="stacks">
+    <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
+  </div>
+  
+  <div id="role-impact">
+    <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
+  </div>
+  
+  <div id="nutshell">
+    <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
+  </div>
+  
+  <div id="strategic-goals">
+    <app-project-strategic [projectStrategicData]="projectData.strategicData"></app-project-strategic>
+  </div>
+  
+  <div id="design-process">
+    <app-project-process [projectProcessData]="projectData.processData"></app-project-process>
+  </div>
+  
+  <div id="producer-page">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.producerClientPageData"></app-project-side-img-cards>
+  </div>
+  
+  <div id="admin-page">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.adminPageData"></app-project-side-img-cards>
+  </div>
+  
+  <div id="target-audience">
+    <app-project-audience [projectAudienceData]="projectData.audienceData"></app-project-audience>
+  </div>
+  
+  <div id="personas">
+    <app-project-personas [projectPersonasData]="projectData.personasData"></app-project-personas>
+  </div>
+  
+  <div id="insights">
+    <app-project-strategic [projectStrategicData]="projectData.insightsData"></app-project-strategic>
+  </div>
+  
+  <div id="logo">
+    <app-project-logo-view [projectLogoViewData]="projectData.logoViewData"></app-project-logo-view>
+  </div>
+  
+  <div id="style-guide">
+    <app-project-style-guide [projectStyleGuideData]="projectData.styleGuideData"></app-project-style-guide>
+  </div>
+
+  <section id="player-section" class="section-client-page">
+    <div class="background">
+      <div class="circle"></div>
+    </div>
+    <div class="container">
+      <h3>Producer Client Page</h3>
+      <p>Designed a custom audio player tailored to Tierro's brand, enabling seamless music playback and giving visitors direct access to his production catalog instantly.</p>
+      <div class="overflow"></div>
+      <div class="player">
+        <img src="assets/images/projects/tierro/player.webp" alt="Player">
+      </div>
+    </div>
+  </section>
+
+  <div id="design-system">
+    <app-project-design-system [projectDesignSystemData]="projectData.designSystemData"></app-project-design-system>
+  </div>
+  
+  <div id="admin-screens" class="projects-side-img-text-container">
+    <app-project-side-img-text [projectSideImgTextData]="projectData.loginScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.songScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.addSongScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.reviewScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.addReviewScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.settingsScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.editProfileScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.editUserDetailsScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.editPaymentMethodsScreenData"></app-project-side-img-text>
+  </div>
+  
+  <div id="lessons-learned">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.lessonLearnedData"></app-project-side-img-cards>
+  </div>
+
+  <div id="thanks">
+    <app-project-thanks [projectThanksData]="projectData.thanksData"></app-project-thanks>
+  </div>
 </main>
 

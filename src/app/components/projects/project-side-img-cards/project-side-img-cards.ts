@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 export interface ProjectSideImgCardsData {
   projectName: string;
   title: string;
-  text: string;
+  text?: string;
   sideDirection: 'left' | 'right';
   cards: {
     backgroundImages?: string[];
@@ -14,6 +14,7 @@ export interface ProjectSideImgCardsData {
   }[];
   image: string;
   backgroundImages?: string[];
+  sectionName: string;
 }
 @Component({
   selector: 'app-project-side-img-cards',
@@ -25,9 +26,9 @@ export class ProjectSideImgCardsComponent {
   @Input() projectSideImgCardsData: ProjectSideImgCardsData = {
     projectName: '',
     title: '',
-    text: '',
     sideDirection: 'left',
     cards: [],
     image: '',
+    sectionName: '',
   };
 }

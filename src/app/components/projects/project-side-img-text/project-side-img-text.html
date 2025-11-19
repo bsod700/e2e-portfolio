@@ -1,0 +1,18 @@
+<section [ngClass]="['project-side-img-text','project-'+projectSideImgTextData.projectName, `side-${projectSideImgTextData.sideDirection}`, `project-${projectSideImgTextData.sectionName}`]">
+    @if (projectSideImgTextData.backgroundImages) {
+        <div class="background">
+            @for (image of projectSideImgTextData.backgroundImages; track $index) {
+                <img [src]="image" alt="background" />
+            }
+        </div>
+    }
+  <div class="container">
+    <div class="text-content">
+      <h3>{{ projectSideImgTextData.title }}</h3>
+      <p>{{ projectSideImgTextData.text }}</p>
+    </div>
+    <div class="img-content">
+        <img [src]="projectSideImgTextData.image" alt="projectSideImgTextData.title" />
+    </div>
+  </div>
+</section>

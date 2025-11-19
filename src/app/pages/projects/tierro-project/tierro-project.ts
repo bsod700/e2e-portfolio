@@ -18,6 +18,18 @@ import {
   ProjectAudienceComponent,
   ProjectPersonasData,
   ProjectPersonasComponent,
+  ProjectLogoViewData,
+  ProjectLogoViewComponent,
+  ProjectStyleGuideData,
+  ProjectStyleGuideComponent,
+  ProjectDesignSystemData,
+  ProjectDesignSystemComponent,
+  ProjectSideImgTextData,
+  ProjectSideImgTextComponent,
+  TableOfContentsComponent,
+  TocSection,
+  ProjectThanksData,
+  ProjectThanksComponent,
 } from '../../../components/projects';
 import { CommonModule } from '@angular/common';
 
@@ -32,6 +44,21 @@ export interface ProjectData {
   adminPageData: ProjectSideImgCardsData;
   audienceData: ProjectAudienceData;
   personasData: ProjectPersonasData;
+  insightsData: ProjectStrategicData;
+  logoViewData: ProjectLogoViewData;
+  styleGuideData: ProjectStyleGuideData;
+  designSystemData: ProjectDesignSystemData;
+  loginScreenData: ProjectSideImgTextData;
+  songScreenData: ProjectSideImgTextData;
+  addSongScreenData: ProjectSideImgTextData;
+  reviewScreenData: ProjectSideImgTextData;
+  addReviewScreenData: ProjectSideImgTextData;
+  settingsScreenData: ProjectSideImgTextData;
+  editProfileScreenData: ProjectSideImgTextData;
+  editUserDetailsScreenData: ProjectSideImgTextData;
+  editPaymentMethodsScreenData: ProjectSideImgTextData;
+  lessonLearnedData: ProjectSideImgCardsData;
+  thanksData: ProjectThanksData;
 }
 @Component({
   selector: 'app-tierro-project',
@@ -46,11 +73,38 @@ export interface ProjectData {
     ProjectSideImgCardsComponent,
     ProjectAudienceComponent,
     ProjectPersonasComponent,
+    ProjectLogoViewComponent,
+    ProjectStyleGuideComponent,
+    ProjectDesignSystemComponent,
+    ProjectSideImgTextComponent,
+    TableOfContentsComponent,
+    ProjectThanksComponent,
   ],
   templateUrl: './tierro-project.html',
   styleUrl: './tierro-project.scss',
 })
 export class TierroProjectComponent {
+  tocSections: TocSection[] = [
+    { id: 'header', title: 'Overview' },
+    { id: 'stacks', title: 'Tech Stack' },
+    { id: 'role-impact', title: 'Role & Impact' },
+    { id: 'nutshell', title: 'In a Nutshell' },
+    { id: 'strategic-goals', title: 'Strategic Goals' },
+    { id: 'design-process', title: 'Design Process' },
+    { id: 'producer-page', title: 'Producer Page' },
+    { id: 'admin-page', title: 'Admin Page' },
+    { id: 'target-audience', title: 'Target Audience' },
+    { id: 'personas', title: 'Personas' },
+    { id: 'insights', title: 'Insights' },
+    { id: 'logo', title: 'Logo' },
+    { id: 'style-guide', title: 'Style Guide' },
+    { id: 'player-section', title: 'Music Player' },
+    { id: 'design-system', title: 'Design System' },
+    { id: 'admin-screens', title: 'Admin Screens' },
+    { id: 'lessons-learned', title: 'Lessons Learned' },
+    { id: 'thanks', title: 'Thanks For Watching!' },
+  ];
+
   projectData: ProjectData = {
     headerData: {
       name: 'tierro',
@@ -233,7 +287,8 @@ export class TierroProjectComponent {
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
       ],
-      image: 'assets/images/projects/tierro/side-img-cards.svg',
+      image: 'assets/images/projects/tierro/producer-mac.webp',
+      sectionName: 'producer-client-page',
     },
     adminPageData: {
       projectName: 'tierro',
@@ -261,6 +316,7 @@ export class TierroProjectComponent {
         },
       ],
       image: 'assets/images/projects/tierro/side-img-cards.svg',
+      sectionName: 'admin-page',
     },
     audienceData: {
       projectName: 'tierro',
@@ -436,5 +492,219 @@ export class TierroProjectComponent {
         'assets/images/projects/tierro/lines.svg',
       ],
     },
+    insightsData: {
+      title: 'Insights',
+      text: 'Through detailed analysis and user research, several key insights were identified to guide the design and development of the project.',
+      cards: [
+        {
+          title: '01.',
+          subtitle: 'Engagement',
+          text: 'Engaging visuals and intuitive design elements are crucial for capturing and maintaining user interest, especially when showcasing creative work.',
+          projectName: 'tierro',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '02.',
+          subtitle: 'Customization Needs',
+          text: 'Users value the ability to customize and manage content easily, particularly for showcasing music and keeping their portfolio current with updates.',
+          projectName: 'tierro',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '03.',
+          subtitle: 'Seamless Navigation',
+          text: 'A user-friendly interface with seamless navigation is essential for both clients and fans to explore content and interact effectively with the site.',
+          projectName: 'tierro',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '04.',
+          subtitle: 'Professional Credibility',
+          text: 'Clear presentation of past collaborations and results builds trust with potential clients, helping them make informed decisions about working with the',
+          projectName: 'tierro',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '05.',
+          subtitle: 'Direct Music Access',
+          text: 'Visitors expect immediate access to music samples without friction, avoiding the need to navigate to external platforms or create accounts.',
+          projectName: 'tierro',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+      ],
+      backgroundImages: [
+        'assets/images/projects/tierro/circles1.svg',
+        'assets/images/projects/tierro/circles2.svg',
+        'assets/images/projects/tierro/lines.svg',
+      ],
+      projectName: 'tierro',
+    },
+    logoViewData: {
+      projectName: 'tierro',
+      title: 'Logo',
+      logosView: [
+        'Tierro',
+        { src: 'assets/images/projects/tierro/logo-plug.svg', alt: 'Logo View 2' },
+        { src: 'assets/images/projects/tierro/logo-line.svg', alt: 'Logo View 3' },
+        { src: 'assets/images/projects/tierro/logo-result.svg', alt: 'Logo View 4' },
+      ],
+      text: 'The Logo View is a visually appealing and user-friendly platform designed for clients and fans to explore the music producer\'s work.',
+    },
+    styleGuideData: {
+      projectName: 'tierro',
+      title: 'Style Guide',
+      text: 'Developed a complete style guide defining typography, colors, and visual elements to ensure brand consistency and unified user experience across the entire platform.',
+      fontGuideTitle: 'Montserrat',
+      fontGuide: ['Light', 'Regular', 'Bold'],
+      colorGuideTitle: 'Color Palette',
+      colorGuide: [
+        { title: 'Brand', colors: [
+          { name: 'Golden Yellow', value: '#FDC45D' },
+          { name: 'Dusty Orange', value: '#F58047' },
+        ] },
+        { title: 'Background', colors: [
+          { name: 'Eerie Black', value: '#1E1E1E' },
+          { name: 'Ghost White', value: '#F9FAFF' },
+        ] },
+        { title: 'Text', colors: [
+          { name: 'Light Silver', value: '#D9D9D9' },
+          { name: 'Eerie Black', value: '#1E1E1E' },
+        ] },
+        { title: 'System', colors: [
+          { name: 'Indian Red', value: '#CB5F5F' },
+          { name: 'Fresh Green', value: '#47D764' },
+          { name: 'Bleu De France', value: '#2F86EB' },
+        ] },
+      ],
+    },
+    designSystemData: {
+      projectName: 'tierro',
+      title: 'Admin Page',
+      text: 'Private backend interface with organized components and controls, enabling Tierro to effortlessly manage his music portfolio, client reviews, and website content independently.',
+      DesignSystemTitle: 'Design System',
+      systemCards: [
+        { image: 'assets/images/projects/tierro/buttons_design_system.webp', title: 'Design System 1' },
+        { image: 'assets/images/projects/tierro/inputs_design_system.webp', title: 'Design System 1' },
+        { image: 'assets/images/projects/tierro/icons_design_system.webp', title: 'Design System 1' },
+        { image: 'assets/images/projects/tierro/components_design_system.webp', title: 'Design System 1' },
+      ],
+    },
+    loginScreenData: {
+      sideDirection: 'right',
+      projectName: 'tierro',
+      title: 'Login Screen',
+      text: 'The Login Screen provides a secure entry point for the music producer\'s admin page, featuring fields for email and password. It ensures quick access while maintaining security through standard authentication protocols.',
+      image: 'assets/images/projects/tierro/admin-login-screen.webp',
+      sectionName: 'login-screen',
+    },
+    songScreenData: {
+      sideDirection: 'left',
+      projectName: 'tierro',
+      title: 'Song Screen',
+      text: 'The Songs Screen allows the music producer to manage his song collection efficiently. He can change the order of the songs, edit existing ones, and add new tracks. This screen also provides a comprehensive overview of all the songs in his portfolio.',
+      image: 'assets/images/projects/tierro/song-screen.webp',
+      sectionName: 'song-screen',
+    },
+    addSongScreenData: {
+      sideDirection: 'right',
+      projectName: 'tierro',
+      title: 'Add Song / Edit Song',
+      text: 'The Add Song and Edit Song screens provide intuitive interfaces for the music producer to manage his tracks. On these screens, he can input details such as title, artist, genre, song picture, and Spotify link if available, and select whether the track is a song or a demo. The Edit Song screen allows for easy modifications to existing songs, ensuring all information and files are up-to-date.',
+      image: 'assets/images/projects/tierro/add-song-screen.webp',
+      sectionName: 'add-song-screen',
+    },
+    reviewScreenData: {
+      sideDirection: 'left',
+      projectName: 'tierro',
+      title: 'Review Screen',
+      text: 'The Reviews Screen allows the music producer to view all the reviews he has received. He can change the order of the reviews displayed in the carousel on his portfolio, as well as add new reviews and edit existing ones. This ensures his portfolio showcases the most relevant and up-to-date feedback.',
+      image: 'assets/images/projects/tierro/review-screen.webp',
+      sectionName: 'review-screen',
+    },
+    addReviewScreenData: {
+      sideDirection: 'right',
+      projectName: 'tierro',
+      title: 'Add Review / Edit Review',
+      text: 'The Add Review and Edit Review screens provide the music producer with the tools to manage his reviews. He can input the review image, review profile details (name and title), the review content, and social links for Spotify and Instagram. These screens enable him to add new reviews or update existing ones, ensuring his portfolio reflects the most accurate and current testimonials.',
+      image: 'assets/images/projects/tierro/add-review-screen.webp',
+      sectionName: 'add-review-screen',
+    },
+    settingsScreenData: {
+      sideDirection: 'left',
+      projectName: 'tierro',
+      title: 'Settings Screen',
+      text: 'The Settings Screen allows the music producer to manage his account details comprehensively. He can view and edit his personal profile, user details, and payment methods. This screen ensures he has full control over his personal and financial information, maintaining accuracy and up-to-date records.',
+      image: 'assets/images/projects/tierro/settings-screen.webp',
+      sectionName: 'settings-screen',
+    },
+    editProfileScreenData: {
+      sideDirection: 'right',
+      projectName: 'tierro',
+      title: 'Edit Personal Profile',
+      text: 'The Edit Personal Profile screen enables the music producer to update his personal information. The inputs for this screen include profile image, first name, last name, date of birth, and gender. This allows him to keep his profile current and accurate.',
+      image: 'assets/images/projects/tierro/edit-profile-screen.webp',
+      sectionName: 'edit-profile-screen',
+    },
+    editUserDetailsScreenData: {
+      sideDirection: 'left',
+      projectName: 'tierro',
+      title: 'Edit User Details',
+      text: 'The Edit User Details screen allows the music producer to update his account information. The inputs for this screen include username, password, email, and phone number. This ensures his contact and login details are always accurate and up-to-date.',
+      image: 'assets/images/projects/tierro/edit-user-details-screen.webp',
+      sectionName: 'edit-user-details-screen',
+    },
+    editPaymentMethodsScreenData: {
+      sideDirection: 'right',
+      projectName: 'tierro',
+      title: 'Edit Payment Methods',
+      text: 'The Edit Payment Methods screen allows the music producer to manage his financial details. The inputs for this screen include card type, cardholder name, expiration date, CVV, and card number. This ensures that his payment information is always current and secure.',
+      image: 'assets/images/projects/tierro/edit-payment-methods-screen.webp',
+      sectionName: 'edit-payment-methods-screen',
+    },
+    lessonLearnedData: {
+      projectName: 'tierro',
+      title: 'Lessons Learned',
+      sideDirection: 'left',
+      cards: [
+        {
+          title: 'Building a Brand Identity from Nothing',
+          text: 'Creating a brand from scratch taught me to spend real time understanding what the client wants their identity to feel like.',
+          icon: '',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: 'Custom Audio Players Are Tricky',
+          text: 'Building the music player was harder than expected. Balancing visual appeal with performance, loading speed, and browser compatibility took serious tweaking.',
+          icon: '',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: 'Making Things Easy for Non-Technical Users',
+          text: 'The admin page showed me that developer-friendly isn\'t user-friendly. I had to design for someone who\'d never need my help again.',
+          icon: '',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: 'Testing and Tweaking Makes All the Difference',
+          text: 'I went through way more iterations than planned. But that\'s where things got good. Feedback helped me catch what I missed initially.',
+          icon: '',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+      ],
+      image: 'assets/images/projects/tierro/side-img-cards.svg',
+      sectionName: 'lesson-learned',
+    },
+    thanksData: {
+      projectName: 'tierro',
+      title: 'Thanks For Watching!',
+      projectKicker: 'The next step',
+      projectTitle: 'Ready to Start Your Project?',
+      projectDescription: 'Tell me what you need and I’ll help you bring it to life.',
+      backgroundCircles: [
+        '',
+        '',
+        ''
+      ],
+    }
   };
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -15,6 +15,8 @@ interface ProjectType {
   styleUrl: './project-inquiry.scss'
 })
 export class ProjectInquiryComponent {
+  @Input() classType: string = 'default';
+  
   projectDescription = '';
   selectedTypes: Set<string> = new Set();
   showContactForm = false;

@@ -7,8 +7,6 @@
     &.project-tierro {
         background: #161616;
         box-shadow: 0 -10px 20px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 20px 0 rgba(0, 0, 0, 0.25) inset;
-
-       
     }
 
     .container {
@@ -24,22 +22,32 @@
             text-align: center;
             h3 {
                 color: #FCFCFC;
-                font-size: 36px;
+                font-size: 24px;
                 font-weight: 600;
                 line-height: 120%; 
+                @include respond-to(md) {
+                    font-size: 36px;
+                }
             }
             p {
                 color: rgba(252, 252, 252, 0.80);
-                font-size: 18px;
+                font-size: 16px;
                 font-weight: 300;
                 line-height: 150%;
+                @include respond-to(md) {
+                    font-size: 18px;
+                }
             }
         }
         .sides {
             display: flex;
-            flex-direction: row;
-            gap: 96px;
+            flex-direction: column;
+            gap: 48px;
             text-align: start;
+            @include respond-to(lg) {
+                flex-direction: row;
+                gap: 96px;
+            }
             .side {
                 display: flex;
                 flex-direction: column;

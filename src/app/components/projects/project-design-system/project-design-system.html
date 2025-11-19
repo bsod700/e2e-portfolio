@@ -1,0 +1,153 @@
+<section [ngClass]="['project-design-system','project-'+projectDesignSystemData.projectName]">
+  <div class="container">
+    <div class="text-content">
+        <h3>{{projectDesignSystemData.title}}</h3>
+        <p>{{projectDesignSystemData.text}}</p>
+    </div>
+    <div class="design-system-container">
+      <div class="design-system-item">
+        <h4>{{projectDesignSystemData.DesignSystemTitle}}</h4>
+        
+        <div class="carousel-wrapper">
+          <!-- Previous Button -->
+          <button 
+            class="carousel-arrow carousel-arrow-prev" 
+            (click)="prevSlide()"
+            [disabled]="!canGoPrev"
+            aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <!-- Carousel Container -->
+          <div class="carousel-container">
+            <div 
+              class="carousel-track"
+              [style.transform]="isDragging ? 'translateX(' + currentTranslate + '%)' : getTransform()"
+              (mousedown)="onTouchStart($event)"
+              (mousemove)="onTouchMove($event)"
+              (mouseup)="onTouchEnd()"
+              (mouseleave)="onTouchEnd()"
+              (touchstart)="onTouchStart($event)"
+              (touchmove)="onTouchMove($event)"
+              (touchend)="onTouchEnd()">
+              
+              @for (systemCard of projectDesignSystemData.systemCards; track $index) {
+                <div class="carousel-slide">
+                  <div class="card" (click)="openOverlay($index)">
+                    <img [src]="systemCard.image" [alt]="systemCard.title" draggable="false">
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Next Button -->
+          <button 
+            class="carousel-arrow carousel-arrow-next" 
+            (click)="nextSlide()"
+            [disabled]="!canGoNext"
+            aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Pagination Dots -->
+        <div class="carousel-pagination">
+          @for (slide of [].constructor(totalSlides); track $index) {
+            <button 
+              class="pagination-dot"
+              [class.active]="currentSlide === $index"
+              (click)="goToSlide($index)"
+              [attr.aria-label]="'Go to slide ' + ($index + 1)">
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Overlay -->
+@if (isOverlayOpen) {
+  <div class="image-overlay" 
+       (click)="onOverlayClick($event)"
+       (keydown)="onKeyDown($event)"
+       tabindex="0">
+    <button class="close-btn" (click)="closeOverlay()" aria-label="Close overlay">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="overlay-content">
+      <!-- Navigation Arrows -->
+      @if (overlayImageIndex > 0) {
+        <button class="nav-btn prev-btn" (click)="previousOverlayImage()" aria-label="Previous image">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+      }
+
+      <!-- Image Container -->
+      <div class="image-container" [class.zoomed]="zoomLevel > 1">
+        <img [src]="projectDesignSystemData.systemCards[overlayImageIndex].image" 
+             [alt]="projectDesignSystemData.systemCards[overlayImageIndex].title"
+             [style.transform]="getImageTransform()"
+             [style.cursor]="getImageCursor()"
+             [class.is-zoomed]="zoomLevel > 1"
+             [class.is-panning]="isPanning"
+             (mousedown)="onImagePanStart($event)"
+             (mousemove)="onImagePanMove($event)"
+             (mouseup)="onImagePanEnd()"
+             (mouseleave)="onImagePanEnd()"
+             (touchstart)="onImagePanStart($event)"
+             (touchmove)="onImagePanMove($event)"
+             (touchend)="onImagePanEnd()"
+             draggable="false">
+      </div>
+
+      @if (overlayImageIndex < projectDesignSystemData.systemCards.length - 1) {
+        <button class="nav-btn next-btn" (click)="nextOverlayImage()" aria-label="Next image">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      }
+    </div>
+
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+      <button (click)="zoomOut()" 
+              [disabled]="zoomLevel <= minZoom"
+              aria-label="Zoom out">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <span class="zoom-level">{{ (zoomLevel * 100) | number:'1.0-0' }}%</span>
+      <button (click)="zoomIn()" 
+              [disabled]="zoomLevel >= maxZoom"
+              aria-label="Zoom in">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="11" y1="8" x2="11" y2="14"></line>
+          <line x1="8" y1="11" x2="14" y2="11"></line>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Image Counter -->
+    <div class="image-counter">
+      {{ overlayImageIndex + 1 }} / {{ projectDesignSystemData.systemCards.length }}
+    </div>
+  </div>
+}

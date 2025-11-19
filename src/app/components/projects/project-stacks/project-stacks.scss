@@ -3,8 +3,11 @@
 .project-stacks {
   position: relative;
   width: 100%;
-  padding: 0 16px 144px;
+  padding: 0 0 96px;
   overflow: hidden;
+  @include respond-to(md) {
+    padding: 0 0 144px;
+  }
 
   &.project-tierro {
     .background {
@@ -52,9 +55,12 @@
     }
     h3 {
       color: #fcfcfc;
-      font-size: 36px;
+      font-size: 24px;
       font-weight: 600;
       line-height: 120%;
+      @include respond-to(md) {
+        font-size: 36px;
+    }
     }
     .services,
     .technologies {

@@ -1,0 +1,104 @@
+@use 'mixins' as *;
+
+.project-logo-view {
+  padding: 96px 0;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  &.project-tierro {
+    background: #171925;
+box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.25) inset;
+    .logo-view-container {
+        img {
+            &.logo-item-img-2 {
+                width: 15px;
+                height: 113px;
+            }
+            &.logo-item-img-3 {
+                width: 150px;
+                height: 138px;
+            }
+            &.logo-item-img-4 {
+                width: 252px;
+                height: 115px;
+            }
+        }
+    }
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    position: relative;
+
+    h3 {
+      color: #fcfcfc;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 120%;
+      max-width: 600px;
+      @include respond-to(md) {
+        font-size: 36px;
+      }
+    }
+    p {
+      color: rgba(252, 252, 252, 0.8);
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 150%;
+      max-width: 600px;
+      @include respond-to(md) {
+        font-size: 18px;
+      }
+    }
+  }
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.1;
+    }
+  }
+  .logo-view-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    @include respond-to(lg) {
+        flex-direction: row;
+    }
+  }
+  .logo-view-item {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    @include respond-to(lg) {
+        flex-direction: row;
+    }
+  }
+  .logo-item-text {
+    color: #FCFCFC;
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 140%;
+  }
+  .logo-view-item-separator {
+        color: rgba(252, 252, 252, 0.80);
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 140%;
+  }
+}

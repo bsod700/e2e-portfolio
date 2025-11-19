@@ -1,0 +1,54 @@
+<div class="table-of-contents"
+     [class.dragging]="isDragging()"
+     [class.right-side]="isOnRightSide()"
+     [style.left]="!isOnRightSide() ? position().x + '%' : null"
+     [style.right]="isOnRightSide() ? (100 - position().x) + '%' : null"
+     [style.top.%]="position().y"
+     (mousemove)="onDrag($event)"
+     (mouseup)="onDragEnd()"
+     (mouseleave)="onDragEnd()"
+     (touchmove)="onDrag($event)"
+     (touchend)="onDragEnd()">
+  
+  <div class="toc-container"
+       (mousedown)="onDragStart($event)"
+       (touchstart)="onDragStart($event)">
+    <button 
+      class="toc-toggle" 
+      [class.open]="isOpen()"
+      (click)="toggleMenu()"
+      aria-label="Toggle table of contents">
+      <span class="toggle-icon">
+        <svg *ngIf="!isOpen()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <svg *ngIf="isOpen()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </span>
+    </button>
+
+    <nav class="toc-menu" 
+         [class.open]="isOpen()">
+      <div class="toc-header">
+        <h3>Table of Contents</h3>
+      </div>
+    <ul class="toc-list">
+      <li *ngFor="let section of sections" class="toc-item">
+        <button
+          class="toc-link"
+          [class.active]="activeSection() === section.id"
+          [attr.data-section-id]="section.id"
+          (click)="scrollToSection(section.id)">
+          <span class="toc-indicator"></span>
+          <span class="toc-title">{{ section.title }}</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  </div>
+</div>
+

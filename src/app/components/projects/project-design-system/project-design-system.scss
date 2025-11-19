@@ -1,0 +1,526 @@
+@use "mixins" as *;
+
+.project-design-system {
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 3;
+  text-align: center;
+  &.project-tierro {
+    background: #161616;
+    box-shadow: 0 -10px 20px 0 rgba(0, 0, 0, 0.25), 0 10px 20px 0 rgba(0, 0, 0, 0.25);
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .text-content {
+    display: flex;
+    width: 900px;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  h3 {
+    color: #FCFCFC;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 120%;
+    @include respond-to(md) {
+      font-size: 36px;
+    }
+  }
+
+  p {
+    color: rgba(252, 252, 252, 0.80);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 150%;
+    @include respond-to(md) {
+      font-size: 18px;
+    }
+  }
+
+  .design-system-container {
+    width: 100%;
+    max-width: 1400px;
+    
+    .design-system-item {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+
+      h4 {
+        color: #FCFCFC;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 120%;
+        text-align: center;
+      }
+
+      // Carousel Wrapper
+      .carousel-wrapper {
+        position: relative;
+        width: 100%;
+        padding: 0 60px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        // Carousel Navigation Arrows
+        .carousel-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: white;
+          transition: all 0.3s ease;
+          z-index: 10;
+
+          &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+          }
+
+          &:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+          }
+
+          &.carousel-arrow-prev {
+            left: 0;
+          }
+
+          &.carousel-arrow-next {
+            right: 0;
+          }
+
+          svg {
+            width: 24px;
+            height: 24px;
+          }
+        }
+
+        // Carousel Container
+        .carousel-container {
+          flex: 1;
+          overflow: hidden;
+          width: 100%;
+          position: relative;
+          padding: 24px 0;
+          
+          .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: grab;
+            user-select: none;
+
+            &:active {
+              cursor: grabbing;
+            }
+
+            .carousel-slide {
+              min-width: calc(100% / 3);
+              padding: 0 16px;
+
+              .card {
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                height: 100%;
+                max-height: 400px;
+                
+                &:hover {
+                  transform: translateY(-8px);
+                  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+                  border-color: rgba(255, 255, 255, 0.2);
+                }
+
+                img {
+                  width: 100%;
+                  height: auto;
+                  display: block;
+                  user-select: none;
+                  pointer-events: none;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Pagination Dots
+      .carousel-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 0;
+
+        .pagination-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          padding: 0;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
+          }
+
+          &.active {
+            background: #FCFCFC;
+            width: 32px;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Image Overlay Styles
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: background 0.3s ease;
+    z-index: 10002;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .overlay-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 100px;
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+      z-index: 10001;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      &.prev-btn {
+        left: 30px;
+      }
+
+      &.next-btn {
+        right: 30px;
+      }
+
+      svg {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .image-container {
+      width: 100%;
+      height: 100%;
+      max-width: 90vw;
+      max-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+
+      img {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+        user-select: none;
+        -webkit-user-drag: none;
+        touch-action: none;
+        transform-origin: center center;
+        
+        &.is-zoomed {
+          max-width: none;
+          max-height: none;
+          width: 100%;
+          height: auto;
+        }
+        
+        &.is-panning {
+          transition: none;
+        }
+      }
+    }
+  }
+
+  .zoom-controls {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgb(0 0 0 / 40%);
+    padding: 12px 20px;
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+    z-index: 10002;
+
+    button {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .zoom-level {
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      min-width: 50px;
+      text-align: center;
+    }
+  }
+
+  .image-counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    z-index: 10002;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .project-design-system {
+    .design-system-container {
+      .design-system-item {
+        .carousel-wrapper {
+          .carousel-container {
+            .carousel-track {
+              .carousel-slide {
+                min-width: calc(100% / 2);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .project-design-system {
+    padding: 60px 0;
+
+    .text-content {
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    h3 {
+      font-size: 28px;
+    }
+
+    p {
+      font-size: 16px;
+    }
+
+    .design-system-container {
+      .design-system-item {
+        h4 {
+          font-size: 20px;
+        }
+
+        .carousel-wrapper {
+          padding: 0 50px;
+
+          .carousel-arrow {
+            width: 40px;
+            height: 40px;
+
+            svg {
+              width: 20px;
+              height: 20px;
+            }
+          }
+
+          .carousel-container {
+            .carousel-track {
+              .carousel-slide {
+                min-width: 100%;
+                padding: 0 5px;
+              }
+            }
+          }
+        }
+
+        .carousel-pagination {
+          gap: 8px;
+
+          .pagination-dot {
+            width: 8px;
+            height: 8px;
+
+            &.active {
+              width: 24px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .image-overlay {
+    .overlay-content {
+      padding: 60px 20px;
+
+      .nav-btn {
+        width: 44px;
+        height: 44px;
+
+        &.prev-btn {
+          left: 10px;
+        }
+
+        &.next-btn {
+          right: 10px;
+        }
+
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
+    .close-btn {
+      top: 10px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+    }
+
+    .zoom-controls {
+      bottom: 60px;
+      padding: 10px 16px;
+      gap: 10px;
+
+      button {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+}
+

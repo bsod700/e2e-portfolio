@@ -1,31 +1,38 @@
-@use "mixins" as *;
+@use 'mixins' as *;
 
 .project-side-texts {
-    padding: 48px 16px;
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: 48px;
-        @include respond-to(md) {
-            flex-direction: row;
-            justify-content: space-between;
-        }
+  padding: 48px 0;
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    @include respond-to(md) {
+      flex-direction: row;
+      justify-content: space-between;
     }
-    h3 {
-        color: #FCFCFC;
-        font-size: 36px;
-        font-weight: 600;
-        line-height: 120%; 
+  }
+  h3 {
+    color: #fcfcfc;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 120%;
+    @include respond-to(md) {
+      font-size: 36px;
     }
-    .text-left, .text-right {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
+  }
+  .text-left,
+  .text-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  p {
+    color: rgba(252, 252, 252, 0.8);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 150%;
+    @include respond-to(md) {
+      font-size: 18px;
     }
-    p {
-        color: rgba(252, 252, 252, 0.80);
-font-size: 18px;
-font-weight: 300;
-line-height: 150%; /* 27px */
-    }
+  }
 }

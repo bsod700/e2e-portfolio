@@ -1,0 +1,173 @@
+@use 'mixins' as *;
+
+.project-style-guide {
+  padding: 96px 0;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  &.project-tierro {
+    background: #171925;
+    .font-guide {
+      .font-card {
+        border-radius: 5px;
+        border: 1px solid rgba(145, 145, 145, 0.6);
+        background: #141313;
+        box-shadow: 3px 74px 21px 0 rgba(0, 0, 0, 0.01), 2px 48px 19px 0 rgba(0, 0, 0, 0.1),
+          1px 27px 16px 0 rgba(0, 0, 0, 0.34), 0 12px 12px 0 rgba(0, 0, 0, 0.58),
+          0 3px 7px 0 rgba(0, 0, 0, 0.67);
+      }
+    }
+  }
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    align-items: center;
+  }
+  .text-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    h3 {
+      color: #fcfcfc;
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 120%;
+    }
+    p {
+      color: rgba(252, 252, 252, 0.8);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 150%;
+      max-width: 600px;
+    }
+  }
+  .font-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    h4 {
+      color: #fcfcfc;
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 140%;
+      @include respond-to(md) {
+        font-size: 96px;
+      }
+    }
+    .font-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      text-align: start;
+      @include respond-to(lg) {
+        flex-direction: row;
+      }
+      .font-card {
+        display: flex;
+        padding: 24px;
+        flex-direction: column;
+        gap: 8px;
+
+        h5 {
+          color: rgba(252, 252, 252, 0.8);
+          font-size: 18px;
+          font-weight: 300;
+          line-height: 150%;
+        }
+        .font-card-a {
+          color: rgba(252, 252, 252, 0.8);
+          font-family: Montserrat;
+          font-size: 36px;
+          line-height: 150%;
+        }
+        .font-card-abc {
+          color: rgba(252, 252, 252, 0.8);
+          font-family: Montserrat;
+          font-size: 18px;
+          line-height: 150%;
+        }
+      }
+    }
+  }
+
+  .color-guide {
+    display: flex;
+    width: 700px;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+
+    h4 {
+      color: #fcfcfc;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 120%;
+      @include respond-to(md) {
+        font-size: 36px;
+      }
+    }
+    .color-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        text-align: start;
+        h5 {
+          color: #FCFCFC;
+          font-size: 18px;
+          font-weight: 700;
+          line-height: 150%;
+        }
+    }
+    .color-card {
+        display: flex;
+        gap: 24px;
+        text-align: start;
+       
+        @include respond-to(md) {
+          flex: 0 0 200px;
+        }
+        .color-card-color {
+          width: 45px;
+          height: 45px;
+          border-radius: 12px;
+          box-shadow: 0 40px 11px 0 rgba(0, 0, 0, 0), 0 26px 10px 0 rgba(0, 0, 0, 0.01),
+            0 14px 9px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09),
+            0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+        .color-card-text {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          p {
+            &:nth-child(1) {
+              color: #fcfcfc;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 140%;
+            }
+            &:nth-child(2) {
+              color: rgba(252, 252, 252, 0.6);
+              font-size: 12px;
+              font-weight: 300;
+              line-height: 140%;
+            }
+          }
+        }
+      }
+
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      text-align: start;
+      @include respond-to(md) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+   
+  }
+}

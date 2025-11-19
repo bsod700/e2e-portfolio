@@ -7,23 +7,30 @@ box-shadow: 0 -10px 4px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 4px 0 rgba(0, 0, 0, 
     .container {
         display: flex;
         flex-direction: column;
-        gap: 128px;
+        gap: 24px;
         @include respond-to(md) {
             flex-direction: row;
+            gap: 128px;
             justify-content: space-between;
         }
     }
     h3 {
         color: #FCFCFC;
-        font-size: 36px;
+        font-size: 24px;
         font-weight: 600;
         line-height: 120%; 
         white-space: nowrap;
+        @include respond-to(md) {
+            font-size: 36px;
+        }
     }
     p {
         color: rgba(252, 252, 252, 0.80);
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 300;
         line-height: 150%; 
+        @include respond-to(md) {
+            font-size: 24px;
+        }
     }
 }

@@ -1,138 +1,171 @@
-@use "mixins" as *;
+@use 'mixins' as *;
 
 .project-side-img-cards {
+  position: relative;
+  padding: 96px 0;
+  overflow: hidden;
+  &.side-left {
+    .container {
+      flex-direction: column;
+      @include respond-to(lg) {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  &.side-right {
+    .container {
+      flex-direction: column;
+      @include respond-to(lg) {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  &.project-tierro {
+    .cards {
+      .card {
+        border: 1px solid rgba(145, 145, 145, 0.3);
+        background: #141313;
+        box-shadow: 3px 74px 21px 0 rgba(0, 0, 0, 0.01), 2px 48px 19px 0 rgba(0, 0, 0, 0.1),
+          1px 27px 16px 0 rgba(0, 0, 0, 0.34), 0 12px 12px 0 rgba(0, 0, 0, 0.58),
+          0 3px 7px 0 rgba(0, 0, 0, 0.67);
+      }
+    }
+    &.project-producer-client-page {
+      .container {
+        .img-content {
+          display: flex;
+          align-items: center;
+          img {
+            width: 700px;
+            height: auto;
+          }
+        }
+      }
+    }
+  }
+
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .container {
+    display: flex;
+    gap: 48px;
     position: relative;
-    padding: 96px 16px;
-    overflow: hidden;
-    &.side-left {
-        .container {
-            flex-direction: row;
-        }
-    }
-    
-    &.side-right {
-        .container {
-            flex-direction: row-reverse;
-        }
-    }
+    z-index: 2;
 
-    &.project-tierro {
-        .cards {
-            .card {
-                border: 1px solid rgba(145, 145, 145, 0.30);
-                background: #141313;
-                box-shadow: 3px 74px 21px 0 rgba(0, 0, 0, 0.01), 2px 48px 19px 0 rgba(0, 0, 0, 0.10), 1px 27px 16px 0 rgba(0, 0, 0, 0.34), 0 12px 12px 0 rgba(0, 0, 0, 0.58), 0 3px 7px 0 rgba(0, 0, 0, 0.67);
-            }
-        }
-    }
+    .text-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
 
-    .background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        img {
+      @include respond-to(lg) {
+        flex: 0 0 500px;
+      }
+
+      @include respond-to(xl) {
+        flex: 0 0 700px;
+      }
+      h3 {
+        color: #fcfcfc;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 120%;
+        @include respond-to(md) {
+          font-size: 36px;
+        }
+      }
+
+      > p {
+        color: rgba(252, 252, 252, 0.8);
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 150%;
+        @include respond-to(md) {
+          font-size: 18px;
+        }
+      }
+    }
+    .cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .card {
+        display: flex;
+        padding: 24px;
+        gap: 24px;
+        border-radius: 5px;
+
+        position: relative;
+        z-index: 2;
+
+        .background {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0.1;
+          }
         }
+
+        h4 {
+          color: #fcfcfc;
+          font-size: 18px;
+          font-weight: 700;
+          line-height: 150%;
+        }
+
+        p {
+          color: rgba(252, 252, 252, 0.8);
+          font-size: 14px;
+          font-weight: 300;
+          line-height: 140%;
+        }
+
+        img {
+          display: flex;
+          width: 45px;
+          height: 45px;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .text {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+      }
     }
-
-    .container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        gap: 48px;
-        position: relative;
-        z-index: 2;
-        .text-content {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            flex: 0 0 700px;
-
-            h3 {
-                color: #FCFCFC;
-                font-size: 36px;
-                font-weight: 600;
-                line-height: 120%;
-            }
-
-            >p {
-                color: rgba(252, 252, 252, 0.80);
-                font-size: 18px;
-                font-weight: 300;
-                line-height: 150%;
-            }
-        }
-        .cards {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-
-            .card {
-                display: flex;
-                padding: 24px;
-                gap: 24px;
-                border-radius: 5px;
-              
-                position: relative;
-                z-index: 2;
-               
-                .background {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 1;
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                        opacity: 0.1;
-                    }
-                }
-
-                h4 {
-                    color: #FCFCFC;
-                    font-size: 18px;
-                    font-weight: 700;
-                    line-height: 150%;
-                }
-
-                p {
-                    color: rgba(252, 252, 252, 0.80);
-                    font-size: 14px;
-                    font-weight: 300;
-                    line-height: 140%;
-                }
-
-                img {
-                    display: flex;
-                    width: 45px;
-                    height: 45px;
-                    justify-content: center;
-                    align-items: center;
-                }
-
-                .text {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-start;
-                    gap: 8px;
-                }
-            }
-        }
-        .img-content {
-            flex: 1;
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
+    .img-content {
+      flex: 1;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
+  }
 }

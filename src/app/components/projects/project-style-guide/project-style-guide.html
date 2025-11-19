@@ -1,0 +1,41 @@
+<section [ngClass]="['project-style-guide','project-'+projectStyleGuideData.projectName]">
+  <div class="container">
+    <div class="text-content">
+        <h3>{{projectStyleGuideData.title}}</h3>
+        <p>{{projectStyleGuideData.text}}</p>
+    </div>
+    <div class="font-guide">
+        <h4>{{projectStyleGuideData.fontGuideTitle}}</h4>
+        <div class="font-cards">
+            @for (fontWeight of projectStyleGuideData.fontGuide; track $index) {
+                <div class="font-card">
+                    <h5>{{ fontWeight }}</h5>
+                    <p class="font-card-a" [style.font-weight]="fontWeight">Aa</p>
+                    <p class="font-card-abc" [style.font-weight]="fontWeight">abcdefghijklmnopqrstuvwxyz</p>
+                </div>
+            }
+        </div>
+    </div>
+   
+    <div class="color-guide">
+        <h4>{{projectStyleGuideData.colorGuideTitle}}</h4>
+        <div class="color-cards">
+            @for (colorCard of projectStyleGuideData.colorGuide; track $index) {
+                <h5>{{ colorCard.title }}</h5>
+                <div class="card-container">
+                    @for (color of colorCard.colors; track $index) {
+                    
+                        <div class="color-card">
+                            <div class="color-card-color" [style.background-color]="color.value"></div>
+                            <div class="color-card-text">
+                                <p>{{ color.name }}</p>
+                                <p>{{ color.value }}</p>
+                            </div>
+                        </div> 
+                    }
+                </div>
+            }
+        </div>
+    </div>
+  </div>
+</section>
