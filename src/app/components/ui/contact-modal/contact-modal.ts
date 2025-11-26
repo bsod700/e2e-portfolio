@@ -73,6 +73,15 @@ export class ContactModalComponent {
         this.emailError = 'Please enter a valid email address';
         return false;
       }
+
+      // Check for disposable/fake email domains
+      const disposableDomains = ['tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com', 'fff.com', 'test.com', 'example.com', 'fake.com'];
+      const emailDomain = this.contactEmail.split('@')[1]?.toLowerCase();
+      
+      if (disposableDomains.includes(emailDomain)) {
+        this.emailError = 'Please use a valid business or personal email address';
+        return false;
+      }
     }
     return true;
   }

@@ -1,5 +1,9 @@
 import nodemailer from 'nodemailer';
 import { clientConfirmationTemplate, adminNotificationTemplate } from './templates/email-templates.mjs';
+import dns from 'dns';
+import { promisify } from 'util';
+
+const resolveMx = promisify(dns.resolveMx);
 
 // Create reusable transporter using Titan SMTP
 const transporter = nodemailer.createTransport({
@@ -42,10 +46,40 @@ export default async function handler(req, res) {
     }
 
     // Validate email format if provided
-    if (contactEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
-      return res.status(400).json({ 
-        error: 'Invalid email format' 
-      });
+    if (contactEmail) {
+      // Check basic format
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+        return res.status(400).json({ 
+          error: 'Invalid email format' 
+        });
+      }
+
+      // Verify domain has valid MX records (mail server)
+      try {
+        const domain = contactEmail.split('@')[1];
+        const mxRecords = await resolveMx(domain);
+        
+        if (!mxRecords || mxRecords.length === 0) {
+          return res.status(400).json({ 
+            error: 'Invalid email domain - no mail server found' 
+          });
+        }
+      } catch (err) {
+        // Domain doesn't exist or has no MX records
+        return res.status(400).json({ 
+          error: 'Invalid email domain - domain does not exist' 
+        });
+      }
+
+      // Block common disposable/fake email domains
+      const disposableDomains = ['tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com', 'fff.com', 'test.com', 'example.com'];
+      const emailDomain = contactEmail.split('@')[1].toLowerCase();
+      
+      if (disposableDomains.includes(emailDomain)) {
+        return res.status(400).json({ 
+          error: 'Please use a valid business or personal email address' 
+        });
+      }
     }
 
     const adminEmail = 'gt@guytagger.com';
