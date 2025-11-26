@@ -151,7 +151,7 @@ export function clientConfirmationTemplate(data) {
       <p>gt@guytagger.com</p>
       <div class="social-links">
         <a href="https://guytagger.com">Portfolio</a>
-        <a href="https://github.com/guytagger">GitHub</a>
+        <a href="https://github.com/bsod700">GitHub</a>
         <a href="https://linkedin.com/in/guytagger">LinkedIn</a>
       </div>
       <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">

@@ -1,12 +1,53 @@
-.scroll-to-top {
+.scroll-to-top-container {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+
+  &:has(.scroll-to-top.visible) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .background {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+      bottom: 0;
+      left: 50%;
+      &.glow-blue-1 {
+        width: 50px;
+        height: 50px;
+        background: var(--color-secondary);
+        filter: blur(40px);
+        transform: translate(-30px, -50px);
+      }
+      &.glow-red-1 {
+        width: 50px;
+        height: 50px;
+        background: var(--color-primary-light);
+        filter: blur(40px);
+        transform: translate(-100px, 17px);
+      }
+    }
+  }
+}
+.scroll-to-top {
   width: 80px;
   height: 80px;
   border-radius: 9px;
   background: var(--color-bg-secondary);
-  border: 1px solid #919191;
+  border: 1px solid #9191917d;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -15,15 +56,14 @@
   visibility: hidden;
   transform: translateY(20px);
   transition: all 0.3s ease;
-  z-index: 1000;
   padding: 0;
   overflow: visible;
+  position: relative;
 
-  svg {
-    color: var(--color-text-primary);
-    width: 24px;
-    height: 24px;
-    z-index: 1;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   &.visible {
@@ -34,7 +74,7 @@
 
   &:hover {
     transform: translateY(-3px);
-    border-color: var(--color-text-primary);
+    border-color: rgba(var(--color-bg-secondary), 0.49);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
   }
 
