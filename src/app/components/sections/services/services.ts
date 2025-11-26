@@ -126,7 +126,7 @@ export class ServicesComponent implements OnInit {
     {
       id: 'design',
       title: 'Digital Product Design',
-      description: 'From mobile apps to complex systems, every product is crafted from the ground up - no templates, no shortcuts. Tailored to your goals, built to perform, and designed to stand out.',
+      description: 'Smart, scalable product design built from scratch for your business.',
       fullDescription: 'I create beautiful, intuitive interfaces that users love. Every design decision is backed by user research and best practices, ensuring your product is not just visually appealing but also highly functional and accessible.',
       services: [
         'UI/UX design & prototyping (Figma, Adobe XD)',

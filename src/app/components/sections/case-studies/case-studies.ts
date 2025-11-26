@@ -42,9 +42,9 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
     // Only start autoplay in browser, not during SSR
     if (isPlatformBrowser(this.platformId)) {
       // Small delay to let the view initialize
-      setTimeout(() => {
-        this.startAutoPlay();
-      }, 100);
+      // setTimeout(() => {
+      //   this.startAutoPlay();
+      // }, 100);
     }
   }
 
@@ -379,17 +379,16 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
   }
 
   get transformStyle(): string {
-    // Each slide takes full width + margin (2rem)
-    // Calculate based on slide width + gap - updated to match Figma 900px cards
-    const slideWidth = 'min(900px, calc(100vw - 160px))';
+    // Use CSS custom properties for responsive widths and gaps
+    // These are defined in the SCSS file and change based on screen size
     
     // Add drag offset during dragging
     if (this.isDragging && this.dragOffset !== 0) {
-      return `translateX(calc(-${this.currentIndex} * (${slideWidth} + 2rem) + ${this.dragOffset}px))`;
+      return `translateX(calc(-${this.currentIndex} * (var(--slide-width) + var(--slide-gap)) + ${this.dragOffset}px))`;
     }
     
-    // Always translate based on currentIndex (normally 3 = centered)
-    return `translateX(calc(-${this.currentIndex} * (${slideWidth} + 2rem)))`;
+    // Normal transform using CSS custom properties
+    return `translateX(calc(-${this.currentIndex} * (var(--slide-width) + var(--slide-gap))))`;
   }
 
   get activeOriginalIndex(): number {

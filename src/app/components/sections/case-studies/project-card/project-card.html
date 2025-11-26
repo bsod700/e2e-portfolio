@@ -1,5 +1,5 @@
 <div class="project-card" [class.active]="isActive" 
- [class.type]="project.type">
+ [class.type]="project.type" [class.projects-page]="isProjectsPage">
 
   <div class="card-content">
     <!-- Background visuals -->
@@ -47,11 +47,23 @@
         </div>
       </div>
     </div>
+
+    @if (project.services && isProjectsPage) {
+      <div class="services">
+        @for (service of project.services; track $index) {
+          <div class="service">
+            <span>{{ service }}</span>
+          </div>
+        }
+      </div>
+    }
+
     @if (project.img) {
       <div [ngClass]="['card-img', `project-${project.type}`]">
         <img [src]="project.img.src" [alt]="project.img.alt" />
       </div>
     }
+
   </div>
 </div>
 

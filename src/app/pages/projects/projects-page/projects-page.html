@@ -1,33 +1,29 @@
 <main class="projects-page">
+  <div class="background">
+    <div class="grid-layer"></div>
+    <div class="glow glow-blue-1"></div>
+  </div>
   <section class="hero-section">
     <div class="container">
-      <div class="hero-content">
-        <p class="hero-subtitle">My Work</p>
-        <h1 class="hero-title">Featured Projects & Case Studies</h1>
-        <p class="hero-description">
-          Explore a collection of projects that showcase my expertise in building modern web applications,
-          from concept to deployment. Each project represents a unique challenge and innovative solution.
+      <div class="section-header">
+        <p class="kicker">Case Studies</p>
+        <h2 class="section-title">Bringing Ideas to Life</h2>
+        <p class="section-description">
+          See how concepts become products. Each one built from scratch with careful design, clean
+          code, and real impact.
         </p>
       </div>
-    </div>
-  </section>
 
-  <section class="projects-section">
-    <div class="container">
       <div class="projects-grid">
         @for (project of projects; track project.type) {
           <div class="project-card-wrapper">
-            <app-project-card [project]="project" [isActive]="false"></app-project-card>
+            <app-project-card [project]="project" [isActive]="false" [isProjectsPage]="true"></app-project-card>
           </div>
         }
       </div>
-      
-      <div class="cta-section">
-        <h2>Ready to Start Your Project?</h2>
-        <p>Let's collaborate and bring your ideas to life with cutting-edge technology and creative solutions.</p>
-        <a routerLink="/" fragment="contact" class="btn btn-lg">Get in Touch</a>
-      </div>
     </div>
   </section>
+  <app-contact></app-contact>
+
 </main>
 

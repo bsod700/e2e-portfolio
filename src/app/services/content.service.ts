@@ -45,6 +45,7 @@ export interface ProjectContent {
   image_src?: string;
   image_alt?: string;
   background_images?: string[];
+  services?: string[];
   link?: string;
   display_order?: number;
   updated_at?: string;
@@ -324,7 +325,8 @@ export class ContentService {
         }
         return (data || []).map(item => ({
           ...item,
-          background_images: Array.isArray(item.background_images) ? item.background_images : []
+          background_images: Array.isArray(item.background_images) ? item.background_images : [],
+          services: Array.isArray(item.services) ? item.services : []
         })) as ProjectContent[];
       }),
       catchError(() => of([]))

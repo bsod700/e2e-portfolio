@@ -56,6 +56,34 @@
           </div>
 
           <div class="form-group">
+            <label>Services</label>
+            <div class="tags-input-wrapper">
+              <div class="tags-container">
+                @if (editingProject.services && editingProject.services.length > 0) {
+                  @for (service of editingProject.services; track $index) {
+                    <span class="tag">
+                      {{ service }}
+                      <button type="button" (click)="removeServiceTag($index)" class="tag-remove" aria-label="Remove service">×</button>
+                    </span>
+                  }
+                }
+              </div>
+              <div class="tag-input-row">
+                <input 
+                  type="text" 
+                  [(ngModel)]="newServiceTag" 
+                  name="newServiceTag" 
+                  (keydown)="onServiceTagKeydown($event)"
+                  placeholder="Add a service tag..." 
+                  class="form-input tag-input" 
+                />
+                <button type="button" (click)="addServiceTag()" class="btn-add-tag">Add</button>
+              </div>
+            </div>
+            <small class="form-hint">Service tags displayed on the project card (e.g., UI/UX, Development, AI Integration)</small>
+          </div>
+
+          <div class="form-group">
             <label>Link</label>
             <input type="text" [(ngModel)]="editingProject.link" name="link" class="form-input" />
             <small class="form-hint">Link to the project (if applicable)</small>
@@ -100,6 +128,13 @@
             }
             <h3 class="preview-project-title">{{ editingProject.title || 'Project Title' }}</h3>
             <p class="preview-project-description">{{ editingProject.description || 'Project description will appear here...' }}</p>
+            @if (editingProject.services && editingProject.services.length > 0) {
+              <div class="preview-project-services">
+                @for (service of editingProject.services; track $index) {
+                  <span class="preview-service-tag">{{ service }}</span>
+                }
+              </div>
+            }
             @if (editingProject.image_src) {
               <div class="preview-project-image">
                 <img [src]="editingProject.image_src" [alt]="editingProject.title" class="preview-image" />

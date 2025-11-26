@@ -1,4 +1,11 @@
 <section class="faq section">
+  <div class="background">
+    <div class="glow glow-blue-1"></div>
+    <div class="glow glow-blue-2"></div>
+    <div class="glow glow-red-1"></div>
+    <div class="glow glow-red-2"></div>
+
+  </div>
   <div class="container">
     <div class="section-header">
       <p class="kicker">Still not convinced?</p>
@@ -16,8 +23,8 @@
             <button class="faq-question" (click)="toggleFaq($index)">
               <span class="faq-question-text">{{ item.question }}</span>
               <span class="faq-icon-wrapper">
-                <svg class="faq-icon" [class.rotated]="item.isOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none" class="faq-icon" [class.rotated]="item.isOpen">
+                  <path d="M10.59 7.41L12 6L6 -2.62268e-07L-2.62268e-07 6L1.41 7.41L6 2.83L10.59 7.41Z" />
                 </svg>
               </span>
             </button>

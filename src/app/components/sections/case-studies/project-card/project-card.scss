@@ -1,6 +1,7 @@
+@use 'mixins' as *;
+
 .project-card {
   width: 100%;
-  height: 500px;
   background: #080c1a;
   border: 1px solid #2b2b2b;
   border-radius: 16px;
@@ -8,12 +9,178 @@
   overflow: hidden;
   transition: all 0.5s ease;
   position: relative;
+  max-width: 900px;
+
 
 
   &.active {
     border-color: rgba(223, 86, 62, 0.5);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
     transform: scale(1.02);
+  }
+
+  &.projects-page {
+    height: 600px;
+    .card-wrapper {
+      padding: 24px;
+      .project-logo {
+        img {
+          height: 60px;
+        }
+      }
+    }
+    .card-img {
+      display: block;
+      right: 0;
+      top: unset;
+      bottom: 0;
+      &.project-prompt-management {
+        img {
+          transform: translate(80px, 295px);
+          width: 500px;
+          height: auto;
+        }
+      }
+      &.project-tierro {
+        img {
+          height: auto;
+          width: 800px;
+          transform: rotate(-15deg) translate(-85px, 230px);
+        }
+      }
+      &.project-landerx {
+        img {
+          width: 330px;
+          height: auto;
+          transform: translate(90px, 325px);
+        }
+      }
+      &.project-brush-along {
+        img {
+          width: 370px;
+          height: auto;
+          transform: translate(145px, 300px);
+        }
+      }
+    }
+  }
+
+  &:not(.projects-page) {
+    height: 650px;
+    @include respond-to(md) {
+      height: 500px;
+    }
+    .card-wrapper {
+      padding: 24px;
+      @include respond-to(md) {
+        padding: 48px;
+      }
+      .project-logo {
+        img {
+          height: 60px;
+          @include respond-to(md) {
+            height: 80px;
+          }
+        }
+      }
+      
+    }
+
+    .card-img {
+      &.project-tierro {
+        right: 0;
+        top: 300px;
+        @include respond-to(md) {
+          right: -350px;
+          top: 70px;
+        }
+        @include respond-to(lg) {
+          right: -300px;
+          top: 0;
+        }
+        img {
+          width: 604px;
+          height: 740px;
+          @include respond-to(lg) {
+            width: 950px;
+            height: 1100px;
+          }
+        }
+      }
+      &.project-prompt-management {
+        transform: translate(0, 200px);
+        @include respond-to(md) {
+          transform: translate(400px, 20px);
+        }
+
+        img {
+          width: 610px;
+          height: auto;
+        }
+      }
+      &.project-landerx {
+        transform: translate(0, 330px);
+        @include respond-to(md) {
+          transform: translate(470px, 10px);
+        }
+        img {
+          width: 375px;
+          height: 296px;
+          @include respond-to(md) {
+            width: 449px;
+            height: 447px;
+          }
+        }
+      }
+      &.project-brush-along {
+        transform: translate(0, 145px);
+        @include respond-to(md) {
+          transform: translate(345px, 55px);
+        }
+        img {
+          width: 415px;
+          height: auto;
+          @include respond-to(md) {
+            width: 525px;
+            height: 441px;
+          }
+        }
+      }
+    }
+    .card-text {
+      @include respond-to(md) {
+        flex: 0 0 400px;
+        justify-content: space-between;
+      }
+    }
+  }
+
+  .services {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    // flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 24px 24px;
+    z-index: 3;
+    .service {
+      display: flex;
+      padding: 8px 16px;
+      align-items: center;
+      gap: 8px;
+      border-radius: 42px;
+      background: rgba(8, 12, 26, 0.6);
+      box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.25);
+      border: 0.5px solid #a7b0c48d;
+      backdrop-filter: blur(10px);
+      span {
+        color: #fcfcfc;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
@@ -35,8 +202,6 @@
   z-index: 0;
 }
 
-
-
 // Glow effects
 .glow-effects {
   position: absolute;
@@ -50,7 +215,7 @@
   position: absolute;
   pointer-events: none;
   mix-blend-mode: soft-light;
-  
+
   &.glow-blue-1 {
     left: 92.59px;
     top: 282.17px;
@@ -59,24 +224,24 @@
     background: radial-gradient(ellipse, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
     transform: scale(3.5);
   }
-  
+
   &.glow-red-1 {
     width: 204.793px;
     height: 204.793px;
     background: radial-gradient(circle, rgba(223, 86, 62, 0.3) 0%, transparent 70%);
     transform: scale(2.18);
-    
+
     &:nth-of-type(2) {
       left: 285.34px;
       top: 376.55px;
     }
-    
+
     &:nth-of-type(3) {
       left: 311.68px;
       top: -55.9px;
     }
   }
-  
+
   &.glow-big-blue-1 {
     left: -127.18px;
     top: 113px;
@@ -94,42 +259,38 @@
   flex-direction: row;
   height: 100%;
   width: 100%;
-  padding: 48px;
-
+ 
   .card-text {
     display: flex;
     flex-direction: column;
     gap: 24px;
     position: relative;
     z-index: 2;
-    width: 400px;
-    justify-content: space-between;
     height: 100%;
-    flex: 0 0 400px;
+
+   
   }
-  
+
   .top {
     display: flex;
     flex-direction: column;
     gap: 24px;
   }
-  
-  .project-logo {  
+
+  .project-logo {
     img {
       width: auto;
-      height: 80px;
       object-fit: contain;
     }
-    
   }
-  
+
   .project-title {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
     line-height: 1.5;
     color: var(--color-text-primary);
   }
-  
+
   .project-description {
     font-size: 14px;
     font-weight: 300;
@@ -142,53 +303,26 @@
     flex-direction: column;
     gap: 16px;
   }
-
- 
 }
 
 .card-img {
-  width: 605px;
   height: 100%;
+  width: 100%;
   overflow: hidden;
   position: absolute;
   right: 0;
-  top: 0;
- 
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+
+  @include respond-to(md) {
+    bottom: unset;
+    top: 0;
+    display: flex;
+    justify-content: start;
+  }
   img {
     width: 100%;
     height: 100%;
   }
-  &.project-tierro {
-    img {
-      width: 950px;
-      height: 1100px;
-    }
-  }
-  &.project-prompt-management {
-    width: 486px;
-    display: flex;
-    align-items: center;
-    img {
-      width: 604px;
-      height: 447px;
-    }
-  }
-  &.project-landerx {
-    width: 450px;
-    img {
-      width: 449px;
-      height: 447px;
-    }
-  }
-  &.project-brush-along {
-    width: 562px;
-    display: flex;
-    align-items: flex-end;
-    img {
-      width: 525px;
-      height: 441px;
-    }
-  }
 }
-
-

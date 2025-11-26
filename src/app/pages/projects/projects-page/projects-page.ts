@@ -1,13 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ProjectCardComponent, Project } from '../../../components/sections';
 import { ProjectsService } from '../../../services/projects.service';
+import { ContactComponent } from '../../../components/sections';
 
 @Component({
   selector: 'app-projects-page',
   imports: [
-    RouterLink,
-    ProjectCardComponent
+    ProjectCardComponent,
+    ContactComponent
   ],
   templateUrl: './projects-page.html',
   styleUrl: './projects-page.scss'

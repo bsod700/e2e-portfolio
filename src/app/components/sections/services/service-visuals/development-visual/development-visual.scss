@@ -52,9 +52,9 @@
       left: 16px;
       transition: transform 300ms ease;
       &.logo-circle-1 {
-        transform: translate(75px, -40px) rotate(0deg);
+        transform: translate(-10px, -10px) rotate(0deg);
         @media (hover: hover) and (pointer: fine) {
-          transform: translate(75px, -40px) rotate(0deg)
+          transform: translate(-10px, -10px) rotate(0deg)
             translate3d(
               calc(var(--hover) * var(--dx) * 2px),
               calc(var(--hover) * var(--dy) * 2px),
@@ -65,9 +65,9 @@
         }
       }
       &.logo-circle-2 {
-        transform: translate(75px, 35px) rotate(0deg);
+        transform: translate(-10px, -10px) rotate(0deg);
         @media (hover: hover) and (pointer: fine) {
-          transform: translate(75px, 35px) rotate(0deg)
+          transform: translate(-10px, -10px) rotate(0deg)
             translate3d(
               calc(var(--hover) * var(--dx) * 4px),
               calc(var(--hover) * var(--dy) * 4px),
@@ -205,8 +205,8 @@
 
   .bubble {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 19px;
+    left: -46px;
     z-index: 5;
     transform-style: preserve-3d;
     will-change: transform;
@@ -231,7 +231,7 @@
   .code {
     position: absolute;
     top: 16px;
-    left: 16px;
+    left: -50px;
     z-index: 4;
     transform-style: preserve-3d;
     will-change: transform;
@@ -256,7 +256,7 @@
   .line_circles {
     position: absolute;
     top: 16px;
-    left: 16px;
+    left: -50px;
     z-index: 4;
     transform-style: preserve-3d;
     will-change: transform;

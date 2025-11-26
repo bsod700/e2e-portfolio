@@ -11,4 +11,5 @@
 export { CtaButtonComponent } from './cta-button/cta-button';
 export { ScrollToTopComponent } from './scroll-to-top/scroll-to-top';
 export { ProjectInquiryComponent } from './project-inquiry/project-inquiry';
+export { ContactModalComponent } from './contact-modal/contact-modal';
 

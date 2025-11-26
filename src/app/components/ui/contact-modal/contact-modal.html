@@ -1,0 +1,115 @@
+@if (showContactForm()) {
+  <div class="contact-modal" (click)="closeContactForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-btn" (click)="closeContactForm()" aria-label="Close">
+        <span>×</span>
+      </button>
+
+      @if (!isSubmitted) {
+        <!-- Contact Form -->
+        <h3 class="modal-title">Almost there! 👋</h3>
+        <p class="modal-subtitle">How can I reach you?</p>
+
+        <div class="message-preview">
+          <label for="project-description">What are we building?</label>
+          <textarea
+            id="project-description"
+            class="preview-textarea"
+            [(ngModel)]="editableMessage"
+            rows="6"
+            placeholder="Describe your project..."
+          ></textarea>
+        </div>
+
+        <div class="contact-fields">
+          <div class="field-group">
+            <label for="contact-name">Name</label>
+            <input
+              id="contact-name"
+              type="text"
+              class="contact-input"
+              [class.error]="nameError"
+              placeholder="Your name"
+              [(ngModel)]="contactName"
+              (blur)="validateName()"
+              (input)="nameError = ''"
+            />
+            @if (nameError) {
+              <span class="error-message">{{ nameError }}</span>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="contact-email">Email</label>
+            <input
+              id="contact-email"
+              type="email"
+              class="contact-input"
+              [class.error]="emailError"
+              placeholder="your@email.com"
+              [(ngModel)]="contactEmail"
+              (blur)="validateEmail()"
+              (input)="emailError = ''"
+            />
+            @if (emailError) {
+              <span class="error-message">{{ emailError }}</span>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="contact-phone">Phone <span class="optional">(optional)</span></label>
+            <input
+              id="contact-phone"
+              type="tel"
+              class="contact-input"
+              [class.error]="phoneError"
+              placeholder="+972 (555) 000-0000"
+              [(ngModel)]="contactPhone"
+              (blur)="validatePhone()"
+              (input)="phoneError = ''"
+            />
+            @if (phoneError) {
+              <span class="error-message">{{ phoneError }}</span>
+            }
+          </div>
+        </div>
+
+        @if (generalError) {
+          <div class="general-error">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>{{ generalError }}</span>
+          </div>
+        }
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" (click)="closeContactForm()" [disabled]="isLoading">Go Back</button>
+          <button class="btn btn-primary" (click)="submitInquiry()" [disabled]="isLoading" [class.loading]="isLoading">
+            @if (isLoading) {
+              <span class="spinner"></span>
+              <span>Sending...</span>
+            } @else {
+              <span>Lets Talk!</span>
+            }
+          </button>
+        </div>
+      } @else {
+        <!-- Thank You Message -->
+        <div class="thank-you-message">
+          <div class="success-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <h3 class="thank-you-title">Thank you! 🎉</h3>
+          <p class="thank-you-text">I'll get back to you soon!</p>
+        </div>
+      }
+    </div>
+  </div>
+}
+

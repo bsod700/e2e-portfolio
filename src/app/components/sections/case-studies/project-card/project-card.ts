@@ -14,6 +14,7 @@ export interface Project {
     src: string;
     alt: string;
   };
+  services?: string[];
 }
 
 @Component({
@@ -25,5 +26,6 @@ export interface Project {
 export class ProjectCardComponent {
   @Input() project!: Project;
   @Input() isActive: boolean = false;
+  @Input() isProjectsPage: boolean = false;
 }
 

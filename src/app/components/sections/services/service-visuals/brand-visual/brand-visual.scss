@@ -6,12 +6,26 @@
   height: 100%;
   overflow: hidden;
 
+  .light {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    img {
+      position: absolute;
+      &:nth-child(1) {
+        transform: rotate(99deg) scale(0.8) translate(-25px, -100px)
+      }
+      &:nth-child(2) {
+        transform: rotate(99deg) scale(0.5) translate(205px, 70px);
+      }
+    }
+  }
   .glow {
     position: absolute;
     border-radius: 50%;
    
     pointer-events: none;
-    z-index: 1;
+    z-index: 3;
     top: 16px;
     left: 16px;
     &.glow-blue-1 {
@@ -20,6 +34,30 @@
       transform: translate(75px, 240px);
       background-color: var(--color-secondary);
       filter: blur(200px);
+    }
+    &.glow-blue-2 {
+      width: 380px;
+      height: 135px;
+      transform: translate(calc(50% - 485px / 2), -65px);
+      background-color: var(--color-secondary);
+      filter: blur(30px);
+      opacity: 0.2;
+    }
+    &.glow-red-1 {
+      width: 200px;
+      height: 200px;
+      background: #FF7474;
+      opacity: 0.2;
+      filter: blur(50px);
+      transform: translate(180px, 55px);
+    }
+    &.glow-dark-1 {
+      width: 200px;
+      height: 200px;
+      opacity: 0.7;
+      background: #09102E;
+      filter: blur(45px);
+      transform: translate(190px, -45px);
     }
   }
 
@@ -38,7 +76,7 @@
   .circles {
     position: absolute;
     top: 155px;
-    left: 190px;
+    left: 155px;
     z-index: 2;
     transform-style: preserve-3d;
     will-change: transform;
@@ -77,16 +115,16 @@
       }
 
       &.circle-1 {
-        width: 160px;
-        height: 160px;
+        width: 170px;
+        height: 170px;
         transform: translate(-50%, -50%);
         animation-duration: 20s;
         z-index: 5;
       }
 
       &.circle-2 {
-        width: 350px;
-        height: 350px;
+        width: 290px;
+        height: 290px;
         transform: translate(-50%, -50%);
         animation-duration: 25s;
         animation-direction: reverse;
@@ -94,16 +132,16 @@
       }
 
       &.circle-3 {
-        width: 220px;
-        height: 220px;
+        width: 210px;
+        height: 210px;
         transform: translate(-50%, -50%);
         animation-duration: 18s;
         z-index: 3;
       }
 
       &.circle-4 {
-        width: 280px;
-        height: 280px;
+        width: 250px;
+        height: 250px;
         transform: translate(-50%, -50%);
         animation-duration: 22s;
         animation-direction: reverse;
@@ -122,23 +160,43 @@
   }
 
   .thumb {
+    overflow: hidden;
     position: absolute;
     top: 155px;
-    left: 190px;
-    width: 114.77px;
-    height: 114.77px;
+    left: 155px;
+    width: 100px;
+    height: 100px;
     z-index: 2;
     transform-style: preserve-3d;
     will-change: transform;
     transition: transform 300ms ease;
     transform: translate(-50%, -50%);
+
+    border-radius: 50%;
+    // background: rgba(47, 50, 64, 0.25);
+    filter: blur(0.25px);
+    box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.25), 0 0 30px 0 rgba(0, 0, 0, 0.25);
     
+    background: rgba(217, 217, 217, 0.20);
+    backdrop-filter: blur(5px);
+
     @media (hover: hover) and (pointer: fine) {
       transform: translate(-50%, -50%)
         translate3d(calc(var(--hover) * var(--dx) * 2px), calc(var(--hover) * var(--dy) * 2px), 0)
         rotateX(calc(var(--hover) * var(--dy) * -2deg))
         rotateY(calc(var(--hover) * var(--dx) * 2deg))
         translateZ(calc(var(--hover) * 200px));
+    }
+    &:after {
+      content: "";
+      position: absolute;
+      top: -1.5px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      z-index: -1;
+      border: solid 1.5px;
     }
     .thumb-icon {
       position: absolute;
@@ -147,8 +205,8 @@
       transform: translate(-50%, -50%);
 
       img {
-        width: 65px;
-        height: 74px;
+        width: 50px;
+        height: 57px;
       }
     }
    
@@ -156,32 +214,28 @@
     .thumb-glow-circle {
       position: absolute;
       border-radius: 50%;
-      background: radial-gradient(
-        circle at center,
-        rgba(205, 71, 57, 0.6) 0%,
-        rgba(205, 71, 57, 0.3) 40%,
-        rgba(205, 71, 57, 0.1) 60%,
-        transparent 100%
-      );
-      filter: blur(15px);
       z-index: 3;
       pointer-events: none;
 
       &.thumb-glow-1 {
-        width: 80px;
-        height: 80px;
-        top: 10%;
-        left: 15%;
-        animation: thumb-glow-pulse 3s ease-in-out infinite;
+        width: 95px;
+        height: 95px;
+        top: 50%;
+        left: 3px;
+        opacity: 0.2;
+        background: #D6503E;
+        filter: blur(15px);
+        filter: blur(25px);
       }
 
       &.thumb-glow-2 {
-        width: 60px;
-        height: 60px;
-        top: 50%;
-        left: 5%;
-        transform: translateY(-50%);
-        animation: thumb-glow-pulse 3.5s ease-in-out infinite 0.5s;
+        width: 95px;
+        height: 95px;
+        top: -50%;
+        left: 3px;
+        opacity: 0.2;
+        background: #70B9EE;
+        filter: blur(25px);
       }
 
       &.thumb-glow-3 {
@@ -189,7 +243,6 @@
         height: 70px;
         bottom: 15%;
         left: 25%;
-        animation: thumb-glow-pulse 4s ease-in-out infinite 1s;
       }
 
       &.thumb-glow-4 {
@@ -197,7 +250,6 @@
         height: 50px;
         top: 30%;
         right: 20%;
-        animation: thumb-glow-pulse 3.2s ease-in-out infinite 0.3s;
       }
 
       &.thumb-glow-5 {
@@ -205,18 +257,6 @@
         height: 45px;
         bottom: 25%;
         right: 15%;
-        animation: thumb-glow-pulse 3.8s ease-in-out infinite 0.8s;
-      }
-    }
-
-    @keyframes thumb-glow-pulse {
-      0%, 100% {
-        opacity: 0.4;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.8;
-        transform: scale(1.2);
       }
     }
   }

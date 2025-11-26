@@ -14,7 +14,7 @@ export class HeroComponent implements OnInit, OnDestroy {
   private contentService = inject(ContentService);
   private subscription?: Subscription;
 
-  badgeText = 'From Vision to Infrastructure';
+  badgeText = 'From Vision to Production';
   heroTitle = 'End-to-End<br>Digital Solutions';
   heroDescription = 'I design and build intuitive apps and websites, combining UX, development and AI into seamless user experiences.';
 

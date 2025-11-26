@@ -2,19 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { ContentService, ProjectContent } from './content.service';
+import { Project } from '../components/sections';
 
-export interface Project {
-  type: string;
-  title: string;
-  description: string;
-  logoUrl?: string;
-  backgroundImages?: string[];
-  link?: string;
-  img?: {
-    src: string;
-    alt: string;
-  };
-}
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +22,8 @@ export class ProjectsService {
         src: 'assets/images/projects/project-card-tierro-img-1.webp',
         alt: 'Tierro project image',
       },
-      link: '/projects/tierro'
+      link: '/projects/tierro',
+      services: ['UI/UX', 'Branding', 'Admin Management', 'Music Player', 'Development']
     },
     {
       type: 'prompt-management',
@@ -44,7 +34,8 @@ export class ProjectsService {
         src: 'assets/images/projects/project-card-p-img-1.webp',
         alt: 'Prompt management project image',
       },
-      link: '/projects/prompt-management'
+      link: '/projects/prompt-management',
+      services: ['UI/UX', 'Development','Extension Development', 'Prompt Engineering', 'AI Integration']
     },
     {
       type: 'landerx',
@@ -55,7 +46,8 @@ export class ProjectsService {
         src: 'assets/images/projects/project-card-landerx-img-1.webp',
         alt: 'Landerx project image',
       },
-      link: '/projects/landerx'
+      link: '/projects/landerx',
+      services: ['UI/UX', 'Development', 'AI Integration', 'Landing Page', 'Marketing']
     },
     {
       type: 'brush-along',
@@ -66,7 +58,8 @@ export class ProjectsService {
         src: 'assets/images/projects/project-card-brushalong-img-1.webp',
         alt: 'Brush along project image',
       },
-      link: '/projects/brush-along'
+      link: '/projects/brush-along',
+      services: ['UI/UX', 'Illustration', 'Game Design', 'Children Motivation']
     }
   ];
 
@@ -135,6 +128,10 @@ export class ProjectsService {
           existingProject.backgroundImages = dbProject.background_images;
         }
         
+        if (dbProject.services && dbProject.services.length > 0) {
+          existingProject.services = dbProject.services;
+        }
+        
         // Only update link if it's a valid specific project link (not just '/projects')
         if (dbProject.link && dbProject.link !== '/projects' && dbProject.link.startsWith('/projects/')) {
           existingProject.link = dbProject.link;
@@ -164,6 +161,7 @@ export class ProjectsService {
             alt: dbProject.image_alt || dbProject.title || 'Project image'
           },
           backgroundImages: dbProject.background_images || [],
+          services: dbProject.services || [],
           link: projectLink
         };
         mergedProjects.push(newProject);

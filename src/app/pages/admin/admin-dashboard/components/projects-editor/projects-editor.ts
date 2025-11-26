@@ -23,6 +23,7 @@ export class ProjectsEditorComponent {
   saving = false;
   error = '';
   successMessage = '';
+  newServiceTag = '';
 
   get dropdownOptions(): DropdownOption[] {
     return this.projects.map(project => ({
@@ -43,7 +44,10 @@ export class ProjectsEditorComponent {
     const project = this.projects.find(p => p.project_id === this.selectedProjectId);
     
     if (project) {
-      this.editingProject = { ...project };
+      this.editingProject = { 
+        ...project,
+        services: project.services ? [...project.services] : []
+      };
       this.cdr.markForCheck();
     } else {
       this.editingProject = null;
@@ -54,6 +58,33 @@ export class ProjectsEditorComponent {
   cancelEditProject(): void {
     this.editingProject = null;
     this.selectedProjectId = '';
+    this.newServiceTag = '';
+  }
+
+  addServiceTag(): void {
+    if (!this.editingProject || !this.newServiceTag.trim()) return;
+    
+    if (!this.editingProject.services) {
+      this.editingProject.services = [];
+    }
+    
+    const tag = this.newServiceTag.trim();
+    if (!this.editingProject.services.includes(tag)) {
+      this.editingProject.services.push(tag);
+      this.newServiceTag = '';
+    }
+  }
+
+  removeServiceTag(index: number): void {
+    if (!this.editingProject || !this.editingProject.services) return;
+    this.editingProject.services.splice(index, 1);
+  }
+
+  onServiceTagKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.addServiceTag();
+    }
   }
 
   async saveProject(): Promise<void> {

@@ -9,10 +9,10 @@
     <span class="glow glow--red-3"></span>
   </div>
   <!-- Main Inquiry Form -->
-  <div class="inquiry-form" [class.hidden]="showContactForm">
+  <div class="inquiry-form" [class.hidden]="showContactForm()">
     <div
       class="input-wrapper shiny-corners"
-      [ngStyle]="inputGlowStyle"
+      [ngStyle]="inputGlowStyle()"
       (mousemove)="onInputPointerMove($event)"
       (mouseenter)="onInputEnter()"
       (mouseleave)="onInputLeave()"
@@ -58,63 +58,4 @@
 
     <!-- <p class="inquiry-hint">Describe your project, select types, or both to get started</p> -->
   </div>
-
-  <!-- Contact Form Modal -->
-  @if (showContactForm) {
-    <div class="contact-modal" (click)="closeContactForm()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="close-btn" (click)="closeContactForm()" aria-label="Close">
-        <span>×</span>
-      </button>
-
-      <h3 class="modal-title">Almost there! 👋</h3>
-      <p class="modal-subtitle">How can I reach you?</p>
-
-      <div class="message-preview">
-        <p class="preview-label">Your Inquiry:</p>
-        <p class="preview-text">{{ generatedMessage }}</p>
-      </div>
-
-      <div class="contact-fields">
-        <div class="field-group">
-          <label for="contact-name">Name</label>
-          <input
-            id="contact-name"
-            type="text"
-            class="contact-input"
-            placeholder="Your name"
-            [(ngModel)]="contactName"
-          />
-        </div>
-
-        <div class="field-group">
-          <label for="contact-email">Email</label>
-          <input
-            id="contact-email"
-            type="email"
-            class="contact-input"
-            placeholder="your@email.com"
-            [(ngModel)]="contactEmail"
-          />
-        </div>
-
-        <div class="field-group">
-          <label for="contact-phone">Phone <span class="optional">(optional)</span></label>
-          <input
-            id="contact-phone"
-            type="tel"
-            class="contact-input"
-            placeholder="+1 (555) 000-0000"
-            [(ngModel)]="contactPhone"
-          />
-        </div>
-      </div>
-
-      <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="closeContactForm()">Go Back</button>
-        <button class="btn btn-primary" (click)="submitInquiry()">Send Inquiry</button>
-      </div>
-    </div>
-    </div>
-  }
 </div>

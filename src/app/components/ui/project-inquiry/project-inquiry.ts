@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ModalService } from '../../../services/modal.service';
 
 interface ProjectType {
   id: string;
@@ -17,20 +18,19 @@ interface ProjectType {
 export class ProjectInquiryComponent {
   @Input() classType: string = 'default';
   
+  // Regular property for form input (works with ngModel)
   projectDescription = '';
-  selectedTypes: Set<string> = new Set();
-  showContactForm = false;
-  inputGlowStyle: { [key: string]: string } = {
+  
+  // Signals for other reactive state
+  selectedTypes = signal<Set<string>>(new Set());
+  inputGlowStyle = signal<{ [key: string]: string }>({
     '--px': '-1000px',
     '--py': '-1000px',
     '--hover': '0'
-  };
+  });
   
-  // Contact form fields
-  contactName = '';
-  contactEmail = '';
-  contactPhone = '';
-  generatedMessage = '';
+  // Computed signal to check if modal is showing
+  showContactForm = computed(() => this.modalService.showContactModal());
 
   // Synchronized with Figma "cta input" labels
   projectTypes: ProjectType[] = [
@@ -45,49 +45,53 @@ export class ProjectInquiryComponent {
     { id: 'other', label: 'Other', icon: '' }
   ];
 
+  constructor(private modalService: ModalService) {}
+
   toggleProjectType(typeId: string): void {
-    if (this.selectedTypes.has(typeId)) {
-      this.selectedTypes.delete(typeId);
+    const currentTypes = new Set(this.selectedTypes());
+    if (currentTypes.has(typeId)) {
+      currentTypes.delete(typeId);
     } else {
-      this.selectedTypes.add(typeId);
+      currentTypes.add(typeId);
     }
+    this.selectedTypes.set(currentTypes);
   }
 
   isSelected(typeId: string): boolean {
-    return this.selectedTypes.has(typeId);
+    return this.selectedTypes().has(typeId);
   }
 
   generateInquiry(): void {
-    // Check if user provided at least something (description or project types)
-    if (!this.projectDescription.trim() && this.selectedTypes.size === 0) {
-      alert('Please describe your project or select at least one project type!');
-      return;
-    }
-
     // Generate a formatted message
-    const selectedTypesText = Array.from(this.selectedTypes)
+    const selectedTypesText = Array.from(this.selectedTypes())
       .map(id => this.projectTypes.find(t => t.id === id)?.label)
       .filter(Boolean)
       .join(', ');
 
+    let generatedMessage = '';
+    
     // Build message based on what's provided
     if (this.projectDescription.trim() && selectedTypesText) {
       // Both description and types provided
-      this.generatedMessage = `Project Description: ${this.projectDescription}\n\nProject Type(s): ${selectedTypesText}`;
+      generatedMessage = `Project Description: ${this.projectDescription}\n\nProject Type(s): ${selectedTypesText}`;
     } else if (this.projectDescription.trim()) {
       // Only description provided
-      this.generatedMessage = `Project Description: ${this.projectDescription}`;
-    } else {
+      generatedMessage = `Project Description: ${this.projectDescription}`;
+    } else if (selectedTypesText) {
       // Only project types provided
-      this.generatedMessage = `Project Type(s): ${selectedTypesText}`;
+      generatedMessage = `Project Type(s): ${selectedTypesText}`;
+    } else {
+      // Nothing provided - use a default message
+      generatedMessage = 'I would like to discuss a potential project.';
     }
 
-    // Show contact form
-    this.showContactForm = true;
-  }
-
-  closeContactForm(): void {
-    this.showContactForm = false;
+    // Open modal via service
+    this.modalService.openContactModal({
+      generatedMessage,
+      contactName: '',
+      contactEmail: '',
+      contactPhone: ''
+    });
   }
 
   onInputPointerMove(event: MouseEvent): void {
@@ -96,60 +100,19 @@ export class ProjectInquiryComponent {
     const rect = target.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    this.inputGlowStyle = {
-      ...this.inputGlowStyle,
+    this.inputGlowStyle.set({
+      ...this.inputGlowStyle(),
       '--px': `${x}px`,
       '--py': `${y}px`
-    };
+    });
   }
 
   onInputEnter(): void {
-    this.inputGlowStyle = { ...this.inputGlowStyle, '--hover': '1' };
+    this.inputGlowStyle.update(style => ({ ...style, '--hover': '1' }));
   }
 
   onInputLeave(): void {
-    this.inputGlowStyle = { ...this.inputGlowStyle, '--hover': '0' };
-  }
-
-  submitInquiry(): void {
-    if (!this.contactEmail && !this.contactName && !this.contactPhone) {
-      alert('Please provide at least one contact method (email, name, or phone)');
-      return;
-    }
-
-    // Here you would send this to your backend or email service
-    const fullInquiry = {
-      message: this.generatedMessage,
-      name: this.contactName,
-      email: this.contactEmail,
-      phone: this.contactPhone,
-      timestamp: new Date().toISOString()
-    };
-
-    console.log('Project Inquiry:', fullInquiry);
-    
-    // In production, you'd send this to your backend
-    // For now, we'll create a mailto link
-    const subject = encodeURIComponent('New Project Inquiry');
-    const body = encodeURIComponent(
-      `${this.generatedMessage}\n\n---\nContact Information:\nName: ${this.contactName || 'N/A'}\nEmail: ${this.contactEmail || 'N/A'}\nPhone: ${this.contactPhone || 'N/A'}`
-    );
-    
-    window.location.href = `mailto:hello@guytagger.com?subject=${subject}&body=${body}`;
-    
-    // Reset form
-    this.resetForm();
-    alert('Thank you! Your inquiry has been sent. I\'ll get back to you soon!');
-  }
-
-  resetForm(): void {
-    this.projectDescription = '';
-    this.selectedTypes.clear();
-    this.showContactForm = false;
-    this.contactName = '';
-    this.contactEmail = '';
-    this.contactPhone = '';
-    this.generatedMessage = '';
+    this.inputGlowStyle.update(style => ({ ...style, '--hover': '0' }));
   }
 }
 
