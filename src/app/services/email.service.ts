@@ -53,10 +53,19 @@ export class EmailService {
       errorMessage = `Error: ${error.error.message}`;
     } else {
       // Server-side error
-      errorMessage = error.error?.error || error.message || errorMessage;
+      const serverError = error.error;
+      
+      if (typeof serverError === 'object' && serverError !== null) {
+        errorMessage = serverError.error || serverError.details || serverError.message || errorMessage;
+      } else if (typeof serverError === 'string') {
+        errorMessage = serverError;
+      } else {
+        errorMessage = error.message || errorMessage;
+      }
     }
 
-    console.error('Email service error:', errorMessage, error);
+    console.error('Email service error:', errorMessage);
+    console.error('Full error object:', error);
     return throwError(() => new Error(errorMessage));
   }
 }

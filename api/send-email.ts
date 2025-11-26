@@ -99,9 +99,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error: any) {
     console.error('Error sending emails:', error);
+    
+    // Detailed error logging
+    const errorDetails = {
+      message: error.message || 'Unknown error',
+      code: error.code,
+      command: error.command,
+      response: error.response,
+      responseCode: error.responseCode
+    };
+    
+    console.error('Detailed error:', errorDetails);
+    
     return res.status(500).json({ 
       error: 'Failed to send emails',
-      details: error.message 
+      details: error.message || 'Unknown error occurred',
+      debug: process.env.NODE_ENV === 'development' ? errorDetails : undefined
     });
   }
 }
