@@ -1,6 +1,5 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
-import { clientConfirmationTemplate, adminNotificationTemplate } from './templates/email-templates';
+import { clientConfirmationTemplate, adminNotificationTemplate } from './templates/email-templates.mjs';
 
 // Create reusable transporter using Titan SMTP
 const transporter = nodemailer.createTransport({
@@ -16,14 +15,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-interface ContactFormData {
-  contactName: string;
-  contactEmail: string;
-  contactPhone: string;
-  message: string;
-}
-
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -40,7 +32,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { contactName, contactEmail, contactPhone, message }: ContactFormData = req.body;
+    const { contactName, contactEmail, contactPhone, message } = req.body;
 
     // Validate required fields
     if (!contactEmail && !contactName) {
@@ -97,7 +89,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       adminEmailId: adminEmailInfo.messageId
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error sending emails:', error);
     
     // Detailed error logging

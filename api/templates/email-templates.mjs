@@ -1,11 +1,12 @@
 /**
  * Client Confirmation Email Template
  * Sent to the client who submitted the contact form
+ * @param {Object} data - Template data
+ * @param {string} data.name - Client name
+ * @param {string} data.message - Client message
+ * @returns {string} HTML email template
  */
-export function clientConfirmationTemplate(data: {
-  name: string;
-  message: string;
-}): string {
+export function clientConfirmationTemplate(data) {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -166,14 +167,15 @@ export function clientConfirmationTemplate(data: {
 /**
  * Admin Notification Email Template
  * Sent to gt@guytagger.com when someone submits the contact form
+ * @param {Object} data - Template data
+ * @param {string} data.name - Client name
+ * @param {string} data.email - Client email
+ * @param {string} data.phone - Client phone
+ * @param {string} data.message - Client message
+ * @param {string} data.submittedAt - Submission timestamp
+ * @returns {string} HTML email template
  */
-export function adminNotificationTemplate(data: {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  submittedAt: string;
-}): string {
+export function adminNotificationTemplate(data) {
   return `
 <!DOCTYPE html>
 <html lang="en">
