@@ -1,4 +1,16 @@
 <section class="contact section" id="contact">
+  <div class="black-hole-container">
+    @for (star of stars; track star.id) {
+      <div 
+        class="star" 
+        [style.top]="star.top + '%'"
+        [style.left]="star.left + '%'"
+        [style.--transform]="'translate(' + star.transformX + 'px, ' + star.transformY + 'px)'"
+        [style.animation-duration]="star.duration + 's'"
+        [style.animation-delay]="star.delay + 's'">
+      </div>
+    }
+  </div>
   <div class="container">
     <div class="contact-content">
       <div class="section-header">
