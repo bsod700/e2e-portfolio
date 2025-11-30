@@ -8,8 +8,8 @@
   </div>
   <div class="container">
     <div class="section-header">
-      <p class="kicker">Still not convinced?</p>
-      <h2 class="section-title">You've got questions, we have the answers</h2>
+      <p class="kicker">Common questions</p>
+      <h2 class="section-title">Quick answers before you reach out</h2>
       <p class="section-description">
         Don't see the answer you're looking for? <a href="#contact" class="contact-link">Get in touch</a>.
       </p>
@@ -19,16 +19,16 @@
     <div class="faq-list">
       @for (item of faqs; track $index) {
         <div class="faq-item" [class.active]="item.isOpen">
-          <div class="faq-content">
-            <button class="faq-question" (click)="toggleFaq($index)">
-              <span class="faq-question-text">{{ item.question }}</span>
-              <span class="faq-icon-wrapper">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none" class="faq-icon" [class.rotated]="item.isOpen">
-                  <path d="M10.59 7.41L12 6L6 -2.62268e-07L-2.62268e-07 6L1.41 7.41L6 2.83L10.59 7.41Z" />
-                </svg>
-              </span>
-            </button>
-            <div class="faq-answer" [class.open]="item.isOpen">
+          <button class="faq-question" (click)="toggleFaq($index)">
+            <span class="faq-question-text">{{ item.question }}</span>
+            <span class="faq-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" fill="none" class="faq-icon" [class.rotated]="item.isOpen">
+                <path d="M10.59 7.41L12 6L6 -2.62268e-07L-2.62268e-07 6L1.41 7.41L6 2.83L10.59 7.41Z" />
+              </svg>
+            </span>
+          </button>
+          <div #detailsWrapper class="faq-details-wrapper" [class.open]="item.isOpen">
+            <div class="faq-details">
               <p>{{ item.answer }}</p>
             </div>
           </div>

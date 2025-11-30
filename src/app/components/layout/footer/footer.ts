@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ScrollToTopComponent } from '../../ui';
 
@@ -6,7 +6,8 @@ import { ScrollToTopComponent } from '../../ui';
   selector: 'app-footer',
   imports: [ScrollToTopComponent, RouterLink],
   templateUrl: './footer.html',
-  styleUrl: './footer.scss'
+  styleUrl: './footer.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();

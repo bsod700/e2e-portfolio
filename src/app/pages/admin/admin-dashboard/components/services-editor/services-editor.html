@@ -2,7 +2,85 @@
   <div class="content-grid">
     <div class="content-section">
       <h2>Home Page Services Section</h2>
-      <p class="section-description">Edit the service cards displayed on the home page services section</p>
+      <p class="section-description">Edit the services section header and service cards displayed on the home page</p>
+
+      <!-- Services Section Header Editor -->
+      <div class="header-editor-section">
+        <h3>Services Section Header</h3>
+        <p class="form-note">Edit the header content that appears above the service cards.</p>
+        
+        <form (ngSubmit)="saveServicesHeader()" class="content-form">
+          <div class="form-group">
+            <label for="services_kicker">Kicker</label>
+            <input
+              type="text"
+              id="services_kicker"
+              [(ngModel)]="servicesHeader.kicker"
+              name="services_kicker"
+              required
+              placeholder="Don't pay for just pretty pixels"
+              class="form-input"
+            />
+            <small class="form-hint">Small text that appears above the title</small>
+          </div>
+
+          <div class="form-group">
+            <label for="services_title">Title</label>
+            <input
+              type="text"
+              id="services_title"
+              [(ngModel)]="servicesHeader.title"
+              name="services_title"
+              required
+              placeholder="Digital products that perform"
+              class="form-input"
+            />
+            <small class="form-hint">Main title for the services section</small>
+          </div>
+
+          <div class="form-group">
+            <label for="services_description">Description</label>
+            <textarea
+              id="services_description"
+              [(ngModel)]="servicesHeader.description"
+              name="services_description"
+              required
+              rows="3"
+              placeholder="From concept to launch, every product I build blends smart UX, modern code, and scalable architecture."
+              class="form-textarea"
+            ></textarea>
+            <small class="form-hint">Description text that appears below the title</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="savingHeader" class="btn-primary">
+              @if (savingHeader) {
+                <span>Saving...</span>
+              }
+              @if (!savingHeader) {
+                <span>Save Header</span>
+              }
+            </button>
+          </div>
+        </form>
+
+        @if (headerError) {
+          <div class="error-message">
+            {{ headerError }}
+          </div>
+        }
+
+        @if (headerSuccessMessage) {
+          <div class="success-message">
+            {{ headerSuccessMessage }}
+          </div>
+        }
+      </div>
+
+      <div class="divider"></div>
+
+      <h3>Service Cards</h3>
+      <p class="form-note">Edit the service cards displayed on the home page services section</p>
 
       @if (homeServices.length > 0) {
         <div class="form-group">
@@ -71,20 +149,34 @@
       }
     </div>
 
-    @if (editingHomeService) {
-      <div class="preview-section">
+    <div class="preview-section">
       <h2>Preview</h2>
-      <div class="preview-card preview-service-card">
-        <div class="preview-service-content">
-          <h3 class="preview-service-title">{{ editingHomeService.title || 'Service Title' }}</h3>
-          <p class="preview-service-description">{{ editingHomeService.description || 'Service description will appear here...' }}</p>
-          <div class="preview-learn-more">
-            Learn More <span class="arrow">→</span>
+      
+      <!-- Header Preview -->
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="preview-badge">
+            <span>{{ servicesHeader.kicker || 'Kicker text' }}</span>
           </div>
+          <h2 class="preview-title">{{ servicesHeader.title || 'Section Title' }}</h2>
+          <p class="preview-description">{{ servicesHeader.description || 'Section description will appear here...' }}</p>
         </div>
       </div>
-      </div>
-    }
+
+      <!-- Service Card Preview -->
+      @if (editingHomeService) {
+        <div class="preview-card preview-service-card">
+          <h3>Service Card</h3>
+          <div class="preview-service-content">
+            <h3 class="preview-service-title">{{ editingHomeService.title || 'Service Title' }}</h3>
+            <p class="preview-service-description">{{ editingHomeService.description || 'Service description will appear here...' }}</p>
+            <div class="preview-learn-more">
+              Learn More <span class="arrow">→</span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
   </div>
 </div>
 

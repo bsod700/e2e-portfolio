@@ -234,54 +234,9 @@ export class ComponentNameComponent {
 ### Responsive Patterns
 Use the project's breakpoints: **768px, 991px, 1200px, 1440px**
 
-```scss
-// Mobile first (default)
-.component {
-  padding: 1rem;
-}
-
-// Small tablets and up (768px+)
-@media (min-width: 768px) {
-  .component {
-    padding: 1.5rem;
-  }
-}
-
-// Tablets and up (991px+)
-@media (min-width: 991px) {
-  .component {
-    padding: 2rem;
-  }
-}
-
-// Desktop and up (1200px+)
-@media (min-width: 1200px) {
-  .component {
-    padding: 2.5rem;
-  }
-}
-
-// Large desktop (1440px+)
-@media (min-width: 1440px) {
-  .component {
-    padding: 3rem;
-  }
-}
-```
-
 ---
 
 ## 🎨 Animation Guidelines
-
-### Transition Timing
-- **Fast:** 0.15s - 0.2s (hover states)
-- **Medium:** 0.3s - 0.4s (content reveals)
-- **Slow:** 0.5s - 0.8s (page transitions)
-
-### Easing Functions
-- **Ease-out:** For entrances
-- **Ease-in:** For exits
-- **Ease-in-out:** For movements
 
 ### Animation Best Practices
 1. Use `transform` and `opacity` for performance
@@ -292,16 +247,6 @@ Use the project's breakpoints: **768px, 991px, 1200px, 1440px**
 ---
 
 ## 📦 Dependencies & Versions
-
-### Core Dependencies
-- **Angular:** ^18.0.0
-- **TypeScript:** ~5.9.2
-- **RxJS:** ~7.8.0
-- **Zone.js:** ~0.14.0
-
-### Development Dependencies
-- **Angular CLI:** ^18.0.0
-- **Angular SSR:** ^18.0.0
 
 ### Important Notes
 - Keep dependencies updated but test thoroughly
@@ -366,52 +311,6 @@ npm test                         # Run tests (if implemented)
 - Alt text on images
 - ARIA labels when needed
 - Valid HTML5
-
----
-
-## 🎯 Content Management
-
-### Updating Content
-
-**Hero Section:** `src/app/components/hero/hero.html`
-- Name and tagline
-- Tech badges
-
-**About Section:** `src/app/components/about/about.html`
-- Bio and description
-
-**Services:** `src/app/components/services/services.ts`
-- Edit `services` array
-
-**Testimonials:** `src/app/components/testimonials/testimonials.ts`
-- Edit `testimonials` array
-
-**Projects:** `src/app/components/case-studies/case-studies.ts`
-- Edit `projects` array
-
-**Technologies:** `src/app/components/technologies/technologies.ts`
-- Edit `technologies` array
-
-**FAQ:** `src/app/components/faq/faq.ts`
-- Edit `faqs` array
-
-**Contact:** `src/app/components/contact/contact.html`
-- Email and social links
-
----
-
-## 🖼️ Image Requirements
-
-### Profile Image
-- **Location:** `/public/profile.jpg`
-- **Size:** 800x1000px (portrait)
-- **Format:** JPG or PNG
-- **Max File Size:** < 500KB
-
-### Optional Images
-- **og-image.jpg** - 1200x630px (Open Graph)
-- **twitter-image.jpg** - 1200x600px (Twitter Card)
-- **apple-touch-icon.png** - 180x180px (iOS icon)
 
 ---
 

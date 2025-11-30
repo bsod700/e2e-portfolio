@@ -10,8 +10,7 @@
       <p class="kicker">Case Studies</p>
       <h2 class="section-title">Bringing Ideas to Life</h2>
       <p class="section-description">
-        See how concepts become products. Each one built from scratch with careful design, clean
-        code, and real impact.
+        Selected projects showing how concepts become shipped products with the key design and engineering decisions behind each.
       </p>
 
       <a routerLink="/projects" class="learn-more">More Projects <span class="arrow">→</span></a>
@@ -29,9 +28,8 @@
       <div
         class="carousel-track"
         [style.transform]="transformStyle"
-        [class.no-transition]="!isTransitioning"
-        [class.dragging]="isDragging"
-        (mousedown)="onDragStart($event)"
+        [class.no-transition]="!isTransitioning()"
+        [class.dragging]="isDragging()"
         (touchstart)="onDragStart($event)"
         (touchmove)="onDragMove($event)"
         (touchend)="onDragEnd($event)"
@@ -39,7 +37,7 @@
       >
         @for (project of projects; track $index; let i = $index) {
         <div class="carousel-slide">
-          <app-project-card [project]="project" [isActive]="i === currentIndex"> </app-project-card>
+          <app-project-card [project]="project"> </app-project-card>
         </div>
         }
       </div>
@@ -77,7 +75,7 @@
 
     <!-- Dots indicator -->
     <div class="carousel-dots">
-      @for (project of originalProjects; track project.title; let i = $index) {
+      @for (project of originalProjects(); track project.title; let i = $index) {
       <button
         class="carousel-dot"
         [class.active]="i === activeOriginalIndex"

@@ -16,7 +16,7 @@ export class HeroComponent implements OnInit, OnDestroy {
 
   badgeText = 'From Vision to Production';
   heroTitle = 'End-to-End<br>Digital Solutions';
-  heroDescription = 'I design and build intuitive apps and websites, combining UX, development and AI into seamless user experiences.';
+  heroDescription = 'Product design, full-stack engineering, and AI.<br>Web and app products - shipped to production.';
 
   ngOnInit(): void {
     this.loadContent();
@@ -34,7 +34,7 @@ export class HeroComponent implements OnInit, OnDestroy {
         if (content && content.badge_text && content.hero_title && content.hero_description) {
           this.badgeText = content.badge_text;
           this.heroTitle = content.hero_title.replace(/\n/g, '<br>');
-          this.heroDescription = content.hero_description;
+          this.heroDescription = content.hero_description.replace(/\n/g, '<br>');
         }
       },
       error: (error) => {
@@ -46,7 +46,12 @@ export class HeroComponent implements OnInit, OnDestroy {
   scrollToNextSection(): void {
       const nextSection = document.getElementById('services');
       if (nextSection) {
-        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const elementPosition = nextSection.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - 80;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }
   }
 }

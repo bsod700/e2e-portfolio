@@ -48,6 +48,7 @@
           [class.selected]="isSelected(type.id)"
           (click)="toggleProjectType(type.id)"
           [attr.aria-pressed]="isSelected(type.id)"
+          type="button"
         >
           <div class="type-btn-content">
             <span class="type-label">{{ type.label }}</span>

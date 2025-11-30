@@ -1,4 +1,4 @@
-<nav class="navbar" [class.scrolled]="isScrolled" [class.open]="menuOpen">
+<nav class="navbar" [class.scrolled]="isScrolled()" [class.open]="menuOpen()">
   <div class="navbar-container">
       <div class="navbar-left">
         <a href="#" class="logo" (click)="scrollToTop($event)">
@@ -27,13 +27,13 @@
           (clicked)="closeMenu()"
           class="cta-nav">
         </app-cta-button>
-        <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen">
+        <button class="menu-toggle" (click)="toggleMenu()" [class.active]="menuOpen()">
           <span></span>
           <span></span>
           <span></span>
         </button>
       </div>
-      <div class="menu-mobile" [class.active]="menuOpen">
+      <div class="menu-mobile" [class.active]="menuOpen()">
         <ul class="nav-links mobile" >
           <li><a href="#services" (click)="scrollToSection('services', $event)">Services</a></li>
           <li><a href="#testimonials" (click)="scrollToSection('testimonials', $event)">Testimonials</a></li>

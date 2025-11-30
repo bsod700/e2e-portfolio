@@ -1,62 +1,116 @@
-import { Component, OnInit, OnDestroy, PLATFORM_ID, Inject, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  inject,
+  signal
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ProjectCardComponent, Project } from './project-card/project-card';
 import { ProjectsService } from '../../../services/projects.service';
 
+/**
+ * Configuration constants for carousel behavior
+ */
+const CAROUSEL_CONFIG = {
+  BUFFER_SIZE: 3,
+  MIN_BUFFER_AHEAD: 4, // Minimum cards ahead to prevent gaps (need more for 3 visible cards)
+  CENTER_POSITION: 3,
+  ANIMATION_DURATION_MS: 800,
+  SNAP_BACK_DURATION_MS: 300,
+  DRAG_THRESHOLD: 50,
+  AUTO_PLAY_DELAY_MS: 10000,
+  INITIALIZATION_DELAY_MS: 100
+} as const;
+
+/**
+ * Interactive tags that should not trigger carousel drag
+ */
+const INTERACTIVE_TAGS = ['a', 'button', 'input', 'select', 'textarea'] as const;
+
+/**
+ * Case studies carousel component featuring:
+ * - Infinite scroll carousel with smooth animations
+ * - Always maintains 2+ cards ahead to prevent gaps
+ * - Drag and touch support
+ * - Auto-play functionality
+ * - Platform-aware (SSR safe)
+ */
 @Component({
   selector: 'app-case-studies',
   imports: [RouterLink, ProjectCardComponent],
   templateUrl: './case-studies.html',
-  styleUrl: './case-studies.scss'
+  styleUrl: './case-studies.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CaseStudiesComponent implements OnInit, OnDestroy {
-  private projectsService = inject(ProjectsService);
-  
-  displayedProjects: Project[] = [];
-  displayedIndexMap: number[] = []; // Maps displayedProjects index to originalProjects index
-  currentIndex = 0; // Current center position in displayedProjects array
-  isHovered = false;
-  isTransitioning = false;
+  private readonly projectsService = inject(ProjectsService);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  /** Projects displayed in the carousel (includes buffer cards) */
+  readonly displayedProjects = signal<Project[]>([]);
+
+  /** Maps displayedProjects index to originalProjects index */
+  readonly displayedIndexMap = signal<number[]>([]);
+
+  /** Current center position in displayedProjects array */
+  readonly currentIndex = signal<number>(0);
+
+  /** Whether the carousel is being hovered (pauses auto-play) */
+  readonly isHovered = signal<boolean>(false);
+
+  /** Whether a transition animation is in progress */
+  readonly isTransitioning = signal<boolean>(false);
+
+  /** Whether a drag operation is in progress */
+  readonly isDragging = signal<boolean>(false);
+
+  /** Original projects array from service */
+  readonly originalProjects = signal<Project[]>([]);
+
   private autoPlayInterval?: ReturnType<typeof setInterval>;
-  
-  // Drag/Touch support
-  isDragging = false;
+  private transitionTimeout?: ReturnType<typeof setTimeout>;
   private startX = 0;
   private currentX = 0;
   private dragStartTime = 0;
   private dragOffset = 0;
   
-  originalProjects: Project[] = [];
-
+  /** Getter for template compatibility */
   get projects(): Project[] {
-    return this.displayedProjects;
+    return this.displayedProjects();
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
   ngOnInit(): void {
-    // Load projects from service
     this.loadProjects();
     
     // Only start autoplay in browser, not during SSR
     if (isPlatformBrowser(this.platformId)) {
-      // Small delay to let the view initialize
-      // setTimeout(() => {
-      //   this.startAutoPlay();
-      // }, 100);
+      // Auto-play can be enabled here if needed
+      // setTimeout(() => this.startAutoPlay(), CAROUSEL_CONFIG.INITIALIZATION_DELAY_MS);
     }
   }
 
+  ngOnDestroy(): void {
+    this.stopAutoPlay();
+    this.cancelTransition();
+  }
+
+  /**
+   * Loads projects from service, initializing with defaults first for immediate render
+   */
   private loadProjects(): void {
     // Initialize with default projects first for immediate render
-    this.originalProjects = this.projectsService.getDefaultProjects();
+    const defaultProjects = this.projectsService.getDefaultProjects();
+    this.originalProjects.set(defaultProjects);
     this.initializeCarousel();
     
     // Then load from service (which may include database updates)
     this.projectsService.getProjects().subscribe({
       next: (projects: Project[]) => {
-        this.originalProjects = projects;
+        this.originalProjects.set(projects);
         this.initializeCarousel();
       },
       error: (error) => {
@@ -66,31 +120,22 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.stopAutoPlay();
-    // Clean up any drag event listeners
-    if (isPlatformBrowser(this.platformId)) {
-      document.removeEventListener('mousemove', this.handleGlobalMouseMove);
-      document.removeEventListener('mouseup', this.handleGlobalMouseUp);
-    }
-  }
-
-  private handleGlobalMouseMove = (event: MouseEvent) => {
-    this.onDragMove(event);
-  };
-
-  private handleGlobalMouseUp = (event: MouseEvent) => {
-    this.onDragEnd(event);
-  };
-
+  /**
+   * Starts auto-play functionality that advances carousel automatically
+   */
   startAutoPlay(): void {
+    this.stopAutoPlay(); // Clear any existing interval
+
     this.autoPlayInterval = setInterval(() => {
-      if (!this.isHovered) {
+      if (!this.isHovered()) {
         this.next();
       }
-    }, 10000);
+    }, CAROUSEL_CONFIG.AUTO_PLAY_DELAY_MS);
   }
 
+  /**
+   * Stops auto-play functionality
+   */
   stopAutoPlay(): void {
     if (this.autoPlayInterval) {
       clearInterval(this.autoPlayInterval);
@@ -98,128 +143,293 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles mouse enter event to pause auto-play
+   */
   onMouseEnter(): void {
-    this.isHovered = true;
+    this.isHovered.set(true);
   }
 
+  /**
+   * Handles mouse leave event to resume auto-play
+   */
   onMouseLeave(): void {
-    this.isHovered = false;
+    this.isHovered.set(false);
   }
 
+  /**
+   * Initializes the carousel with buffer cards for infinite scroll effect
+   * Structure: [3 left] [1 CENTER] [5 right] = 9 cards
+   * Center position (index 3) shows project index 0 (first project)
+   */
   private initializeCarousel(): void {
-    const total = this.originalProjects.length; // 5
-    // We need enough cards to show 3 in viewport + buffers on both sides
-    // Structure: [3 left buffer] [1 left visible] [1 CENTER] [1 right visible] [3 right buffer] = 9 cards
-    this.displayedProjects = [];
-    this.displayedIndexMap = [];
-    
-    const bufferSize = 3; // 3 cards buffer on each side
-    const startCardIndex = 0; // Which original card to show in center
-    
-    // Add buffer cards on the left (3 cards before the visible area)
-    for (let i = -bufferSize; i <= 3; i++) {
-      const index = (startCardIndex + i + total * 10) % total;
-      this.displayedProjects.push(this.originalProjects[index]);
-      this.displayedIndexMap.push(index);
+    const projects = this.originalProjects();
+    const total = projects.length;
+
+    if (total === 0) {
+      this.displayedProjects.set([]);
+      this.displayedIndexMap.set([]);
+      this.currentIndex.set(0);
+      return;
     }
-    
-    // Add visible cards: left partial, center, right partial (3 cards)
-    for (let i = -1; i <= 1; i++) {
-      const index = (startCardIndex + i + total * 10) % total;
-      this.displayedProjects.push(this.originalProjects[index]);
-      this.displayedIndexMap.push(index);
+
+    const displayed: Project[] = [];
+    const indexMap: number[] = [];
+    const centerProjectIndex = 0; // Start with first project (index 0) in center
+
+    // Add 3 cards on the left: -3, -2, -1 (wrapped around)
+    for (let i = -3; i <= -1; i++) {
+      const index = (centerProjectIndex + i + total * 10) % total;
+      displayed.push(projects[index]);
+      indexMap.push(index);
     }
-    
-    // Add buffer cards on the right (3 cards after visible area)
-    for (let i = 2; i <= bufferSize + 1; i++) {
-      const index = (startCardIndex + i) % total;
-      this.displayedProjects.push(this.originalProjects[index]);
-      this.displayedIndexMap.push(index);
+
+    // Add center card: project index 0
+    displayed.push(projects[centerProjectIndex]);
+    indexMap.push(centerProjectIndex);
+
+    // Add 5 cards on the right: 1, 2, 3, 4, 5
+    for (let i = 1; i <= 5; i++) {
+      const index = (centerProjectIndex + i) % total;
+      displayed.push(projects[index]);
+      indexMap.push(index);
     }
-    
-    // Set current index to the center card (index 4 in array of 9)
-    this.currentIndex = bufferSize + 1; // Position 4 = center
+
+    this.displayedProjects.set(displayed);
+    this.displayedIndexMap.set(indexMap);
+    // Set current index to the center card (position 3, showing project index 0)
+    this.currentIndex.set(CAROUSEL_CONFIG.CENTER_POSITION);
   }
 
+  /**
+   * Gets the original project index for a given display index
+   */
   private getOriginalIndex(displayIndex: number): number {
-    // Return the original project index for the given display index
-    return this.displayedIndexMap[displayIndex];
+    const indexMap = this.displayedIndexMap();
+    return indexMap[displayIndex] ?? 0;
   }
 
+  /**
+   * Ensures there are always at least MIN_BUFFER_AHEAD cards ahead of the current position
+   * This prevents empty spaces during transitions when moving forward
+   */
+  private ensureBufferAhead(additionalSteps: number = 0): void {
+    const displayed = this.displayedProjects();
+    const indexMap = this.displayedIndexMap();
+    const projects = this.originalProjects();
+    const total = projects.length;
+    const currentIdx = this.currentIndex();
+
+    if (total === 0) return;
+
+    // Calculate how many cards are ahead of current position
+    // Account for the additional steps we're about to take
+    const cardsAhead = displayed.length - currentIdx - 1 - additionalSteps;
+
+    // If we don't have enough buffer ahead, add more cards
+    if (cardsAhead < CAROUSEL_CONFIG.MIN_BUFFER_AHEAD) {
+      const cardsToAdd = CAROUSEL_CONFIG.MIN_BUFFER_AHEAD - cardsAhead + 2; // +2 for extra safety
+      const newDisplayed = [...displayed];
+      const newIndexMap = [...indexMap];
+
+      for (let i = 0; i < cardsToAdd; i++) {
+        const lastCardOriginalIndex = newIndexMap[newIndexMap.length - 1];
+        const nextCardIndex = (lastCardOriginalIndex + 1) % total;
+        newDisplayed.push(projects[nextCardIndex]);
+        newIndexMap.push(nextCardIndex);
+      }
+
+      this.displayedProjects.set(newDisplayed);
+      this.displayedIndexMap.set(newIndexMap);
+    }
+  }
+
+  /**
+   * Ensures there are always at least MIN_BUFFER_AHEAD cards behind the current position
+   * This prevents empty spaces during transitions when moving backward
+   */
+  private ensureBufferBehind(): void {
+    const displayed = this.displayedProjects();
+    const indexMap = this.displayedIndexMap();
+    const projects = this.originalProjects();
+    const total = projects.length;
+    const currentIdx = this.currentIndex();
+
+    if (total === 0) return;
+
+    // Calculate how many cards are behind current position
+    const cardsBehind = currentIdx;
+
+    // If we don't have enough buffer behind, add more cards to the left
+    if (cardsBehind < CAROUSEL_CONFIG.MIN_BUFFER_AHEAD) {
+      const cardsToAdd = CAROUSEL_CONFIG.MIN_BUFFER_AHEAD - cardsBehind + 1; // +1 for safety
+      const newDisplayed = [...displayed];
+      const newIndexMap = [...indexMap];
+
+      for (let i = 0; i < cardsToAdd; i++) {
+        const firstCardOriginalIndex = newIndexMap[0];
+        const prevCardIndex = (firstCardOriginalIndex - 1 + total) % total;
+        newDisplayed.unshift(projects[prevCardIndex]);
+        newIndexMap.unshift(prevCardIndex);
+      }
+
+      // Adjust currentIndex since we added cards to the left
+      this.currentIndex.set(currentIdx + cardsToAdd);
+      this.displayedProjects.set(newDisplayed);
+      this.displayedIndexMap.set(newIndexMap);
+    }
+  }
+
+  /**
+   * Moves carousel to the next slide(s)
+   * @param steps - Number of steps to move (default: 1, max: 1)
+   */
   next(steps: number = 1): void {
-    if (this.isTransitioning) return;
+    if (this.isTransitioning() && !this.isDragging()) return;
     
     steps = Math.min(steps, 1); // Only move 1 at a time
-    const total = this.originalProjects.length;
-    const centerPosition = 4; // Center position in our 9-card array
-    this.isTransitioning = true;
+    const total = this.originalProjects().length;
+
+    if (total === 0) return;
+
+    // Cancel any pending transition
+    this.cancelTransition();
+
+    // Ensure we have enough buffer ahead before animating (account for the steps we're about to take)
+    this.ensureBufferAhead(steps);
+
+    this.isTransitioning.set(true);
     
     // Step 1: Animate slide to the right
-    this.currentIndex += steps;
+    this.currentIndex.update((idx) => idx + steps);
     
     // Step 2: After animation, rebalance the array
-    setTimeout(() => {
-      this.isTransitioning = false;
-      
-      // Remove 'steps' cards from the left
-      this.displayedProjects.splice(0, steps);
-      this.displayedIndexMap.splice(0, steps);
-      
-      // Add 'steps' new cards to the right
-      for (let i = 0; i < steps; i++) {
-        // Find what the next card should be
-        const lastCardOriginalIndex = this.displayedIndexMap[this.displayedIndexMap.length - 1];
-        const nextCardIndex = (lastCardOriginalIndex + 1) % total;
-        this.displayedProjects.push(this.originalProjects[nextCardIndex]);
-        this.displayedIndexMap.push(nextCardIndex);
+    this.transitionTimeout = setTimeout(() => {
+      if (!this.isDragging()) {
+        this.rebalanceCarouselRight(steps, total);
+        this.currentIndex.set(CAROUSEL_CONFIG.CENTER_POSITION);
+        this.isTransitioning.set(false);
       }
-      
-      // Reset currentIndex back to center position
-      this.currentIndex = centerPosition;
-    }, 800);
+      this.transitionTimeout = undefined;
+    }, CAROUSEL_CONFIG.ANIMATION_DURATION_MS);
   }
 
+  /**
+   * Moves carousel to the previous slide(s)
+   * @param steps - Number of steps to move (default: 1, max: 1)
+   */
   previous(steps: number = 1): void {
-    if (this.isTransitioning) return;
+    if (this.isTransitioning() && !this.isDragging()) return;
     
     steps = Math.min(steps, 1); // Only move 1 at a time
-    const total = this.originalProjects.length;
-    const centerPosition = 4; // Center position in our 9-card array
-    this.isTransitioning = true;
-    
+    const total = this.originalProjects().length;
+
+    if (total === 0) return;
+
+    // Cancel any pending transition
+    this.cancelTransition();
+
+    this.isTransitioning.set(true);
+
     // Step 1: Animate slide to the left
-    this.currentIndex -= steps;
+    this.currentIndex.update((idx) => idx - steps);
     
     // Step 2: After animation, rebalance the array
-    setTimeout(() => {
-      this.isTransitioning = false;
+    this.transitionTimeout = setTimeout(() => {
+      if (!this.isDragging()) {
+        const displayed = [...this.displayedProjects()];
+        const indexMap = [...this.displayedIndexMap()];
+        const projects = this.originalProjects();
+        
+        // Remove 'steps' cards from the right
+        displayed.splice(-steps, steps);
+        indexMap.splice(-steps, steps);
+        
+        // Add 'steps' new cards to the left
+        for (let i = 0; i < steps; i++) {
+          // Find what the previous card should be
+          const firstCardOriginalIndex = indexMap[0];
+          const prevCardIndex = (firstCardOriginalIndex - 1 + total) % total;
+          displayed.unshift(projects[prevCardIndex]);
+          indexMap.unshift(prevCardIndex);
+        }
+        
+        this.displayedProjects.set(displayed);
+        this.displayedIndexMap.set(indexMap);
+        
+        // Reset currentIndex back to center position
+        this.currentIndex.set(CAROUSEL_CONFIG.CENTER_POSITION);
+        this.isTransitioning.set(false);
+      }
+      this.transitionTimeout = undefined;
+    }, CAROUSEL_CONFIG.ANIMATION_DURATION_MS);
+  }
+
+  /**
+   * Rebalances carousel array after moving right by removing left cards and adding right cards
+   */
+  private rebalanceCarouselRight(steps: number, total: number): void {
+    const displayed = [...this.displayedProjects()];
+    const indexMap = [...this.displayedIndexMap()];
+    const projects = this.originalProjects();
+
+    // Remove 'steps' cards from the left
+    displayed.splice(0, steps);
+    indexMap.splice(0, steps);
+
+    // Add 'steps' new cards to the right
+    for (let i = 0; i < steps; i++) {
+      const lastCardOriginalIndex = indexMap[indexMap.length - 1];
+      const nextCardIndex = (lastCardOriginalIndex + 1) % total;
+      displayed.push(projects[nextCardIndex]);
+      indexMap.push(nextCardIndex);
+    }
+
+    this.displayedProjects.set(displayed);
+    this.displayedIndexMap.set(indexMap);
+  }
+
+  /**
+   * Rebalances carousel array after moving left by removing right cards and adding left cards
+   */
+  private rebalanceCarouselLeft(steps: number, total: number): void {
+    const displayed = [...this.displayedProjects()];
+    const indexMap = [...this.displayedIndexMap()];
+    const projects = this.originalProjects();
       
       // Remove 'steps' cards from the right
-      this.displayedProjects.splice(-steps, steps);
-      this.displayedIndexMap.splice(-steps, steps);
+    displayed.splice(-steps, steps);
+    indexMap.splice(-steps, steps);
       
       // Add 'steps' new cards to the left
       for (let i = 0; i < steps; i++) {
-        // Find what the previous card should be
-        const firstCardOriginalIndex = this.displayedIndexMap[0];
+      const firstCardOriginalIndex = indexMap[0];
         const prevCardIndex = (firstCardOriginalIndex - 1 + total) % total;
-        this.displayedProjects.unshift(this.originalProjects[prevCardIndex]);
-        this.displayedIndexMap.unshift(prevCardIndex);
+      displayed.unshift(projects[prevCardIndex]);
+      indexMap.unshift(prevCardIndex);
       }
       
-      // Reset currentIndex back to center position
-      this.currentIndex = centerPosition;
-    }, 800);
+    this.displayedProjects.set(displayed);
+    this.displayedIndexMap.set(indexMap);
   }
 
+  /**
+   * Navigates to a specific slide by index
+   * @param targetIndex - The target slide index in originalProjects
+   */
   goToSlide(targetIndex: number): void {
-    if (this.isTransitioning) return;
-    
-    const currentOriginalIndex = this.getOriginalIndex(this.currentIndex);
+    if (this.isTransitioning()) return;
+
+    const total = this.originalProjects().length;
+    if (total === 0 || targetIndex < 0 || targetIndex >= total) {
+      console.warn(`Invalid target index: ${targetIndex}`);
+      return;
+    }
+
+    const currentOriginalIndex = this.getOriginalIndex(this.currentIndex());
     const diff = targetIndex - currentOriginalIndex;
-    const total = this.originalProjects.length;
     
-    // Calculate shortest path
+    // Calculate shortest path (wrap around if going the other way is shorter)
     let steps = diff;
     if (Math.abs(diff) > total / 2) {
       steps = diff > 0 ? diff - total : diff + total;
@@ -237,9 +447,12 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Touch/Mouse drag handlers
-  onDragStart(event: MouseEvent | TouchEvent): void {
-    if (this.isTransitioning) return;
+  /**
+   * Handles drag start event (touch only - no mouse drag on desktop)
+   * @param event - Touch event
+   */
+  onDragStart(event: TouchEvent): void {
+    if (this.isTransitioning()) return;
     
     // Don't start drag if clicking on interactive elements (buttons, links, etc.)
     const target = event.target as HTMLElement;
@@ -247,109 +460,82 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
       return;
     }
     
-    this.isDragging = true;
+    this.isDragging.set(true);
     this.dragStartTime = Date.now();
     this.startX = this.getClientX(event);
     this.currentX = this.startX;
     this.dragOffset = 0;
-    
-    // Add global listeners for mouse events to track dragging outside carousel
-    if (event instanceof MouseEvent && isPlatformBrowser(this.platformId)) {
-      document.addEventListener('mousemove', this.handleGlobalMouseMove);
-      document.addEventListener('mouseup', this.handleGlobalMouseUp);
-    }
   }
 
   /**
-   * Check if the target element or its parent is an interactive element
+   * Checks if the target element or its parent is an interactive element
+   * @param element - The element to check
+   * @returns True if the element is interactive
    */
   private isInteractiveElement(element: HTMLElement | null): boolean {
     if (!element) return false;
     
     // Check if element itself is interactive
     const tagName = element.tagName.toLowerCase();
-    const isInteractiveTag = ['a', 'button', 'input', 'select', 'textarea'].includes(tagName);
+    const isInteractiveTag = INTERACTIVE_TAGS.includes(
+      tagName as (typeof INTERACTIVE_TAGS)[number]
+    );
     
     if (isInteractiveTag) {
       return true;
     }
     
     // Check if element has role="button" or is inside an interactive element
-    const hasButtonRole = element.getAttribute('role') === 'button';
-    if (hasButtonRole) {
+    if (element.getAttribute('role') === 'button') {
       return true;
     }
     
     // Check if element is inside a button or link
-    const closestInteractive = element.closest('a, button, [role="button"]');
-    if (closestInteractive) {
+    if (element.closest('a, button, [role="button"]')) {
       return true;
     }
     
     // Check if element is inside the CTA button component
-    const closestCta = element.closest('app-cta-button, .cta-button');
-    if (closestCta) {
+    if (element.closest('app-cta-button, .cta-button')) {
       return true;
     }
     
     return false;
   }
 
-  onDragMove(event: MouseEvent | TouchEvent): void {
-    if (!this.isDragging) return;
-    
-    // Check if we're over an interactive element - if so, cancel drag
-    if (event instanceof MouseEvent) {
-      const target = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
-      if (this.isInteractiveElement(target)) {
-        // Cancel drag if over interactive element
-        this.isDragging = false;
-        this.dragOffset = 0;
-        if (isPlatformBrowser(this.platformId)) {
-          document.removeEventListener('mousemove', this.handleGlobalMouseMove);
-          document.removeEventListener('mouseup', this.handleGlobalMouseUp);
-        }
-        return;
-      }
-    }
+  /**
+   * Handles drag move event (touch only)
+   * @param event - Touch event
+   */
+  onDragMove(event: TouchEvent): void {
+    if (!this.isDragging()) return;
     
     event.preventDefault();
     this.currentX = this.getClientX(event);
     this.dragOffset = this.currentX - this.startX;
   }
 
-  onDragEnd(event?: MouseEvent | TouchEvent): void {
-    if (!this.isDragging) return;
+  /**
+   * Handles drag end event (touch only)
+   * @param event - Optional touch event
+   */
+  onDragEnd(event?: TouchEvent): void {
+    if (!this.isDragging()) return;
     
     // Don't end drag if clicking on interactive elements
     if (event) {
       const target = event.target as HTMLElement;
       if (this.isInteractiveElement(target)) {
-        // Reset drag state without triggering carousel movement
-        this.isDragging = false;
-        this.dragOffset = 0;
-        
-        // Remove global listeners
-        if (isPlatformBrowser(this.platformId)) {
-          document.removeEventListener('mousemove', this.handleGlobalMouseMove);
-          document.removeEventListener('mouseup', this.handleGlobalMouseUp);
-        }
+        this.cancelDrag();
         return;
       }
     }
     
-    this.isDragging = false;
-    
-    // Remove global listeners
-    if (isPlatformBrowser(this.platformId)) {
-      document.removeEventListener('mousemove', this.handleGlobalMouseMove);
-      document.removeEventListener('mouseup', this.handleGlobalMouseUp);
-    }
+    this.isDragging.set(false);
     
     const dragDistance = this.currentX - this.startX;
-    const threshold = 50; // minimum drag distance to trigger
     
-    if (Math.abs(dragDistance) > threshold) {
+    if (Math.abs(dragDistance) > CAROUSEL_CONFIG.DRAG_THRESHOLD) {
       // Move in the direction of the drag (always 1 card)
       if (dragDistance > 0) {
         // Dragged right (go to previous card)
@@ -360,39 +546,73 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
       }
     } else {
       // If drag was too small, snap back with transition
-      this.isTransitioning = true;
-      setTimeout(() => {
-        this.isTransitioning = false;
-      }, 300);
+      this.isTransitioning.set(true);
+      this.transitionTimeout = setTimeout(() => {
+        this.isTransitioning.set(false);
+        this.transitionTimeout = undefined;
+      }, CAROUSEL_CONFIG.SNAP_BACK_DURATION_MS);
     }
     
     // Reset drag offset
     this.dragOffset = 0;
   }
 
-  private getClientX(event: MouseEvent | TouchEvent): number {
-    if (event instanceof MouseEvent) {
-      return event.clientX;
-    } else {
+  /**
+   * Gets the client X coordinate from a touch event
+   */
+  private getClientX(event: TouchEvent): number {
       return event.touches[0]?.clientX || event.changedTouches[0]?.clientX || 0;
-    }
   }
 
+  /**
+   * Cancels the current drag operation
+   */
+  private cancelDrag(): void {
+    this.isDragging.set(false);
+    this.dragOffset = 0;
+  }
+
+  /**
+   * Cancels any ongoing transition
+   */
+  private cancelTransition(): void {
+    if (this.transitionTimeout) {
+      clearTimeout(this.transitionTimeout);
+      this.transitionTimeout = undefined;
+    }
+    this.isTransitioning.set(false);
+  }
+
+  /**
+   * Cleans up drag event listeners (no longer needed for touch-only)
+   */
+  private cleanupDragListeners(): void {
+    // No cleanup needed for touch events as they're handled inline
+  }
+
+  /**
+   * Computes the CSS transform style for the carousel track
+   * Uses CSS custom properties for responsive widths and gaps
+   * Centers the active card while keeping track at full viewport width
+   */
   get transformStyle(): string {
-    // Use CSS custom properties for responsive widths and gaps
-    // These are defined in the SCSS file and change based on screen size
+    const currentIdx = this.currentIndex();
+    // Center the active card: move left by currentIdx cards, then shift right to center
+    const baseTransform = `translateX(calc(-${currentIdx} * (var(--slide-width) + var(--slide-gap)) + (100vw - var(--slide-width)) / 2))`;
     
     // Add drag offset during dragging
-    if (this.isDragging && this.dragOffset !== 0) {
-      return `translateX(calc(-${this.currentIndex} * (var(--slide-width) + var(--slide-gap)) + ${this.dragOffset}px))`;
+    if (this.isDragging() && this.dragOffset !== 0) {
+      return `translateX(calc(-${currentIdx} * (var(--slide-width) + var(--slide-gap)) + (100vw - var(--slide-width)) / 2 + ${this.dragOffset}px))`;
     }
     
-    // Normal transform using CSS custom properties
-    return `translateX(calc(-${this.currentIndex} * (var(--slide-width) + var(--slide-gap))))`;
+    return baseTransform;
   }
 
+  /**
+   * Returns the index of the currently centered project in originalProjects
+   */
   get activeOriginalIndex(): number {
-    // Return which original project is currently centered
-    return this.getOriginalIndex(this.currentIndex);
+    return this.getOriginalIndex(this.currentIndex());
   }
 }
+

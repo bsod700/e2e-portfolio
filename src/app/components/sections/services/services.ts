@@ -1,12 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ContentService } from '../../../services/content.service';
+import { ContentService, ServicesSectionHeader } from '../../../services/content.service';
 import { DesignVisualComponent } from './service-visuals/design-visual/design-visual';
 import { DevelopmentVisualComponent } from './service-visuals/development-visual/development-visual';
 import { AiAutomationVisualComponent } from './service-visuals/ai-automation-visual/ai-automation-visual';
 import { StrategyVisualComponent } from './service-visuals/strategy-visual/strategy-visual';
 import { BrandVisualComponent } from './service-visuals/brand-visual/brand-visual';
+import { Subscription } from 'rxjs';
 
 export interface ServiceOffering {
   id: string;
@@ -31,26 +32,63 @@ export interface ServiceOffering {
   templateUrl: './services.html',
   styleUrl: './services.scss'
 })
-export class ServicesComponent implements OnInit {
+export class ServicesComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {}
   private contentService = inject(ContentService);
+  private headerSubscription?: Subscription;
+
+  // Services section header content
+  servicesKicker = "Product design • Full-stack • AI";
+  servicesTitle = 'Everything needed to ship a digital product';
+  servicesDescription = 'A complete service stack: design, full-stack development, AI automation, strategy, and brand identity.';
 
   // Track glow styles for each service card
   cardGlowStyles: { [key: string]: { [key: string]: string } } = {};
   // Enable interactive effects only for desktop/mouse
   private interactiveEnabled = false;
+  // Track animation frame for throttling mousemove events
+  private rafId: number | null = null;
 
   ngOnInit(): void {
     // Initialize glow styles for each service card
+    // Only enable interactive effects on devices with mouse (not touch screens)
     if (typeof window !== 'undefined') {
       const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
       this.interactiveEnabled = mq.matches;
       // Update if the media query changes (e.g., device mode switches)
       if (typeof mq.addEventListener === 'function') {
-        mq.addEventListener('change', (e) => { this.interactiveEnabled = e.matches; });
+        mq.addEventListener('change', (e) => { 
+          this.interactiveEnabled = e.matches;
+          // Reset hover states when switching between mouse and touch
+          if (!e.matches) {
+            this.services.forEach(service => {
+              this.cardGlowStyles[service.id] = {
+                '--px': '-1000px',
+                '--py': '-1000px',
+                '--hover': '0',
+                '--dx': '0',
+                '--dy': '0'
+              };
+            });
+          }
+        });
       } else if (typeof mq.addListener === 'function') {
         // Safari fallback
-        mq.addListener((e) => { this.interactiveEnabled = e.matches; });
+        mq.addListener((e) => { 
+          this.interactiveEnabled = e.matches;
+          // Reset hover states when switching between mouse and touch
+          if (!e.matches) {
+            this.services.forEach(service => {
+              this.cardGlowStyles[service.id] = {
+                '--px': '-1000px',
+                '--py': '-1000px',
+                '--hover': '0',
+                '--dx': '0',
+                '--dy': '0'
+              };
+            });
+          }
+        });
       }
     }
 
@@ -64,6 +102,22 @@ export class ServicesComponent implements OnInit {
 
     // Load updated content from database
     this.loadUpdatedContent();
+    this.loadServicesHeaderContent();
+  }
+
+  private loadServicesHeaderContent(): void {
+    this.headerSubscription = this.contentService.getServicesSectionHeader().subscribe({
+      next: (header) => {
+        if (header) {
+          this.servicesKicker = header.kicker;
+          this.servicesTitle = header.title;
+          this.servicesDescription = header.description;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading services section header:', error);
+      }
+    });
   }
 
   private loadUpdatedContent(): void {
@@ -90,21 +144,32 @@ export class ServicesComponent implements OnInit {
     if (!this.interactiveEnabled) return;
     const target = event.currentTarget as HTMLElement | null;
     if (!target) return;
+    
+    // Capture values immediately before RAF
     const rect = target.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    // normalized direction from center (-1..1)
+    const x = Math.round((event.clientX - rect.left) * 100) / 100; // Round to 2 decimal places
+    const y = Math.round((event.clientY - rect.top) * 100) / 100; // Round to 2 decimal places
     const cx = rect.width / 2;
     const cy = rect.height / 2;
-    const ndx = Math.max(-1, Math.min(1, (x - cx) / cx));
-    const ndy = Math.max(-1, Math.min(1, (y - cy) / cy));
-    this.cardGlowStyles[serviceId] = {
-      ...this.cardGlowStyles[serviceId],
-      '--px': `${x}px`,
-      '--py': `${y}px`,
-      '--dx': `${ndx}`,
-      '--dy': `${ndy}`
-    };
+    const ndx = Math.round(Math.max(-1, Math.min(1, (x - cx) / cx)) * 1000) / 1000; // Round to 3 decimal places
+    const ndy = Math.round(Math.max(-1, Math.min(1, (y - cy) / cy)) * 1000) / 1000; // Round to 3 decimal places
+    
+    // Cancel previous animation frame if pending
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+    }
+
+    // Throttle updates using requestAnimationFrame (limits to ~60fps)
+    this.rafId = requestAnimationFrame(() => {
+      this.cardGlowStyles[serviceId] = {
+        ...this.cardGlowStyles[serviceId],
+        '--px': `${x}px`,
+        '--py': `${y}px`,
+        '--dx': `${ndx}`,
+        '--dy': `${ndy}`
+      };
+      this.rafId = null;
+    });
   }
 
   onCardEnter(serviceId: string): void {
@@ -254,5 +319,16 @@ export class FeatureComponent {
 
   navigateToService(serviceId: string): void {
     this.router.navigate(['/services', serviceId]);
+  }
+
+  ngOnDestroy(): void {
+    // Clean up animation frame on component destroy
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+    }
+    // Clean up subscription
+    if (this.headerSubscription) {
+      this.headerSubscription.unsubscribe();
+    }
   }
 }

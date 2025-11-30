@@ -5,10 +5,9 @@
   <div class="container">
     <div class="section-header">
       <p class="kicker">Real Success Stories</p>
-      <h2 class="section-title">What Clients Say<br />About My Work</h2>
+      <h2 class="section-title">Words from past collaborators</h2>
       <p class="section-description">
-        Hear from satisfied collaborators who can attest to our work ethic and the positive impact
-        we've made together.
+        A few notes from clients and teammates on process, communication, and delivery.
       </p>
     </div>
 
@@ -17,10 +16,10 @@
       <button
         class="animation-control-btn"
         (click)="toggleAnimation()"
-        [attr.aria-label]="isAnimationPaused ? 'Play animation' : 'Pause animation'"
+        [attr.aria-label]="isAnimationPaused() ? 'Play animation' : 'Pause animation'"
         type="button"
       >
-        @if (!isAnimationPaused) {
+        @if (!isAnimationPaused()) {
         <svg
           width="20"
           height="20"
@@ -32,7 +31,7 @@
           <rect x="6" y="4" width="4" height="16"></rect>
           <rect x="14" y="4" width="4" height="16"></rect>
         </svg>
-        } @if (isAnimationPaused) {
+        } @if (isAnimationPaused()) {
         <svg
           width="20"
           height="20"
@@ -50,11 +49,11 @@
 
   <div
     class="carousel-container"
-    [class.paused]="isAnimationPaused"
+    [class.paused]="isAnimationPaused()"
     (mouseenter)="pauseAnimation()"
     (mouseleave)="resumeAnimation()"
   >
-  @for (row of carouselRows; track row.id) {
+  @for (row of carouselRows(); track row.id) {
   <div class="carousel-row" [ngClass]="row.direction">
     <div class="carousel-track">
       @for (card of row.cards; track card.key) {

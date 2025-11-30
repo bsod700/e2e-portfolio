@@ -35,6 +35,14 @@ export interface HomeServiceCard {
   updated_at?: string;
 }
 
+export interface ServicesSectionHeader {
+  id?: string;
+  kicker: string;
+  title: string;
+  description: string;
+  updated_at?: string;
+}
+
 export interface ProjectContent {
   id?: string;
   project_id: string;
@@ -242,6 +250,102 @@ export class ContentService {
         return { success: true, data: data as HomeServiceCard };
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+    );
+  }
+
+  // Services Section Header
+  getServicesSectionHeader(): Observable<ServicesSectionHeader | null> {
+    const client = this.supabaseService.client;
+    if (!client) {
+      return new Observable(observer => {
+        observer.next(null);
+        observer.complete();
+      });
+    }
+
+    return from(
+      client
+        .from('services_section_header')
+        .select('*')
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching services section header:', error);
+          return null;
+        }
+        return data as ServicesSectionHeader | null;
+      }),
+      catchError(error => {
+        console.error('Error in getServicesSectionHeader:', error);
+        return [null];
+      })
+    );
+  }
+
+  updateServicesSectionHeader(content: Partial<ServicesSectionHeader>): Observable<{ success: boolean; error?: string; data?: ServicesSectionHeader }> {
+    const client = this.supabaseService.client;
+    if (!client) {
+      return of({ success: false, error: 'Supabase client not initialized' });
+    }
+
+    return from(
+      client
+        .from('services_section_header')
+        .select('*')
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+    ).pipe(
+      switchMap(({ data: existingData, error: fetchError }) => {
+        if (fetchError && fetchError.code !== 'PGRST116') {
+          return of({ success: false, error: fetchError.message });
+        }
+
+        if (existingData) {
+          return from(
+            client
+              .from('services_section_header')
+              .update({
+                ...content,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', existingData.id)
+              .select()
+              .single()
+          ).pipe(
+            map(({ data, error }) => {
+              if (error) {
+                return { success: false, error: error.message };
+              }
+              return { success: true, data: data as ServicesSectionHeader };
+            })
+          );
+        } else {
+          return from(
+            client
+              .from('services_section_header')
+              .insert({
+                ...content,
+                updated_at: new Date().toISOString()
+              })
+              .select()
+              .single()
+          ).pipe(
+            map(({ data, error }) => {
+              if (error) {
+                return { success: false, error: error.message };
+              }
+              return { success: true, data: data as ServicesSectionHeader };
+            })
+          );
+        }
+      }),
+      catchError((error) => {
+        return of({ success: false, error: error.message || 'An error occurred' });
+      })
     );
   }
 

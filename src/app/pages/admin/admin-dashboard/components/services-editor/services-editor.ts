@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ContentService, HomeServiceCard } from '../../../../../services/content.service';
+import { ContentService, HomeServiceCard, ServicesSectionHeader } from '../../../../../services/content.service';
 import { CustomDropdownComponent, DropdownOption } from './custom-dropdown/custom-dropdown';
 
 @Component({
@@ -11,18 +11,73 @@ import { CustomDropdownComponent, DropdownOption } from './custom-dropdown/custo
   templateUrl: './services-editor.html',
   styleUrl: './services-editor.scss'
 })
-export class ServicesEditorComponent {
+export class ServicesEditorComponent implements OnInit {
   private contentService = inject(ContentService);
   private cdr = inject(ChangeDetectorRef);
 
   @Input() homeServices: HomeServiceCard[] = [];
   @Output() servicesUpdated = new EventEmitter<HomeServiceCard[]>();
 
+  // Services section header
+  servicesHeader: ServicesSectionHeader = {
+    kicker: "Product design • Full-stack • AI",
+    title: 'Everything Needed to Ship a Digital Product',
+    description: 'A complete service stack: design, full-stack development, AI automation, strategy, and brand identity.'
+  };
+  savingHeader = false;
+  headerError = '';
+  headerSuccessMessage = '';
+
   selectedServiceId: string = '';
   editingHomeService: HomeServiceCard | null = null;
   saving = false;
   error = '';
   successMessage = '';
+
+  ngOnInit(): void {
+    this.loadServicesHeader();
+  }
+
+  loadServicesHeader(): void {
+    this.contentService.getServicesSectionHeader().subscribe({
+      next: (header) => {
+        if (header) {
+          this.servicesHeader = header;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading services section header:', error);
+      }
+    });
+  }
+
+  async saveServicesHeader(): Promise<void> {
+    this.savingHeader = true;
+    this.headerError = '';
+    this.headerSuccessMessage = '';
+
+    this.contentService.updateServicesSectionHeader(this.servicesHeader).subscribe({
+      next: (result) => {
+        if (result.success) {
+          this.headerSuccessMessage = 'Services section header saved successfully!';
+          if (result.data) {
+            this.servicesHeader = result.data;
+          }
+          setTimeout(() => {
+            this.headerSuccessMessage = '';
+          }, 3000);
+        } else {
+          this.headerError = result.error || 'Failed to save header';
+        }
+        this.savingHeader = false;
+      },
+      error: (error) => {
+        console.error('Error saving services header:', error);
+        this.headerError = 'Failed to save header';
+        this.savingHeader = false;
+      }
+    });
+  }
 
   get dropdownOptions(): DropdownOption[] {
     return this.homeServices.map(service => ({

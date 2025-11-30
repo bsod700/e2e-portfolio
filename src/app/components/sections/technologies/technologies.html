@@ -17,15 +17,15 @@
       <button 
         class="animation-control-btn"
         (click)="toggleAnimation()"
-        [attr.aria-label]="isAnimationPaused ? 'Play animation' : 'Pause animation'"
+        [attr.aria-label]="isAnimationPaused() ? 'Play animation' : 'Pause animation'"
         type="button">
-        @if (!isAnimationPaused) {
+        @if (!isAnimationPaused()) {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="6" y="4" width="4" height="16"></rect>
             <rect x="14" y="4" width="4" height="16"></rect>
           </svg>
         }
-        @if (isAnimationPaused) {
+        @if (isAnimationPaused()) {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="5 3 19 12 5 21 5 3"></polygon>
           </svg>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="carousel-container" 
-         [class.paused]="isAnimationPaused"
+         [class.paused]="isAnimationPaused()"
          (mouseenter)="pauseAnimation()"
          (mouseleave)="resumeAnimation()">
       
@@ -58,7 +58,7 @@
         </div>
 
         <!-- Center Divider - Logo Pulse -->
-        <div class="center-divider logo-pulse">
+        <a class="center-divider logo-pulse" (click)="scrollToContact($event)">
           <!-- Ripple Circles -->
           @for (ripple of rippleArray; track ripple) {
             <div class="ripple-circle ripple-{{ ripple }}"></div>
@@ -75,7 +75,7 @@
             <!-- Logo Icon -->
             <img src="assets/images/logo-icon-white-3.svg" alt="Logo" class="logo-icon">
           </div>
-        </div>
+        </a>
 
         <!-- Right Side - Scrolling Left (towards center) -->
         <div class="carousel-half right-side">
@@ -94,16 +94,16 @@
     </div>
 
     <!-- Tooltip -->
-    @if (activeTooltip) {
+    @if (activeTooltip(); as tooltip) {
       <div class="tech-tooltip"
-           [style.left.px]="activeTooltip.x"
-           [style.top.px]="activeTooltip.y">
-        {{ activeTooltip.name }}
+           [style.left.px]="tooltip.x"
+           [style.top.px]="tooltip.y">
+        {{ tooltip.name }}
       </div>
     }
 
     <div class="undertext">
-      <p class="undertext-text">I use modern tools across design and development to create fast, scalable and visually consistent digital products.</p>
+      <p class="undertext-text">Practical tools across design and engineering picked for speed, consistency, and maintainability.</p>
     </div>
   </div>
 </section>

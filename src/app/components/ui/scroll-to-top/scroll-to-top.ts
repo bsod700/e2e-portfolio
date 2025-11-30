@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './scroll-to-top.html',
-  styleUrl: './scroll-to-top.scss'
+  styleUrl: './scroll-to-top.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScrollToTopComponent {
   isVisible = false;

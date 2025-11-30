@@ -181,22 +181,24 @@
 .carousel-row {
   display: flex;
   width: 100%;
+  overflow: hidden; // Ensure content doesn't overflow the container
 }
 
 .carousel-track {
   --scroll-duration: 40s;
+  --num-copies: 3;
+  --scroll-distance: calc(-100% / var(--num-copies));
   display: flex;
   gap: 16px;
   width: max-content;
   will-change: transform;
 
   .scroll-left & {
-    transform: translateX(0);
     animation: scrollLeft var(--scroll-duration) linear infinite;
   }
 
   .scroll-right & {
-    transform: translateX(-50%);
+    transform: translateX(calc(-100% / 3)); // Start at negative position so content is visible
     animation: scrollRight var(--scroll-duration) linear infinite;
   }
 
@@ -207,18 +209,21 @@
 }
 
 // Keyframe animations for seamless infinite scroll
+// scrollLeft: moves left (negative direction) from 0 to -33.333%
+// scrollRight: moves right (positive direction) but starts at -33.333% to avoid empty space
+// When animation completes, it loops back seamlessly because we have multiple identical sets
 @keyframes scrollLeft {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(calc(-100% / 3));
   }
 }
 
 @keyframes scrollRight {
   from {
-    transform: translateX(-50%);
+    transform: translateX(calc(-100% / 3));
   }
   to {
     transform: translateX(0);
