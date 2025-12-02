@@ -47,16 +47,74 @@
       } @else {
         <ul>
           @for (domain of domains; track trackByDomain($index, domain)) {
-            <li class="domain-item">
-              <span class="domain">{{ domain }}</span>
-              <button
-                type="button"
-                class="btn-link danger"
-                (click)="deleteDomain(domain)"
-                [disabled]="saving"
-              >
-                Remove
-              </button>
+            <li class="domain-item" [class.editing]="isEditing($index)">
+              <div class="domain-main">
+                @if (!isEditing($index)) {
+                  <span class="domain">{{ domain }}</span>
+                } @else {
+                  <input
+                    type="text"
+                    [(ngModel)]="editDomainValue"
+                    [disabled]="saving"
+                    placeholder="e.g. tempmail.com"
+                    class="domain-input"
+                  />
+                }
+              </div>
+              <div class="section-actions">
+                @if (!isEditing($index)) {
+                  <button
+                    type="button"
+                    class="btn-icon"
+                    title="Edit"
+                    (click)="startEdit($index, domain)"
+                    [disabled]="saving"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M11.333 2.667a1.333 1.333 0 0 1 1.885 1.885L5.333 12.667l-2.667.667.667-2.667L11.333 2.667z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-icon btn-delete"
+                    title="Delete"
+                    (click)="deleteDomain(domain)"
+                    [disabled]="saving"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M4 4L12 12M12 4L4 12"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn-small"
+                    (click)="saveEdit(domain, $index)"
+                    [disabled]="saving || !editDomainValue.trim()"
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-small btn-secondary"
+                    (click)="cancelEdit()"
+                    [disabled]="saving"
+                  >
+                    Cancel
+                  </button>
+                }
+              </div>
             </li>
           }
         </ul>
