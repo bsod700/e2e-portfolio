@@ -34,15 +34,55 @@
           0 3px 7px 0 rgba(0, 0, 0, 0.67);
       }
     }
-    &.project-producer-client-page {
+    &.project-producer-client-page, &.project-admin-page {
       .container {
         .img-content {
           display: flex;
           align-items: center;
           img {
-            width: 700px;
+            width: 400px;
+            height: auto;
+            @include respond-to(md) {
+              width: 700px;
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+    &.project-lesson-learned {
+      .container {
+        .img-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          img {
+            width: 450px;
             height: auto;
           }
+        }
+      }
+      .circle {
+        position: absolute;
+        &.circle-1 {
+          bottom: calc(-365px / 2);
+          left: calc(50% - 365px / 2);
+          width: 365px;
+          height: 365px;
+          border-radius: 100%;
+          background: #FDC45D;
+          filter: blur(40px);
+          opacity: 0.05;
+        }
+        &.circle-2 {
+          width: 567px;
+          height: 567px;
+          border-radius: 100%;
+          opacity: 0.05;
+          background: #FDC45D;
+          filter: blur(40px);
+          right: -192px;
+          top: -62px;
         }
       }
     }
@@ -110,10 +150,13 @@
         padding: 24px;
         gap: 24px;
         border-radius: 5px;
-
         position: relative;
         z-index: 2;
+        flex-direction: column;
 
+        @include respond-to(md) {
+         flex-direction: row;
+        }
         .background {
           position: absolute;
           top: 0;

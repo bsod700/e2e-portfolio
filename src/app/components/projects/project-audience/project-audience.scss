@@ -11,10 +11,13 @@
 
     .container {
         display: flex;
-        padding: 0 48px;
+        padding: 0 0;
         flex-direction: column;
         gap: 48px;
         text-align: center;
+        @include respond-to(md) {
+            padding: 0 48px;
+        }
         .text-content {
             display: flex;
             flex-direction: column;
@@ -68,10 +71,12 @@
                         display: flex;
                         gap: 24px;
                         border-radius: 5px;
-                      
                         position: relative;
                         z-index: 2;
-                       
+                        flex-direction: column;
+                        @include respond-to(md) {
+                            flex-direction: row;
+                        }
                         .background {
                             position: absolute;
                             top: 0;

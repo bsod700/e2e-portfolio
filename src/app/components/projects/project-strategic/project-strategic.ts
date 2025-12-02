@@ -8,6 +8,7 @@ export interface ProjectStrategicData {
   cards: ProjectNumberCardData[];
   backgroundImages?: string[];
   projectName: string;
+  sectionName: string;
 }
 @Component({
   selector: 'app-project-strategic',
@@ -22,5 +23,6 @@ export class ProjectStrategicComponent {
     text: '',
     cards: [],
     projectName: '',
+    sectionName: '',
   };
 }

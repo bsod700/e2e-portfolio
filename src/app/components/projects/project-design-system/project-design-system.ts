@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectDesignSystemData {
@@ -18,8 +18,9 @@ export interface ProjectDesignSystemData {
   styleUrl: './project-design-system.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectDesignSystemComponent {
+export class ProjectDesignSystemComponent implements AfterViewInit {
   private readonly swipeThreshold = 15; // percentage
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Input() projectDesignSystemData: ProjectDesignSystemData = {
     projectName: '',
@@ -31,11 +32,13 @@ export class ProjectDesignSystemComponent {
 
   // Carousel state
   currentSlide = 0;
-  readonly itemsPerView = 3;
-  private isDragging = false;
+  itemsPerView = 3; // Will be calculated based on screen size
+  isDragging = false;
   private startX = 0;
-  private currentTranslate = 0;
+  currentTranslate = 0;
   private prevTranslate = 0;
+  private carouselWidth = 0;
+  private hasMoved = false;
 
   // Overlay state
   isOverlayOpen = false;
@@ -46,7 +49,7 @@ export class ProjectDesignSystemComponent {
   readonly zoomStep = 0.5;
   
   // Pan/drag state for zoomed image
-  private isPanning = false;
+  isPanning = false;
   private panStartX = 0;
   private panStartY = 0;
   panX = 0;
@@ -54,7 +57,23 @@ export class ProjectDesignSystemComponent {
   currentPanX = 0;
   currentPanY = 0;
 
+  getItemsPerView(): number {
+    if (typeof window === 'undefined') return 3;
+    
+    const totalCards = this.projectDesignSystemData.systemCards.length;
+    
+    if (window.innerWidth <= 768) {
+      return 1; // Mobile: 1 item per view
+    } else if (window.innerWidth <= 1024) {
+      return 2; // Tablet: 2 items per view
+    }
+    
+    // Desktop: Show all cards if 4 or fewer, otherwise show 3
+    return totalCards <= 4 ? totalCards : 3;
+  }
+
   get totalSlides(): number {
+    this.itemsPerView = this.getItemsPerView();
     return Math.ceil(this.projectDesignSystemData.systemCards.length / this.itemsPerView);
   }
 
@@ -86,26 +105,58 @@ export class ProjectDesignSystemComponent {
   }
 
   getTransform(): string {
+    // Calculate items per view based on current screen size
+    this.itemsPerView = this.getItemsPerView();
+    // Move by full pages (100% of container width per slide)
     const percentage = this.currentSlide * -100;
     return `translateX(${percentage}%)`;
   }
 
-  // Touch/Drag handlers for carousel
-  onTouchStart(event: TouchEvent | MouseEvent): void {
+  // Touch/Drag handlers for carousel (touch only)
+  onTouchStart(event: TouchEvent): void {
+    this.hasMoved = false;
     this.isDragging = true;
-    this.startX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
-    this.prevTranslate = this.currentSlide * -100;
+    this.startX = event.touches[0].clientX;
+    
+    // Calculate carousel width if not set
+    if (this.carouselWidth === 0 && typeof document !== 'undefined') {
+      const carouselElement = document.querySelector('.carousel-container');
+      if (carouselElement) {
+        this.carouselWidth = carouselElement.clientWidth;
+      } else {
+        this.carouselWidth = window.innerWidth;
+      }
+    }
+    
+    // Calculate the current position in pixels (100% = full container width)
+    this.prevTranslate = -(this.currentSlide * this.carouselWidth);
+    this.currentTranslate = this.prevTranslate;
   }
 
-  onTouchMove(event: TouchEvent | MouseEvent): void {
+  onTouchMove(event: TouchEvent): void {
     if (!this.isDragging) return;
     
-    const currentX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX;
-    const diff = currentX - this.startX;
-    const slideWidth = window.innerWidth;
-    const percentageMoved = (diff / slideWidth) * 100;
+    const currentX = event.touches[0].clientX;
+    const diff = Math.abs(currentX - this.startX);
     
-    this.currentTranslate = this.prevTranslate + percentageMoved;
+    // Mark as moved if moved more than 5px
+    if (diff > 5) {
+      this.hasMoved = true;
+      event.preventDefault();
+    }
+    
+    // Calculate new position in pixels
+    this.currentTranslate = this.prevTranslate + (currentX - this.startX);
+    
+    // Prevent dragging beyond boundaries
+    const minTranslate = -(this.totalSlides - 1) * this.carouselWidth;
+    const maxTranslate = 0;
+    
+    if (this.currentTranslate > maxTranslate) {
+      this.currentTranslate = maxTranslate;
+    } else if (this.currentTranslate < minTranslate) {
+      this.currentTranslate = minTranslate;
+    }
   }
 
   onTouchEnd(): void {
@@ -113,20 +164,32 @@ export class ProjectDesignSystemComponent {
     this.isDragging = false;
     
     const movedBy = this.currentTranslate - this.prevTranslate;
+    const threshold = this.carouselWidth * (this.swipeThreshold / 100);
     
-    // Swipe threshold: percentage of slide width
-    if (movedBy < -this.swipeThreshold && this.canGoNext) {
+    // Determine if we should move to next/prev slide
+    if (movedBy < -threshold && this.canGoNext) {
       this.nextSlide();
-    } else if (movedBy > this.swipeThreshold && this.canGoPrev) {
+    } else if (movedBy > threshold && this.canGoPrev) {
       this.prevSlide();
     }
     
+    // Reset translate
     this.currentTranslate = 0;
     this.prevTranslate = 0;
+    
+    // Reset hasMoved after a short delay to allow click event
+    setTimeout(() => {
+      this.hasMoved = false;
+    }, 100);
   }
 
   // Overlay methods
   openOverlay(index: number): void {
+    // Prevent opening overlay if user was dragging
+    if (this.hasMoved) {
+      return;
+    }
+    
     this.overlayImageIndex = index;
     this.isOverlayOpen = true;
     this.zoomLevel = 1;
@@ -265,6 +328,37 @@ export class ProjectDesignSystemComponent {
       case '_':
         this.zoomOut();
         break;
+    }
+  }
+
+  ngAfterViewInit(): void {
+    // Initialize carousel width after view is initialized
+    setTimeout(() => {
+      this.updateCarouselWidth();
+      this.cdr.markForCheck();
+    }, 0);
+  }
+
+  private updateCarouselWidth(): void {
+    if (typeof document !== 'undefined') {
+      const carouselElement = document.querySelector('.carousel-container');
+      if (carouselElement) {
+        this.carouselWidth = carouselElement.clientWidth;
+      }
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    // Recalculate carousel width on resize
+    this.updateCarouselWidth();
+    
+    // Reset to first slide if current slide is out of bounds after resize
+    const newItemsPerView = this.getItemsPerView();
+    const newTotalSlides = Math.ceil(this.projectDesignSystemData.systemCards.length / newItemsPerView);
+    if (this.currentSlide >= newTotalSlides) {
+      this.currentSlide = Math.max(0, newTotalSlides - 1);
+      this.cdr.markForCheck();
     }
   }
 }

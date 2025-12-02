@@ -24,19 +24,17 @@
           <div class="carousel-container">
             <div 
               class="carousel-track"
-              [style.transform]="isDragging ? 'translateX(' + currentTranslate + '%)' : getTransform()"
-              (mousedown)="onTouchStart($event)"
-              (mousemove)="onTouchMove($event)"
-              (mouseup)="onTouchEnd()"
-              (mouseleave)="onTouchEnd()"
+              [style.transform]="isDragging ? 'translateX(' + currentTranslate + 'px)' : getTransform()"
+              [style.transition]="isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)'"
               (touchstart)="onTouchStart($event)"
               (touchmove)="onTouchMove($event)"
-              (touchend)="onTouchEnd()">
+              (touchend)="onTouchEnd()"
+              (touchcancel)="onTouchEnd()">
               
               @for (systemCard of projectDesignSystemData.systemCards; track $index) {
-                <div class="carousel-slide">
+                <div class="carousel-slide" [style.min-width.%]="100 / getItemsPerView()">
                   <div class="card" (click)="openOverlay($index)">
-                    <img [src]="systemCard.image" [alt]="systemCard.title" draggable="false">
+                    <img [src]="systemCard.image" [alt]="systemCard.title" width="467" height="400" draggable="false">
                   </div>
                 </div>
               }
@@ -98,6 +96,8 @@
       <div class="image-container" [class.zoomed]="zoomLevel > 1">
         <img [src]="projectDesignSystemData.systemCards[overlayImageIndex].image" 
              [alt]="projectDesignSystemData.systemCards[overlayImageIndex].title"
+             width="1400"
+             height="400"
              [style.transform]="getImageTransform()"
              [style.cursor]="getImageCursor()"
              [class.is-zoomed]="zoomLevel > 1"

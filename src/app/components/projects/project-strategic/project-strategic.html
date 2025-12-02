@@ -1,4 +1,4 @@
-<section [ngClass]="['project-strategic','project-'+projectStrategicData.projectName]">
+<section [ngClass]="['project-strategic','project-'+projectStrategicData.projectName,'section-name-'+projectStrategicData.sectionName]">
     @if (projectStrategicData.backgroundImages) {
         <div class="background">
             @for (image of projectStrategicData.backgroundImages; track $index) {

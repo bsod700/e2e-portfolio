@@ -1,8 +1,15 @@
 <section [ngClass]="['project-side-img-cards','project-'+projectSideImgCardsData.projectName, `side-${projectSideImgCardsData.sideDirection}`, `project-${projectSideImgCardsData.sectionName}`]">
-    @if (projectSideImgCardsData.backgroundImages) {
+    @if (projectSideImgCardsData.backgroundImages || projectSideImgCardsData.backgroundCircles) {
         <div class="background">
-            @for (image of projectSideImgCardsData.backgroundImages; track $index) {
-                <img [src]="image" alt="background" />
+            @if (projectSideImgCardsData.backgroundImages) {
+                @for (image of projectSideImgCardsData.backgroundImages; track $index) {
+                    <img [src]="image" alt="background" />
+                }
+            }
+            @if (projectSideImgCardsData.backgroundCircles) {
+                @for(circle of projectSideImgCardsData.backgroundCircles; track $index) {
+                    <div [ngClass]="['circle','circle-' + ($index + 1)]"></div>
+                }
             }
         </div>
     }

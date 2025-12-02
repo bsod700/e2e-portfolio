@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import {
   ProjectHeaderComponent,
   ProjectHeaderData,
@@ -32,6 +32,7 @@ import {
   ProjectThanksComponent,
 } from '../../../components/projects';
 import { CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 
 export interface ProjectData {
   headerData: ProjectHeaderData;
@@ -100,35 +101,35 @@ const TIERRO_PROJECT_DATA = {
     stacksData: {
       projectName: 'tierro',
       services: [
-        { name: 'UI/UX Design', icon: 'assets/images/projects/tierro/services/ui-ux-design.svg' },
-        { name: 'Logo', icon: 'assets/images/projects/tierro/services/branding.svg' },
+        { name: 'UI/UX Design', icon: 'assets/images/icons/uiux.svg' },
+        { name: 'Logo', icon: 'assets/images/icons/logo.svg' },
         {
           name: 'Design System',
-          icon: 'assets/images/projects/tierro/services/music-production.svg',
+          icon: 'assets/images/icons/design-system.svg',
         },
         {
           name: 'Admin Management',
-          icon: 'assets/images/projects/tierro/services/music-distribution.svg',
+          icon: 'assets/images/icons/admin-management.svg',
         },
-        { name: 'Portfolio', icon: 'assets/images/projects/tierro/services/music-promotion.svg' },
+        { name: 'Portfolio', icon: 'assets/images/icons/portfolio.svg' },
         {
           name: 'Music Player',
-          icon: 'assets/images/projects/tierro/services/music-marketing.svg',
+          icon: 'assets/images/icons/music-player.svg',
         },
         {
           name: 'Development',
-          icon: 'assets/images/projects/tierro/services/music-management.svg',
+          icon: 'assets/images/icons/development.svg',
         },
       ],
       technologies: [
-        { name: 'Illustrator', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'Photoshop', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'Figma', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'Angular', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'Material', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'Github', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'WebPack', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
-        { name: 'FireBase', icon: 'assets/images/projects/tierro/technologies/angular.svg' },
+        { name: 'Illustrator', icon: 'assets/images/icons/illustrator.svg' },
+        { name: 'Photoshop', icon: 'assets/images/icons/photoshop.svg' },
+        { name: 'Figma', icon: 'assets/images/icons/figma.svg' },
+        { name: 'Angular', icon: 'assets/images/icons/development.svg' },
+        { name: 'Material', icon: 'assets/images/icons/development.svg' },
+        { name: 'Github', icon: 'assets/images/icons/github.svg' },
+        { name: 'WebPack', icon: 'assets/images/icons/dev-sheet.svg' },
+        { name: 'FireBase', icon: 'assets/images/icons/db.svg' },
       ],
     },
     sideTextsData: {
@@ -145,6 +146,7 @@ const TIERRO_PROJECT_DATA = {
     },
     strategicData: {
       title: 'Strategic Goals',
+      sectionName: 'strategic-goals',
       text: 'Tierro needed a digital platform that would elevate his professional presence and provide direct access to his audience. Without an existing logo or visual identity, the goal was to create a complete brand experience from scratch that showcases his work, attracts potential collaborators, and gives him full control over his content without depending on third-party platforms.',
       cards: [
         {
@@ -248,19 +250,19 @@ const TIERRO_PROJECT_DATA = {
         {
           title: 'Showcase Music',
           text: "Features a custom music player to seamlessly showcase the producer's tracks without relying on external platforms.",
-          icon: '',
+          icon: 'assets/images/icons/music-tav.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Engaging Visuals',
           text: "Utilizes engaging visuals and a cohesive brand identity to capture the essence of the music producer's style and creative vision.",
-          icon: '',
+          icon: 'assets/images/icons/smileys.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Client Reviews',
           text: 'Highlights client reviews and testimonials to build credibility, establish trust, and connect authentically with the audience.',
-          icon: '',
+          icon: 'assets/images/icons/like-tag.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
       ],
@@ -276,23 +278,23 @@ const TIERRO_PROJECT_DATA = {
         {
           title: 'Content Management',
           text: 'Allows the producer to update reviews and music tracks effortlessly, maintaining full control over their portfolio and public presence.',
-          icon: '',
+          icon: 'assets/images/icons/gear.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'User-Friendly Interface',
           text: 'Designed for ease of use, ensuring the producer can quickly make changes without technical expertise or external assistance.',
-          icon: '',
+          icon: 'assets/images/icons/user-tick.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Dynamic Updates',
           text: 'Ensures the public-facing site remains current and engaging by allowing for real-time content updates across all sections.',
-          icon: '',
+          icon: 'assets/images/icons/refresh-circle.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
       ],
-      image: 'assets/images/projects/tierro/side-img-cards.svg',
+      image: 'assets/images/projects/tierro/admin-login-mac.webp',
       sectionName: 'admin-page',
     },
     audienceData: {
@@ -303,17 +305,17 @@ const TIERRO_PROJECT_DATA = {
         {
           title: 'Potential Collaborators',
           text: 'artists, bands, and music industry professionals actively seeking a producer who aligns with their artistic vision and can bring their musical ideas to life.',
-          icon: '',
+          icon: 'assets/images/icons/music-tav.svg',
         },
         {
           title: 'Record Labels and A&R',
           text: 'Industry decision-makers looking to discover talented producers for their roster of artists, evaluating production quality and past collaborations.',
-          icon: '',
+          icon: 'assets/images/icons/cd.svg',
         },
         {
           title: 'Independent Artists',
           text: 'Solo musicians and songwriters who need professional production services to elevate their tracks and compete in the streaming landscape.',
-          icon: '',
+          icon: 'assets/images/icons/microphone.svg',
         },
       ],
       sideRightTitle: 'Fans',
@@ -321,17 +323,17 @@ const TIERRO_PROJECT_DATA = {
         {
           title: 'Music Enthusiasts',
           text: "Individuals who enjoy and appreciate Tierro's productions, seeking an immersive way to discover his catalog and stay updated on new releases.",
-          icon: '',
+          icon: 'assets/images/icons/group-people.svg',
         },
         {
           title: 'Genre Followers',
           text: 'Fans of pop, R&B, and electronic music who explore producer portfolios to discover new sounds and understand the creative process behind their favorite tracks.',
-          icon: '',
+          icon: 'assets/images/icons/music-note.svg',
         },
         {
           title: 'General Audience',
           text: "Casual visitors who are curious about the producer's work and want to explore his music, read client reviews, and learn about his approach.",
-          icon: '',
+          icon: 'assets/images/icons/user-octagon.svg',
         },
       ],
     },
@@ -344,38 +346,38 @@ const TIERRO_PROJECT_DATA = {
           name: 'Sarah',
           image: 'assets/images/projects/tierro/persona-alex.webp',
           attributes: [
-            { icon: '', name: 'Age', value: '28 years' },
-            { icon: '', name: 'Location', value: 'Los Angeles, CA' },
-            { icon: '', name: 'Education', value: "Bachelor's Degree in Music" },
-            { icon: '', name: 'Occupation', value: 'Indie Musician' },
+            { icon: 'assets/images/icons/cake.svg', name: 'Age', value: '28 years' },
+            { icon: 'assets/images/icons/location.svg', name: 'Location', value: 'Los Angeles, CA' },
+            { icon: 'assets/images/icons/education.svg', name: 'Education', value: "Bachelor's Degree in Music" },
+            { icon: 'assets/images/icons/work.svg', name: 'Occupation', value: 'Indie Musician' },
           ],
           wants: [
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value:
                 'Reliable music producer for collaboration'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'Easy access to the producer\'s portfolio'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'Clear communication and feedback channels'
             },
           ],
           frustrations: [
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value:
                 'Difficulty finding producers with a strong online presence'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Limited access to high-quality work samples'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Time-consuming search process'
             },
           ],
@@ -383,40 +385,40 @@ const TIERRO_PROJECT_DATA = {
         },
         {
           name: 'Alex',
-          image: 'assets/images/projects/tierro/personas/potential-collaborators.svg',
+          image: 'assets/images/projects/tierro/persona-sarha.webp',
           attributes: [
-            { icon: '', name: 'Age', value: '22 years' },
-            { icon: '', name: 'Location', value: 'Austin, TX' },
-            { icon: '', name: 'Education', value: 'College Student, studying Communications' },
-            { icon: '', name: 'Occupation', value: 'College Student' },
+            { icon: 'assets/images/icons/cake.svg', name: 'Age', value: '22 years' },
+            { icon: 'assets/images/icons/location.svg', name: 'Location', value: 'Austin, TX' },
+            { icon: 'assets/images/icons/education.svg', name: 'Education', value: 'College Student, studying Communications' },
+            { icon: 'assets/images/icons/work.svg', name: 'Occupation', value: 'College Student' },
           ],
           wants: [
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value:
                 'Discover new and exciting music'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'Learn more about favorite music producers'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'Access to curated music collections'
             },
           ],
           frustrations: [
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value:
                 'Limited access to high-quality, curated music'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Difficulty finding detailed information about producers'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Cluttered and confusing websites'
             },
           ],
@@ -424,40 +426,40 @@ const TIERRO_PROJECT_DATA = {
         },
         {
           name: 'Emily',
-          image: 'assets/images/projects/tierro/personas/potential-collaborators.svg',
+          image: 'assets/images/projects/tierro/persona-emily.webp',
           attributes: [
-            { icon: '', name: 'Age', value: '30 years' },
-            { icon: '', name: 'Location', value: 'Nashville, TN' },
-            { icon: '', name: 'Education', value: 'Bachelor\'s Degree in Vocal Performance' },
-            { icon: '', name: 'Occupation', value: 'Singer and Songwriter' },
+            { icon: 'assets/images/icons/cake.svg', name: 'Age', value: '30 years' },
+            { icon: 'assets/images/icons/location.svg', name: 'Location', value: 'Nashville, TN' },
+            { icon: 'assets/images/icons/education.svg', name: 'Education', value: 'Bachelor\'s Degree in Vocal Performance' },
+            { icon: 'assets/images/icons/work.svg', name: 'Occupation', value: 'Singer and Songwriter' },
           ],
           wants: [
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value:
                 'Singer and Songwriter'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'A portfolio showcasing successful collaborations with other singers'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/happy-smile.svg',
               value: 'Easy access to contact and booking information'
             },
           ],
           frustrations: [
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value:
                 'Limited information about the producer\'s experience with vocalists'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Difficulty finding a producer who aligns with her artistic vision'
             },
             {
-              icon: '',
+              icon: 'assets/images/icons/sad-smile.svg',
               value: 'Difficulty finding a producer who aligns with her artistic vision'
             },
           ],
@@ -471,6 +473,7 @@ const TIERRO_PROJECT_DATA = {
     },
     insightsData: {
       title: 'Insights',
+      sectionName: 'insights',
       text: 'Through detailed analysis and user research, several key insights were identified to guide the design and development of the project.',
       cards: [
         {
@@ -512,7 +515,6 @@ const TIERRO_PROJECT_DATA = {
       backgroundImages: [
         'assets/images/projects/tierro/circles1.svg',
         'assets/images/projects/tierro/circles2.svg',
-        'assets/images/projects/tierro/lines.svg',
       ],
       projectName: 'tierro',
     },
@@ -646,30 +648,34 @@ const TIERRO_PROJECT_DATA = {
         {
           title: 'Building a Brand Identity from Nothing',
           text: 'Creating a brand from scratch taught me to spend real time understanding what the client wants their identity to feel like.',
-          icon: '',
+          icon: 'assets/images/icons/document.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Custom Audio Players Are Tricky',
           text: 'Building the music player was harder than expected. Balancing visual appeal with performance, loading speed, and browser compatibility took serious tweaking.',
-          icon: '',
+          icon: 'assets/images/icons/music-tav.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Making Things Easy for Non-Technical Users',
           text: 'The admin page showed me that developer-friendly isn\'t user-friendly. I had to design for someone who\'d never need my help again.',
-          icon: '',
+          icon: 'assets/images/icons/user-tag.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: 'Testing and Tweaking Makes All the Difference',
           text: 'I went through way more iterations than planned. But that\'s where things got good. Feedback helped me catch what I missed initially.',
-          icon: '',
+          icon: 'assets/images/icons/task-square.svg',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
       ],
-      image: 'assets/images/projects/tierro/side-img-cards.svg',
+      image: 'assets/images/projects/tierro/logo-result.svg',
       sectionName: 'lesson-learned',
+      backgroundCircles: [
+        '',
+        '',
+      ]
     },
     thanksData: {
       projectName: 'tierro',
@@ -710,7 +716,38 @@ const TIERRO_PROJECT_DATA = {
   templateUrl: './tierro-project.html',
   styleUrl: './tierro-project.scss',
 })
-export class TierroProjectComponent {
+export class TierroProjectComponent implements OnInit, OnDestroy {
+  private readonly document = inject(DOCUMENT);
+  private fontLinkElement?: HTMLLinkElement;
+
   readonly tocSections: TocSection[] = [...TIERRO_TOC_SECTIONS];
   readonly projectData: ProjectData = TIERRO_PROJECT_DATA;
+
+  ngOnInit(): void {
+    const head = this.document.head;
+    const existingLink = head.querySelector<HTMLLinkElement>(
+      'link[data-font="tierro-montserrat"]'
+    );
+
+    if (existingLink) {
+      this.fontLinkElement = existingLink;
+      return;
+    }
+
+    const linkEl = this.document.createElement('link');
+    linkEl.rel = 'stylesheet';
+    linkEl.href =
+      'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap';
+    linkEl.setAttribute('data-font', 'tierro-montserrat');
+
+    head.appendChild(linkEl);
+    this.fontLinkElement = linkEl;
+  }
+
+  ngOnDestroy(): void {
+    if (this.fontLinkElement?.parentNode) {
+      this.fontLinkElement.parentNode.removeChild(this.fontLinkElement);
+      this.fontLinkElement = undefined;
+    }
+  }
 }

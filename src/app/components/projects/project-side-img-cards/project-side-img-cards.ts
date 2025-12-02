@@ -15,6 +15,7 @@ export interface ProjectSideImgCardsData {
   image: string;
   backgroundImages?: string[];
   sectionName: string;
+  backgroundCircles?: string[];
 }
 @Component({
   selector: 'app-project-side-img-cards',
