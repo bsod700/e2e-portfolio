@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { EmailDomainService } from './email-domain.service';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -9,8 +10,8 @@ export interface ValidationResult {
   providedIn: 'root'
 })
 export class ValidationService {
-  // Disposable email domains to block
-  private readonly DISPOSABLE_EMAIL_DOMAINS = [
+  // Fallback disposable email domains to block (used when DB is unavailable)
+  private static readonly FALLBACK_DISPOSABLE_EMAIL_DOMAINS = [
     'tempmail.com',
     'guerrillamail.com',
     '10minutemail.com',
@@ -20,6 +21,15 @@ export class ValidationService {
     'example.com',
     'fake.com'
   ];
+
+  // Runtime list of disposable domains, hydrated from Supabase when available
+  private disposableEmailDomains: string[] = [...ValidationService.FALLBACK_DISPOSABLE_EMAIL_DOMAINS];
+
+  private readonly emailDomainService = inject(EmailDomainService);
+
+  constructor() {
+    this.hydrateDisposableDomainsFromDatabase();
+  }
 
   // Email regex pattern
   private readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -66,7 +76,7 @@ export class ValidationService {
 
     // Check for disposable email domains
     const emailDomain = trimmedEmail.split('@')[1]?.toLowerCase();
-    if (emailDomain && this.DISPOSABLE_EMAIL_DOMAINS.includes(emailDomain)) {
+    if (emailDomain && this.disposableEmailDomains.includes(emailDomain)) {
       return { 
         isValid: false, 
         errorMessage: 'Please use a valid business or personal email address' 
@@ -100,6 +110,25 @@ export class ValidationService {
    */
   hasAtLeastOneContactMethod(name: string, email: string, phone: string): boolean {
     return !!(name.trim() || email.trim() || phone.trim());
+  }
+
+  /**
+   * Attempt to hydrate the disposable domain list from Supabase.
+   * If anything fails, the service silently falls back to the hardcoded list.
+   */
+  private hydrateDisposableDomainsFromDatabase(): void {
+    this.emailDomainService.getDisposableEmailDomains().subscribe({
+      next: (domains) => {
+        if (Array.isArray(domains) && domains.length > 0) {
+          this.disposableEmailDomains = domains;
+        } else {
+          this.disposableEmailDomains = [...ValidationService.FALLBACK_DISPOSABLE_EMAIL_DOMAINS];
+        }
+      },
+      error: () => {
+        this.disposableEmailDomains = [...ValidationService.FALLBACK_DISPOSABLE_EMAIL_DOMAINS];
+      }
+    });
   }
 }
 

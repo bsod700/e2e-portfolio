@@ -1,0 +1,68 @@
+<div class="email-domains-editor">
+  <div class="header">
+    <h2>Disposable Email Domains</h2>
+    <p class="description">
+      Manage the list of disposable or test email domains that should be blocked by validation.
+    </p>
+  </div>
+
+  <div class="status-messages">
+    @if (error) {
+      <p class="status-message error">{{ error }}</p>
+    }
+    @if (successMessage) {
+      <p class="status-message success">{{ successMessage }}</p>
+    }
+  </div>
+
+  <div class="add-domain-form">
+    <label for="new-domain">Add domain</label>
+    <div class="input-row">
+      <input
+        id="new-domain"
+        type="text"
+        [(ngModel)]="newDomain"
+        [disabled]="saving"
+        placeholder="e.g. tempmail.com"
+      />
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="addDomain()"
+        [disabled]="saving || !newDomain.trim()"
+      >
+        Add
+      </button>
+    </div>
+  </div>
+
+  <div class="domains-list">
+    @if (loading) {
+      <p class="loading">Loading domains...</p>
+    } @else {
+      @if (!domains.length) {
+        <p class="empty-state">
+          No domains in the block list yet. Add domains above to start blocking them.
+        </p>
+      } @else {
+        <ul>
+          @for (domain of domains; track trackByDomain($index, domain)) {
+            <li class="domain-item">
+              <span class="domain">{{ domain }}</span>
+              <button
+                type="button"
+                class="btn-link danger"
+                (click)="deleteDomain(domain)"
+                [disabled]="saving"
+              >
+                Remove
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </div>
+</div>
+
+

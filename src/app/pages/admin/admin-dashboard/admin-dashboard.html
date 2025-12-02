@@ -108,6 +108,13 @@
       </div>
     }
 
+    <!-- Email Validation Section -->
+    @if (activeSection() === 'validation') {
+      <div class="section-content">
+        <app-email-domains-editor></app-email-domains-editor>
+      </div>
+    }
+
     <!-- Settings Section -->
     @if (activeSection() === 'settings') {
       <div class="section-content">

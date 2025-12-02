@@ -14,6 +14,7 @@ import { ProjectsEditorComponent } from './components/projects-editor/projects-e
 import { TestimonialsEditorComponent } from './components/testimonials-editor/testimonials-editor';
 import { FAQEditorComponent } from './components/faq-editor/faq-editor';
 import { LegalPageEditorComponent } from './components/legal-page-editor/legal-page-editor';
+import { EmailDomainsEditorComponent } from './components/email-domains-editor/email-domains-editor';
 import { ConfirmDialogComponent } from '../../../components/ui/confirm-dialog/confirm-dialog';
 
 @Component({
@@ -31,6 +32,7 @@ import { ConfirmDialogComponent } from '../../../components/ui/confirm-dialog/co
     TestimonialsEditorComponent,
     FAQEditorComponent,
     LegalPageEditorComponent,
+    EmailDomainsEditorComponent,
     ConfirmDialogComponent
   ],
   templateUrl: './admin-dashboard.html',

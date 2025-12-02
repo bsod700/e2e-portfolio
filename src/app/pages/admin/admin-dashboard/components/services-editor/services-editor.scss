@@ -261,31 +261,14 @@
 }
 
 .preview-header {
-  margin-bottom: 2rem;
-
-  .preview-kicker {
-    color: var(--color-primary-light);
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+  .kicker {
+    width: fit-content;
   }
-  .preview-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
 
-    span {
-      color: var(--color-text-primary);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-  }
   .preview-title {
     color: var(--color-text-primary);
     font-size: 2rem;

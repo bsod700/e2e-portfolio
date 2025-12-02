@@ -95,42 +95,6 @@
   max-width: 650px;
   margin: 0 auto 64px;
 
-  .kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 16px 4px 10px;
-    border-radius: 6px;
-    background: rgba(209, 75, 59, 0.1);
-    border: 1px solid rgba(209, 75, 59, 0.1);
-    // Heavy backdrop-filter blur can cause scroll jank on many GPUs.
-    // Keeping the translucent background without blur is a better tradeoff.
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 16px;
-    @include respond-to(md) {
-      font-size: 16px;
-    }
-    .badge-icon {
-      display: inline-flex;
-      width: 18px;
-      height: 18px;
-      svg {
-        width: 100%;
-        height: 100%;
-        path {
-          fill: var(--color-text-primary);
-        }
-      }
-    }
-
-    .badge-text {
-      font-weight: 500;
-      white-space: pre;
-    }
-  }
-
   .section-title {
     font-size: 36px;
     font-weight: 500;

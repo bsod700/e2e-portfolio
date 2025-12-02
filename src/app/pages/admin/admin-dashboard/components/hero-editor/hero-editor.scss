@@ -157,25 +157,11 @@
 }
 
 .preview-card {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-
-  .preview-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    margin-bottom: 1.5rem;
-
-    span {
-      color: var(--color-text-primary);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  .kicker {
+    width: fit-content;
   }
 
   .preview-title {
@@ -183,7 +169,6 @@
     font-size: 2.5rem;
     font-weight: 700;
     line-height: 1.2;
-    margin-bottom: 1rem;
   }
 
   .preview-description {

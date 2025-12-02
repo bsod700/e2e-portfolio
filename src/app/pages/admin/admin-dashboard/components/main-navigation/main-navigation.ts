@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-export type MainSection = 'users' | 'content' | 'settings';
+export type MainSection = 'users' | 'content' | 'settings' | 'validation';
 
 export interface NavigationItem {
   id: MainSection;
@@ -23,6 +23,7 @@ export class MainNavigationComponent {
   navigationItems: NavigationItem[] = [
     { id: 'users', label: 'Users', icon: '👥' },
     { id: 'content', label: 'Content', icon: '📄' },
+    { id: 'validation', label: 'Email Validation', icon: '✉️' },
     { id: 'settings', label: 'Settings', icon: '⚙️' }
   ];
 
