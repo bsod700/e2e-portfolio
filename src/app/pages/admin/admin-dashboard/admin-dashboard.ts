@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -35,19 +35,20 @@ import { ConfirmDialogComponent } from '../../../components/ui/confirm-dialog/co
     EmailDomainsEditorComponent,
     ConfirmDialogComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss'
 })
 export class AdminDashboardComponent implements OnInit {
-  private authService = inject(AuthService);
-  private contentService = inject(ContentService);
-  private router = inject(Router);
+  private readonly authService = inject(AuthService);
+  private readonly contentService = inject(ContentService);
+  private readonly router = inject(Router);
 
   // Main navigation
-  activeSection = signal<MainSection>('content');
+  readonly activeSection = signal<MainSection>('content');
 
   // Page and tab management (for Content section)
-  pages: Page[] = [
+  readonly pages: Page[] = [
     { id: 'home', name: 'Home', tabs: ['hero', 'services', 'projects', 'testimonials', 'faq'] as TabType[] },
     { id: 'accessibility-statement', name: 'Accessibility Statement', tabs: [] },
     { id: 'privacy-policy', name: 'Privacy Policy', tabs: [] },
@@ -78,7 +79,7 @@ export class AdminDashboardComponent implements OnInit {
   privacyContent: LegalPageContent | null = null;
   termsContent: LegalPageContent | null = null;
 
-  loading = signal(false);
+  readonly loading = signal(false);
 
   onSectionChange(section: MainSection): void {
     this.activeSection.set(section);
@@ -98,99 +99,18 @@ export class AdminDashboardComponent implements OnInit {
 
   private loadAllContent(): void {
     this.loading.set(true);
-    
-    // Load Hero content
-    this.contentService.getHomePageContent().subscribe({
-      next: (data) => {
-        if (data) {
-          this.content = data;
-        } else {
-          this.content = {
-            badge_text: 'From Vision to Infrastructure',
-            hero_title: 'End-to-End\nDigital Solutions',
-            hero_description: 'I design and build intuitive apps and websites, combining UX, development and AI into seamless user experiences.'
-          };
-        }
-        this.loading.set(false);
-      },
-      error: (error) => {
-        console.error('Error loading hero content:', error);
-        this.loading.set(false);
-      }
-    });
 
-    // Load Home Page Services Section
-    this.contentService.getHomeServicesSection().subscribe({
-      next: (data) => {
-        this.homeServices = data;
-      },
-      error: (error) => {
-        console.error('Error loading home services section:', error);
-      }
-    });
-
-    // Load Projects
-    this.contentService.getProjectsContent().subscribe({
-      next: (data) => {
-        this.projects = data;
-      },
-      error: (error) => {
-        console.error('Error loading projects:', error);
-      }
-    });
-
-    // Load Testimonials
-    this.contentService.getTestimonialsContent().subscribe({
-      next: (data) => {
-        this.testimonials = data;
-      },
-      error: (error) => {
-        console.error('Error loading testimonials:', error);
-      }
-    });
-
-    // Load FAQs
-    this.contentService.getFAQContent().subscribe({
-      next: (data) => {
-        this.faqs = data;
-      },
-      error: (error) => {
-        console.error('Error loading FAQs:', error);
-      }
-    });
-
-    // Load Legal Pages
-    this.contentService.getLegalPageContent('accessibility-statement').subscribe({
-      next: (data) => {
-        this.accessibilityContent = data;
-      },
-      error: (error) => {
-        console.error('Error loading accessibility content:', error);
-      }
-    });
-
-    this.contentService.getLegalPageContent('privacy-policy').subscribe({
-      next: (data) => {
-        this.privacyContent = data;
-      },
-      error: (error) => {
-        console.error('Error loading privacy content:', error);
-      }
-    });
-
-    this.contentService.getLegalPageContent('terms-conditions').subscribe({
-      next: (data) => {
-        this.termsContent = data;
-      },
-      error: (error) => {
-        console.error('Error loading terms content:', error);
-      }
-    });
+    this.loadHeroContent();
+    this.loadHomeServicesSection();
+    this.loadProjects();
+    this.loadTestimonials();
+    this.loadFaqs();
+    this.loadLegalPages();
   }
 
   setActivePage(page: PageType): void {
     this.activePage = page;
-    const pageData = this.pages.find(p => p.id === page);
+    const pageData = this.findPageById(page);
     if (pageData && pageData.tabs.length > 0) {
       this.activeTab = pageData.tabs[0] as TabType;
     }
@@ -265,7 +185,7 @@ export class AdminDashboardComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error reloading legal content:', error);
+          this.logError('Error reloading legal content', error);
         }
       });
     }
@@ -277,5 +197,103 @@ export class AdminDashboardComponent implements OnInit {
 
   async signOut(): Promise<void> {
     await this.authService.signOut();
+  }
+
+  private loadHeroContent(): void {
+    this.contentService.getHomePageContent().subscribe({
+      next: (data) => {
+        this.content = data ?? {
+          badge_text: 'From Vision to Infrastructure',
+          hero_title: 'End-to-End\nDigital Solutions',
+          hero_description: 'I design and build intuitive apps and websites, combining UX, development and AI into seamless user experiences.'
+        };
+        this.loading.set(false);
+      },
+      error: (error) => {
+        this.logError('Error loading hero content', error);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  private loadHomeServicesSection(): void {
+    this.contentService.getHomeServicesSection().subscribe({
+      next: (data) => {
+        this.homeServices = data;
+      },
+      error: (error) => {
+        this.logError('Error loading home services section', error);
+      }
+    });
+  }
+
+  private loadProjects(): void {
+    this.contentService.getProjectsContent().subscribe({
+      next: (data) => {
+        this.projects = data;
+      },
+      error: (error) => {
+        this.logError('Error loading projects', error);
+      }
+    });
+  }
+
+  private loadTestimonials(): void {
+    this.contentService.getTestimonialsContent().subscribe({
+      next: (data) => {
+        this.testimonials = data;
+      },
+      error: (error) => {
+        this.logError('Error loading testimonials', error);
+      }
+    });
+  }
+
+  private loadFaqs(): void {
+    this.contentService.getFAQContent().subscribe({
+      next: (data) => {
+        this.faqs = data;
+      },
+      error: (error) => {
+        this.logError('Error loading FAQs', error);
+      }
+    });
+  }
+
+  private loadLegalPages(): void {
+    this.contentService.getLegalPageContent('accessibility-statement').subscribe({
+      next: (data) => {
+        this.accessibilityContent = data;
+      },
+      error: (error) => {
+        this.logError('Error loading accessibility content', error);
+      }
+    });
+
+    this.contentService.getLegalPageContent('privacy-policy').subscribe({
+      next: (data) => {
+        this.privacyContent = data;
+      },
+      error: (error) => {
+        this.logError('Error loading privacy content', error);
+      }
+    });
+
+    this.contentService.getLegalPageContent('terms-conditions').subscribe({
+      next: (data) => {
+        this.termsContent = data;
+      },
+      error: (error) => {
+        this.logError('Error loading terms content', error);
+      }
+    });
+  }
+
+  private findPageById(id: PageType): Page | undefined {
+    return this.pages.find((page) => page.id === id);
+  }
+
+  private logError(context: string, error: unknown): void {
+    console.error(context, error);
   }
 }

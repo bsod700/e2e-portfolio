@@ -11,11 +11,14 @@ import { AuthService } from '../../../services/auth.service';
   styleUrl: './admin-login.scss'
 })
 export class AdminLoginComponent implements OnInit {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  email = 'guytagger@gmail.com'; // Pre-fill with allowed email
+  // Centralised route configuration to avoid magic strings
+  private readonly adminRoute = ['/admin'];
+
+  email = ''; // Pre-fill with allowed email
   password = '';
   useMagicLink = false;
   loading = false;
@@ -26,7 +29,7 @@ export class AdminLoginComponent implements OnInit {
     // Use effect to reactively handle authentication state changes
     effect(() => {
       if (this.authService.isAuthenticated()) {
-        this.router.navigate(['/admin']);
+        this.router.navigate(this.adminRoute);
       }
     });
   }
@@ -41,7 +44,7 @@ export class AdminLoginComponent implements OnInit {
 
     // Check if user is already authenticated (signals are synchronous)
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/admin']);
+      this.router.navigate(this.adminRoute);
     }
 
     // Also check for auth callback in URL
@@ -50,9 +53,9 @@ export class AdminLoginComponent implements OnInit {
 
   private async checkAuthCallback(): Promise<void> {
     // Small delay to allow auth service to process callback
-    setTimeout(() => {
+    window.setTimeout(() => {
       if (this.authService.isAuthenticated()) {
-        this.router.navigate(['/admin']);
+        this.router.navigate(this.adminRoute);
       }
     }, 500);
   }
@@ -62,23 +65,32 @@ export class AdminLoginComponent implements OnInit {
     this.error = '';
     this.successMessage = '';
 
-    if (this.useMagicLink) {
-      const result = await this.authService.signInWithMagicLink(this.email);
-      if (result.success) {
-        this.successMessage = result.message || 'Magic link sent! Check your email.';
-      } else {
-        this.error = result.error || 'Failed to send magic link';
-      }
-    } else {
-      const result = await this.authService.signInWithEmail(this.email, this.password);
-      if (result.success) {
-        this.router.navigate(['/admin']);
-      } else {
-        this.error = result.error || 'Failed to sign in';
-      }
-    }
+    try {
+      if (this.useMagicLink) {
+        const result = await this.authService.signInWithMagicLink(this.email);
 
-    this.loading = false;
+        if (result.success) {
+          this.successMessage = result.message || 'Magic link sent! Check your email.';
+        } else {
+          this.error = result.error || 'Failed to send magic link';
+        }
+      } else {
+        const result = await this.authService.signInWithEmail(this.email, this.password);
+
+        if (result.success) {
+          this.router.navigate(this.adminRoute);
+        } else {
+          this.error = result.error || 'Failed to sign in';
+        }
+      }
+    } catch (err) {
+      // Fallback error handling for unexpected failures
+      this.error = 'An unexpected error occurred while signing in. Please try again.';
+      // Optionally log the error somewhere (e.g. monitoring service)
+      console.error('AdminLoginComponent.onSubmit error', err);
+    } finally {
+      this.loading = false;
+    }
   }
 
   toggleAuthMethod(): void {
@@ -95,7 +107,7 @@ export class AdminLoginComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       this.successMessage = 'You are signed in! Redirecting...';
       setTimeout(() => {
-        this.router.navigate(['/admin']);
+        this.router.navigate(this.adminRoute);
       }, 500);
     } else {
       this.error = 'You are not signed in. Please use magic link or password to sign in.';
@@ -114,15 +126,20 @@ export class AdminLoginComponent implements OnInit {
     this.error = '';
     this.successMessage = '';
 
-    const result = await this.authService.resetPassword(this.email);
+    try {
+      const result = await this.authService.resetPassword(this.email);
 
-    if (result.success) {
-      this.successMessage = result.message || 'Password reset email sent! Check your email for instructions.';
-    } else {
-      this.error = result.error || 'Failed to send password reset email';
+      if (result.success) {
+        this.successMessage = result.message || 'Password reset email sent! Check your email for instructions.';
+      } else {
+        this.error = result.error || 'Failed to send password reset email';
+      }
+    } catch (err) {
+      this.error = 'An unexpected error occurred while requesting a password reset. Please try again.';
+      console.error('AdminLoginComponent.requestPasswordReset error', err);
+    } finally {
+      this.loading = false;
     }
-
-    this.loading = false;
   }
 }
 

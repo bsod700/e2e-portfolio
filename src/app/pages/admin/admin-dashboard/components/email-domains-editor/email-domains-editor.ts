@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmailDomainService } from '../../../../../services/email-domain.service';
 import { DialogService } from '../../../../../services/dialog.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-email-domains-editor',
@@ -12,10 +14,11 @@ import { DialogService } from '../../../../../services/dialog.service';
   styleUrl: './email-domains-editor.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmailDomainsEditorComponent {
+export class EmailDomainsEditorComponent implements OnInit {
   private readonly emailDomainService = inject(EmailDomainService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly dialogService = inject(DialogService);
+  private readonly destroyRef = inject(DestroyRef);
 
   domains: string[] = [];
   newDomain = '';
@@ -53,19 +56,24 @@ export class EmailDomainsEditorComponent {
     this.loading = true;
     this.error = '';
 
-    this.emailDomainService.getDisposableEmailDomains().subscribe({
-      next: (domains) => {
-        this.domains = domains;
-        this.loading = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error loading disposable email domains:', error);
-        this.error = 'Failed to load disposable email domains.';
-        this.loading = false;
-        this.cdr.markForCheck();
-      }
-    });
+    this.emailDomainService
+      .getDisposableEmailDomains()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.loading = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (domains) => {
+          this.domains = domains;
+        },
+        error: (error) => {
+          console.error('Error loading disposable email domains:', error);
+          this.error = 'Failed to load disposable email domains.';
+        }
+      });
   }
 
   addDomain(): void {
@@ -90,25 +98,30 @@ export class EmailDomainsEditorComponent {
     this.error = '';
     this.successMessage = '';
 
-    this.emailDomainService.addDisposableEmailDomain(trimmed).subscribe({
-      next: (result) => {
-        if (result.success && result.domains) {
-          this.domains = result.domains;
-          this.newDomain = '';
-          this.successMessage = 'Domain added successfully.';
-        } else if (!result.success) {
-          this.error = (result as any).error || 'Failed to add domain.';
+    this.emailDomainService
+      .addDisposableEmailDomain(trimmed)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.saving = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success && result.domains) {
+            this.domains = result.domains;
+            this.newDomain = '';
+            this.successMessage = 'Domain added successfully.';
+          } else if (!result.success) {
+            this.error = (result as any).error || 'Failed to add domain.';
+          }
+        },
+        error: (error) => {
+          console.error('Error adding disposable email domain:', error);
+          this.error = 'Failed to add domain.';
         }
-        this.saving = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error adding disposable email domain:', error);
-        this.error = 'Failed to add domain.';
-        this.saving = false;
-        this.cdr.markForCheck();
-      }
-    });
+      });
   }
 
   saveEdit(originalDomain: string, index: number): void {
@@ -141,25 +154,30 @@ export class EmailDomainsEditorComponent {
     this.error = '';
     this.successMessage = '';
 
-    this.emailDomainService.updateDisposableEmailDomain(originalDomain, trimmed).subscribe({
-      next: (result) => {
-        if (result.success && result.domains) {
-          this.domains = result.domains;
-          this.successMessage = 'Domain updated successfully.';
-          this.cancelEdit();
-        } else if (!result.success) {
-          this.error = (result as any).error || 'Failed to update domain.';
+    this.emailDomainService
+      .updateDisposableEmailDomain(originalDomain, trimmed)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.saving = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success && result.domains) {
+            this.domains = result.domains;
+            this.successMessage = 'Domain updated successfully.';
+            this.cancelEdit();
+          } else if (!result.success) {
+            this.error = (result as any).error || 'Failed to update domain.';
+          }
+        },
+        error: (error) => {
+          console.error('Error updating disposable email domain:', error);
+          this.error = 'Failed to update domain.';
         }
-        this.saving = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error updating disposable email domain:', error);
-        this.error = 'Failed to update domain.';
-        this.saving = false;
-        this.cdr.markForCheck();
-      }
-    });
+      });
   }
 
   async deleteDomain(domain: string): Promise<void> {
@@ -183,24 +201,29 @@ export class EmailDomainsEditorComponent {
     this.error = '';
     this.successMessage = '';
 
-    this.emailDomainService.deleteDisposableEmailDomain(domain).subscribe({
-      next: (result) => {
-        if (result.success && result.domains) {
-          this.domains = result.domains;
-          this.successMessage = 'Domain removed successfully.';
-        } else if (!result.success) {
-          this.error = (result as any).error || 'Failed to remove domain.';
+    this.emailDomainService
+      .deleteDisposableEmailDomain(domain)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => {
+          this.saving = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success && result.domains) {
+            this.domains = result.domains;
+            this.successMessage = 'Domain removed successfully.';
+          } else if (!result.success) {
+            this.error = (result as any).error || 'Failed to remove domain.';
+          }
+        },
+        error: (error) => {
+          console.error('Error deleting disposable email domain:', error);
+          this.error = 'Failed to remove domain.';
         }
-        this.saving = false;
-        this.cdr.markForCheck();
-      },
-      error: (error) => {
-        console.error('Error deleting disposable email domain:', error);
-        this.error = 'Failed to remove domain.';
-        this.saving = false;
-        this.cdr.markForCheck();
-      }
-    });
+      });
   }
 
   trackByDomain(_index: number, domain: string): string {

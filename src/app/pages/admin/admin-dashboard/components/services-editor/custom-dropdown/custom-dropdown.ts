@@ -1,4 +1,14 @@
-import { Component, Input, Output, EventEmitter, HostListener, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface DropdownOption {
@@ -11,7 +21,8 @@ export interface DropdownOption {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './custom-dropdown.html',
-  styleUrl: './custom-dropdown.scss'
+  styleUrl: './custom-dropdown.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomDropdownComponent implements OnChanges, OnInit {
   @Input() options: DropdownOption[] = [];
@@ -20,11 +31,11 @@ export class CustomDropdownComponent implements OnChanges, OnInit {
   @Input() label: string = '';
   @Input() id: string = '';
 
-  @Output() valueChange = new EventEmitter<string>();
+  @Output() readonly valueChange = new EventEmitter<string>();
 
   isOpen = false;
   focusedIndex = -1;
-  internalSelectedValue: string = '';
+  internalSelectedValue = '';
 
   ngOnInit(): void {
     this.internalSelectedValue = this.selectedValue;
@@ -37,86 +48,78 @@ export class CustomDropdownComponent implements OnChanges, OnInit {
   }
 
   get selectedOption(): DropdownOption | undefined {
-    return this.options.find(opt => opt.value === this.internalSelectedValue);
+    return this.options.find((opt) => opt.value === this.internalSelectedValue);
   }
 
   get displayText(): string {
-    return this.selectedOption?.label || this.placeholder;
+    return this.selectedOption?.label ?? this.placeholder;
   }
 
   toggleDropdown(): void {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      this.focusedIndex = this.internalSelectedValue 
-        ? this.options.findIndex(opt => opt.value === this.internalSelectedValue)
+      this.focusedIndex = this.internalSelectedValue
+        ? this.options.findIndex((opt) => opt.value === this.internalSelectedValue)
         : -1;
     }
   }
 
   selectOption(option: DropdownOption, event?: MouseEvent): void {
-    console.log('=== selectOption START ===');
-    console.log('Option received:', option);
-    console.log('Option value:', option.value);
-    console.log('Event received:', event);
-    console.log('Event type:', event?.type);
-    
     if (event) {
       event.stopPropagation();
       event.preventDefault();
-      console.log('Stopped propagation and prevented default');
     }
-    
-    // Immediately update the internal value
+
+    // Avoid unnecessary work and emissions when selecting the same value
+    if (option.value === this.internalSelectedValue) {
+      this.closeDropdown();
+      return;
+    }
+
     this.internalSelectedValue = option.value;
-    console.log('Set internalSelectedValue to:', this.internalSelectedValue);
-    
-    // Emit immediately
-    console.log('About to emit valueChange with:', option.value);
-    console.log('EventEmitter exists?', !!this.valueChange);
-    
-    try {
-      this.valueChange.emit(option.value);
-      console.log('✅ Successfully emitted valueChange event with value:', option.value);
-    } catch (error) {
-      console.error('❌ Error emitting valueChange:', error);
-    }
-    
-    // Close dropdown immediately
-    this.isOpen = false;
-    this.focusedIndex = -1;
-    console.log('Dropdown closed');
-    console.log('=== selectOption END ===');
+    this.valueChange.emit(option.value);
+
+    this.closeDropdown();
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
+    const target = event.target as HTMLElement | null;
     // Don't close if clicking inside the dropdown
-    if (!target.closest('.custom-dropdown')) {
-      this.isOpen = false;
-      this.focusedIndex = -1;
+    if (target && !target.closest('.custom-dropdown')) {
+      this.closeDropdown();
     }
   }
 
   @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    if (!this.isOpen && (event.key === 'Enter' || event.key === ' ' || event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+    if (
+      !this.isOpen &&
+      (event.key === 'Enter' ||
+        event.key === ' ' ||
+        event.key === 'ArrowDown' ||
+        event.key === 'ArrowUp')
+    ) {
       event.preventDefault();
       this.toggleDropdown();
       return;
     }
 
-    if (!this.isOpen) return;
+    if (!this.isOpen) {
+      return;
+    }
 
     switch (event.key) {
       case 'Escape':
         event.preventDefault();
-        this.isOpen = false;
-        this.focusedIndex = -1;
+        this.closeDropdown();
         break;
       case 'ArrowDown':
         event.preventDefault();
-        this.focusedIndex = Math.min(this.focusedIndex + 1, this.options.length - 1);
+        this.focusedIndex = Math.min(
+          this.focusedIndex + 1,
+          this.options.length - 1,
+        );
         this.scrollToFocused();
         break;
       case 'ArrowUp':
@@ -127,7 +130,7 @@ export class CustomDropdownComponent implements OnChanges, OnInit {
       case 'Enter':
         event.preventDefault();
         if (this.focusedIndex >= 0 && this.focusedIndex < this.options.length) {
-          this.selectOption(this.options[this.focusedIndex], undefined);
+          this.selectOption(this.options[this.focusedIndex]);
         }
         break;
       case 'Home':
@@ -140,20 +143,30 @@ export class CustomDropdownComponent implements OnChanges, OnInit {
         this.focusedIndex = this.options.length - 1;
         this.scrollToFocused();
         break;
+      default:
+        break;
     }
-  }
-
-  private scrollToFocused(): void {
-    setTimeout(() => {
-      const focusedElement = document.querySelector(`.custom-dropdown-option[data-index="${this.focusedIndex}"]`);
-      if (focusedElement) {
-        focusedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }, 0);
   }
 
   onOptionMouseEnter(index: number): void {
     this.focusedIndex = index;
+  }
+
+  private closeDropdown(): void {
+    this.isOpen = false;
+    this.focusedIndex = -1;
+  }
+
+  private scrollToFocused(): void {
+    // Defer to the next frame so the DOM has updated before querying
+    requestAnimationFrame(() => {
+      const focusedElement = document.querySelector(
+        `.custom-dropdown-option[data-index="${this.focusedIndex}"]`,
+      );
+      if (focusedElement) {
+        focusedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
   }
 }
 

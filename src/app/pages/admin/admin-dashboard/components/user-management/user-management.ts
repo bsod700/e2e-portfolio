@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserManagementService, AdminUser } from '../../../../../services/user-management.service';
@@ -8,18 +8,19 @@ import { UserManagementService, AdminUser } from '../../../../../services/user-m
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './user-management.html',
-  styleUrl: './user-management.scss'
+  styleUrl: './user-management.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserManagementComponent implements OnInit {
   private readonly userService = inject(UserManagementService);
 
-  users = signal<AdminUser[]>([]);
-  loading = signal(false);
-  error = signal('');
-  successMessage = signal('');
+  readonly users = signal<AdminUser[]>([]);
+  readonly loading = signal(false);
+  readonly error = signal('');
+  readonly successMessage = signal('');
 
   // Form state
-  showAddForm = signal(false);
+  readonly showAddForm = signal(false);
   newUserEmail = '';
   editingUserId: string | null = null;
 
@@ -34,17 +35,22 @@ export class UserManagementComponent implements OnInit {
   async loadUsers(): Promise<void> {
     this.loading.set(true);
     this.error.set('');
-    
-    const { data, error } = await this.userService.getAllUsers();
-    
-    if (error) {
-      this.error.set(error);
-      this.loading.set(false);
-      return;
-    }
 
-    this.users.set(data || []);
-    this.loading.set(false);
+    try {
+      const { data, error } = await this.userService.getAllUsers();
+
+      if (error) {
+        this.error.set(error);
+        return;
+      }
+
+      this.users.set(data ?? []);
+    } catch (err) {
+      console.error('Error loading users', err);
+      this.error.set('An unexpected error occurred while loading users. Please try again.');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   toggleAddForm(): void {
@@ -55,7 +61,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   async addUser(): Promise<void> {
-    if (!this.newUserEmail.trim()) {
+    const email = this.newUserEmail.trim();
+
+    if (!email) {
       this.error.set('Please enter an email address');
       return;
     }
@@ -64,18 +72,23 @@ export class UserManagementComponent implements OnInit {
     this.error.set('');
     this.successMessage.set('');
 
-    const result = await this.userService.addUser(this.newUserEmail.trim());
+    try {
+      const result = await this.userService.addUser(email);
 
-    if (result.success) {
-      this.successMessage.set(result.message || 'User added successfully');
-      this.newUserEmail = '';
-      this.showAddForm.set(false);
-      await this.loadUsers();
-    } else {
-      this.error.set(result.error || 'Failed to add user');
+      if (result.success) {
+        this.successMessage.set(result.message || 'User added successfully');
+        this.newUserEmail = '';
+        this.showAddForm.set(false);
+        await this.loadUsers();
+      } else {
+        this.error.set(result.error || 'Failed to add user');
+      }
+    } catch (err) {
+      console.error('Error adding user', err);
+      this.error.set('An unexpected error occurred while adding the user. Please try again.');
+    } finally {
+      this.loading.set(false);
     }
-
-    this.loading.set(false);
   }
 
   async deleteUser(user: AdminUser): Promise<void> {
@@ -87,16 +100,21 @@ export class UserManagementComponent implements OnInit {
     this.error.set('');
     this.successMessage.set('');
 
-    const result = await this.userService.deleteUser(user.id, user.email);
+    try {
+      const result = await this.userService.deleteUser(user.id, user.email);
 
-    if (result.success) {
-      this.successMessage.set(result.message || 'User deleted successfully');
-      await this.loadUsers();
-    } else {
-      this.error.set(result.error || 'Failed to delete user');
+      if (result.success) {
+        this.successMessage.set(result.message || 'User deleted successfully');
+        await this.loadUsers();
+      } else {
+        this.error.set(result.error || 'Failed to delete user');
+      }
+    } catch (err) {
+      console.error('Error deleting user', err);
+      this.error.set('An unexpected error occurred while deleting the user. Please try again.');
+    } finally {
+      this.loading.set(false);
     }
-
-    this.loading.set(false);
   }
 
   async sendPasswordReset(user: AdminUser): Promise<void> {
@@ -108,15 +126,20 @@ export class UserManagementComponent implements OnInit {
     this.error.set('');
     this.successMessage.set('');
 
-    const result = await this.userService.sendPasswordReset(user.email);
+    try {
+      const result = await this.userService.sendPasswordReset(user.email);
 
-    if (result.success) {
-      this.successMessage.set(result.message || 'Password reset email sent successfully');
-    } else {
-      this.error.set(result.error || 'Failed to send password reset email');
+      if (result.success) {
+        this.successMessage.set(result.message || 'Password reset email sent successfully');
+      } else {
+        this.error.set(result.error || 'Failed to send password reset email');
+      }
+    } catch (err) {
+      console.error('Error sending password reset email', err);
+      this.error.set('An unexpected error occurred while sending the password reset email. Please try again.');
+    } finally {
+      this.loading.set(false);
     }
-
-    this.loading.set(false);
   }
 
   formatDate(dateString?: string): string {

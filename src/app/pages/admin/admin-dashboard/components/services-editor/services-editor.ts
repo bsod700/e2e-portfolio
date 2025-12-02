@@ -1,22 +1,38 @@
-import { Component, Input, Output, EventEmitter, inject, ChangeDetectorRef, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, HomeServiceCard, ServicesSectionHeader } from '../../../../../services/content.service';
 import { CustomDropdownComponent, DropdownOption } from './custom-dropdown/custom-dropdown';
+import { finalize, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-services-editor',
   standalone: true,
   imports: [CommonModule, FormsModule, CustomDropdownComponent],
   templateUrl: './services-editor.html',
-  styleUrl: './services-editor.scss'
+  styleUrl: './services-editor.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesEditorComponent implements OnInit {
-  private contentService = inject(ContentService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly contentService = inject(ContentService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  @Input() homeServices: HomeServiceCard[] = [];
-  @Output() servicesUpdated = new EventEmitter<HomeServiceCard[]>();
+  private _homeServices: HomeServiceCard[] = [];
+
+  @Input()
+  set homeServices(services: HomeServiceCard[]) {
+    this._homeServices = services ?? [];
+    this.dropdownOptions = this._homeServices.map((service) => ({
+      value: service.service_id,
+      label: service.service_id
+    }));
+  }
+
+  get homeServices(): HomeServiceCard[] {
+    return this._homeServices;
+  }
+
+  @Output() readonly servicesUpdated = new EventEmitter<HomeServiceCard[]>();
 
   // Services section header
   servicesHeader: ServicesSectionHeader = {
@@ -28,7 +44,7 @@ export class ServicesEditorComponent implements OnInit {
   headerError = '';
   headerSuccessMessage = '';
 
-  selectedServiceId: string = '';
+  selectedServiceId = '';
   editingHomeService: HomeServiceCard | null = null;
   saving = false;
   error = '';
@@ -39,62 +55,63 @@ export class ServicesEditorComponent implements OnInit {
   }
 
   loadServicesHeader(): void {
-    this.contentService.getServicesSectionHeader().subscribe({
-      next: (header) => {
-        if (header) {
-          this.servicesHeader = header;
+    this.contentService
+      .getServicesSectionHeader()
+      .pipe(take(1))
+      .subscribe({
+        next: (header) => {
+          if (header) {
+            this.servicesHeader = header;
+            this.cdr.markForCheck();
+          }
+        },
+        error: (error) => {
+          // Keep a minimal log for diagnostics without spamming the console
+          console.error('Error loading services section header:', error);
         }
-      },
-      error: (error) => {
-        console.error('Error loading services section header:', error);
-      }
-    });
+      });
   }
 
-  async saveServicesHeader(): Promise<void> {
+  saveServicesHeader(): void {
     this.savingHeader = true;
     this.headerError = '';
     this.headerSuccessMessage = '';
 
-    this.contentService.updateServicesSectionHeader(this.servicesHeader).subscribe({
-      next: (result) => {
-        if (result.success) {
-          this.headerSuccessMessage = 'Services section header saved successfully!';
-          if (result.data) {
-            this.servicesHeader = result.data;
+    this.contentService
+      .updateServicesSectionHeader(this.servicesHeader)
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.savingHeader = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success) {
+            this.headerSuccessMessage = 'Services section header saved successfully!';
+            if (result.data) {
+              this.servicesHeader = result.data;
+            }
+            setTimeout(() => {
+              this.headerSuccessMessage = '';
+              this.cdr.markForCheck();
+            }, 3000);
+          } else {
+            this.headerError = result.error || 'Failed to save header';
           }
-          setTimeout(() => {
-            this.headerSuccessMessage = '';
-          }, 3000);
-        } else {
-          this.headerError = result.error || 'Failed to save header';
+        },
+        error: (error) => {
+          console.error('Error saving services header:', error);
+          this.headerError = 'Failed to save header';
         }
-        this.savingHeader = false;
-      },
-      error: (error) => {
-        console.error('Error saving services header:', error);
-        this.headerError = 'Failed to save header';
-        this.savingHeader = false;
-      }
-    });
+      });
   }
 
-  get dropdownOptions(): DropdownOption[] {
-    return this.homeServices.map(service => ({
-      value: service.service_id,
-      label: service.service_id
-    }));
-  }
+  dropdownOptions: DropdownOption[] = [];
 
   onServiceSelect(value: string): void {
-    console.log('=== onServiceSelect START ===');
-    console.log('Received value:', value);
-    console.log('Type of value:', typeof value);
-    console.log('homeServices array:', this.homeServices);
-    console.log('homeServices length:', this.homeServices.length);
-    
     if (!value || value === '' || !value.trim()) {
-      console.log('Empty value, clearing selection');
       this.selectedServiceId = '';
       this.editingHomeService = null;
       this.cdr.markForCheck();
@@ -102,30 +119,16 @@ export class ServicesEditorComponent implements OnInit {
     }
 
     this.selectedServiceId = value.trim();
-    console.log('Set selectedServiceId to:', this.selectedServiceId);
-    
-    // Try to find the service
-    const service = this.homeServices.find(s => {
-      const match = s.service_id === this.selectedServiceId;
-      console.log(`Comparing: "${s.service_id}" === "${this.selectedServiceId}" = ${match}`);
-      return match;
-    });
-    
-    console.log('Found service:', service);
-    
+
+    const service = this.homeServices.find((s) => s.service_id === this.selectedServiceId);
+
     if (service) {
-      console.log('Setting editingHomeService to:', service);
       this.editingHomeService = { ...service };
-      console.log('editingHomeService is now:', this.editingHomeService);
       this.cdr.markForCheck();
     } else {
-      console.error('Service NOT found!');
-      console.error('Searched for:', this.selectedServiceId);
-      console.error('Available service_ids:', this.homeServices.map(s => `"${s.service_id}"`));
       this.editingHomeService = null;
       this.cdr.markForCheck();
     }
-    console.log('=== onServiceSelect END ===');
   }
 
   cancelEditHomeService(): void {
@@ -133,42 +136,61 @@ export class ServicesEditorComponent implements OnInit {
     this.selectedServiceId = '';
   }
 
-  async saveHomeService(): Promise<void> {
-    if (!this.editingHomeService) return;
+  saveHomeService(): void {
+    if (!this.editingHomeService) {
+      return;
+    }
 
     this.saving = true;
     this.error = '';
     this.successMessage = '';
 
-    this.contentService.updateHomeServiceCard(this.editingHomeService).subscribe({
-      next: (result) => {
-        if (result.success) {
-          this.successMessage = 'Service card saved successfully!';
-          if (result.data) {
-            const index = this.homeServices.findIndex(s => s.service_id === result.data!.service_id);
+    this.contentService
+      .updateHomeServiceCard(this.editingHomeService)
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.saving = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success && result.data) {
+            const updatedService = result.data;
+            const index = this.homeServices.findIndex((s) => s.service_id === updatedService.service_id);
+
             if (index >= 0) {
-              this.homeServices[index] = result.data;
+              this.homeServices[index] = updatedService;
             } else {
-              this.homeServices.push(result.data);
+              this.homeServices = [...this.homeServices, updatedService];
             }
-            this.homeServices.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+
+            this.homeServices = [...this.homeServices].sort(
+              (a, b) => (a.display_order || 0) - (b.display_order || 0)
+            );
+
+            this.dropdownOptions = this.homeServices.map((service) => ({
+              value: service.service_id,
+              label: service.service_id
+            }));
+
             this.servicesUpdated.emit([...this.homeServices]);
+
+            this.successMessage = 'Service card saved successfully!';
+            setTimeout(() => {
+              this.successMessage = '';
+              this.cdr.markForCheck();
+            }, 3000);
+          } else if (!result.success) {
+            this.error = result.error || 'Failed to save service card';
           }
-          // Keep the service selected after save
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
-        } else {
-          this.error = result.error || 'Failed to save service card';
+        },
+        error: (error) => {
+          console.error('Error saving service card:', error);
+          this.error = 'Failed to save service card';
         }
-        this.saving = false;
-      },
-      error: (error) => {
-        console.error('Error saving service card:', error);
-        this.error = 'Failed to save service card';
-        this.saving = false;
-      }
-    });
+      });
   }
 }
 

@@ -1,19 +1,21 @@
-import { Component, Input, Output, EventEmitter, inject, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, ProjectContent } from '../../../../../services/content.service';
 import { CustomDropdownComponent, DropdownOption } from '../services-editor/custom-dropdown/custom-dropdown';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-projects-editor',
   standalone: true,
   imports: [CommonModule, FormsModule, CustomDropdownComponent],
   templateUrl: './projects-editor.html',
-  styleUrl: './projects-editor.scss'
+  styleUrl: './projects-editor.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsEditorComponent {
-  private contentService = inject(ContentService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly contentService = inject(ContentService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Input() projects: ProjectContent[] = [];
   @Output() projectsUpdated = new EventEmitter<ProjectContent[]>();
@@ -33,14 +35,16 @@ export class ProjectsEditorComponent {
   }
 
   onProjectSelect(value: string): void {
-    if (!value || value === '' || !value.trim()) {
+    const cleanedValue = value?.trim() ?? '';
+
+    if (!cleanedValue) {
       this.selectedProjectId = '';
       this.editingProject = null;
       this.cdr.markForCheck();
       return;
     }
 
-    this.selectedProjectId = value.trim();
+    this.selectedProjectId = cleanedValue;
     const project = this.projects.find(p => p.project_id === this.selectedProjectId);
     
     if (project) {
@@ -62,13 +66,16 @@ export class ProjectsEditorComponent {
   }
 
   addServiceTag(): void {
-    if (!this.editingProject || !this.newServiceTag.trim()) return;
+    const tag = this.newServiceTag.trim();
+
+    if (!this.editingProject || !tag) {
+      return;
+    }
     
     if (!this.editingProject.services) {
       this.editingProject.services = [];
     }
     
-    const tag = this.newServiceTag.trim();
     if (!this.editingProject.services.includes(tag)) {
       this.editingProject.services.push(tag);
       this.newServiceTag = '';
@@ -87,42 +94,60 @@ export class ProjectsEditorComponent {
     }
   }
 
-  async saveProject(): Promise<void> {
-    if (!this.editingProject) return;
+  saveProject(): void {
+    if (!this.editingProject || this.saving) {
+      return;
+    }
 
     this.saving = true;
+    this.resetMessages();
+
+    this.contentService
+      .updateProjectContent(this.editingProject)
+      .pipe(
+        finalize(() => {
+          this.saving = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          if (result.success) {
+            this.successMessage = 'Project saved successfully!';
+            if (result.data) {
+              const index = this.projects.findIndex(p => p.project_id === result.data!.project_id);
+              if (index >= 0) {
+                this.projects[index] = result.data;
+              } else {
+                this.projects.push(result.data);
+              }
+              this.sortProjectsInPlace();
+              this.projectsUpdated.emit([...this.projects]);
+            }
+
+            // Clear success message after a short delay
+            setTimeout(() => {
+              this.successMessage = '';
+              this.cdr.markForCheck();
+            }, 3000);
+          } else {
+            this.error = result.error || 'Failed to save project';
+          }
+        },
+        error: (error) => {
+          console.error('Error saving project:', error);
+          this.error = 'Failed to save project';
+        }
+      });
+  }
+
+  private sortProjectsInPlace(): void {
+    this.projects.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+  }
+
+  private resetMessages(): void {
     this.error = '';
     this.successMessage = '';
-
-    this.contentService.updateProjectContent(this.editingProject).subscribe({
-      next: (result) => {
-        if (result.success) {
-          this.successMessage = 'Project saved successfully!';
-          if (result.data) {
-            const index = this.projects.findIndex(p => p.project_id === result.data!.project_id);
-            if (index >= 0) {
-              this.projects[index] = result.data;
-            } else {
-              this.projects.push(result.data);
-            }
-          this.projects.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-          this.projectsUpdated.emit([...this.projects]);
-          }
-          // Keep the project selected after save
-          setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
-        } else {
-          this.error = result.error || 'Failed to save project';
-        }
-        this.saving = false;
-      },
-      error: (error) => {
-        console.error('Error saving project:', error);
-        this.error = 'Failed to save project';
-        this.saving = false;
-      }
-    });
   }
 }
 

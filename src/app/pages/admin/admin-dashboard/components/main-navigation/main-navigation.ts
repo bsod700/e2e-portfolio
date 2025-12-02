@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export type MainSection = 'users' | 'content' | 'settings' | 'validation';
@@ -14,13 +14,14 @@ export interface NavigationItem {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './main-navigation.html',
-  styleUrl: './main-navigation.scss'
+  styleUrl: './main-navigation.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainNavigationComponent {
   @Input() activeSection: MainSection = 'content';
   @Output() sectionChange = new EventEmitter<MainSection>();
 
-  navigationItems: NavigationItem[] = [
+  readonly navigationItems: NavigationItem[] = [
     { id: 'users', label: 'Users', icon: '👥' },
     { id: 'content', label: 'Content', icon: '📄' },
     { id: 'validation', label: 'Email Validation', icon: '✉️' },
