@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ProjectInquiryComponent } from '../../ui';
 import { CommonModule } from '@angular/common';
 
@@ -16,7 +16,8 @@ export interface ProjectThanksData {
   selector: 'app-project-thanks',
   imports: [ProjectInquiryComponent, CommonModule],
   templateUrl: './project-thanks.html',
-  styleUrl: './project-thanks.scss'
+  styleUrl: './project-thanks.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectThanksComponent {
   @Input() projectThanksData: ProjectThanksData = {

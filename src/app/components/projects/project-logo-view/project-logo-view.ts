@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectLogoViewData {
@@ -13,7 +13,8 @@ export interface ProjectLogoViewData {
   selector: 'app-project-logo-view',
   imports: [CommonModule],
   templateUrl: './project-logo-view.html',
-  styleUrl: './project-logo-view.scss'
+  styleUrl: './project-logo-view.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectLogoViewComponent {
   @Input() projectLogoViewData: ProjectLogoViewData = {

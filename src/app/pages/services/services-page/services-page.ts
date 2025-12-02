@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -15,14 +15,16 @@ export interface ServiceDetail {
 
 @Component({
   selector: 'app-services-page',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './services-page.html',
-  styleUrl: './services-page.scss'
+  styleUrl: './services-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesPageComponent {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
-  services: ServiceDetail[] = [
+  readonly services: ReadonlyArray<ServiceDetail> = [
     {
       id: 'development',
       icon: '</>',
@@ -157,7 +159,7 @@ export class FeatureComponent {
     }
   ];
 
-  additionalServices = [
+  readonly additionalServices = [
     {
       icon: '🚀',
       title: 'Performance Optimization',
@@ -204,7 +206,7 @@ export class FeatureComponent {
     }
   ];
 
-  process = [
+  readonly process = [
     {
       number: '01',
       title: 'Discovery & Planning',

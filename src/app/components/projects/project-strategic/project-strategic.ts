@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectNumberCardData, ProjectNumberCardComponent } from '../project-number-card/project-number-card';
 
@@ -13,7 +13,8 @@ export interface ProjectStrategicData {
   selector: 'app-project-strategic',
   imports: [CommonModule, ProjectNumberCardComponent],
   templateUrl: './project-strategic.html',
-  styleUrl: './project-strategic.scss'
+  styleUrl: './project-strategic.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectStrategicComponent {
   @Input() projectStrategicData: ProjectStrategicData = {

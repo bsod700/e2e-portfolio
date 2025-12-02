@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface PersonaAttribute {
@@ -25,7 +25,8 @@ export interface ProjectPersonasData {
   selector: 'app-project-personas',
   imports: [CommonModule],
   templateUrl: './project-personas.html',
-  styleUrl: './project-personas.scss'
+  styleUrl: './project-personas.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectPersonasComponent {
   @Input() projectPersonasData: ProjectPersonasData = {

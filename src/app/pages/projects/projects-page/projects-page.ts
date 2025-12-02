@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ProjectCardComponent, Project } from '../../../components/sections';
 import { ProjectsService } from '../../../services/projects.service';
 import { ContactComponent } from '../../../components/sections';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-projects-page',
@@ -10,27 +11,28 @@ import { ContactComponent } from '../../../components/sections';
     ContactComponent
   ],
   templateUrl: './projects-page.html',
-  styleUrl: './projects-page.scss'
+  styleUrl: './projects-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectsPageComponent implements OnInit {
-  private projectsService = inject(ProjectsService);
-  
-  projects: Project[] = [];
+  private readonly projectsService = inject(ProjectsService);
+
+  // Initialize with default projects first for immediate render
+  projects: Project[] = this.projectsService.getDefaultProjects();
 
   ngOnInit(): void {
-    // Initialize with default projects first for immediate render
-    this.projects = this.projectsService.getDefaultProjects();
-    
     // Then load from service (which may include database updates)
-    this.projectsService.getProjects().subscribe({
-      next: (projects: Project[]) => {
-        this.projects = projects;
-      },
-      error: (error) => {
-        console.error('Error loading projects:', error);
-        // Already have default projects, so continue
-      }
-    });
+    this.projectsService.getProjects()
+      .pipe(take(1))
+      .subscribe({
+        next: (projects: Project[]) => {
+          this.projects = projects;
+        },
+        error: (error: unknown) => {
+          console.error('Error loading projects:', error);
+          // Already have default projects, so continue using them
+        }
+      });
   }
 }
 

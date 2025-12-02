@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import {ProjectNumberCardData, ProjectNumberCardComponent } from '../project-number-card/project-number-card';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +14,8 @@ export interface ProjectProcessData {
   selector: 'app-project-process',
   imports: [ProjectNumberCardComponent, CommonModule],
   templateUrl: './project-process.html',
-  styleUrl: './project-process.scss'
+  styleUrl: './project-process.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectProcessComponent {
   @Input() projectProcessData: ProjectProcessData = {

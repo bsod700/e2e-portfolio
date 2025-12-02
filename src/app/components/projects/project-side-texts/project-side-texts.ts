@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface ProjectSideTextsData {
   titleLeft: string;
@@ -10,7 +10,8 @@ export interface ProjectSideTextsData {
   selector: 'app-project-side-texts',
   imports: [],
   templateUrl: './project-side-texts.html',
-  styleUrl: './project-side-texts.scss'
+  styleUrl: './project-side-texts.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectSideTextsComponent {
   @Input() projectSideTextsData: ProjectSideTextsData = {

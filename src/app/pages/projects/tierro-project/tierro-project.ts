@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   ProjectHeaderComponent,
   ProjectHeaderData,
@@ -60,31 +60,8 @@ export interface ProjectData {
   lessonLearnedData: ProjectSideImgCardsData;
   thanksData: ProjectThanksData;
 }
-@Component({
-  selector: 'app-tierro-project',
-  imports: [
-    ProjectHeaderComponent,
-    CommonModule,
-    ProjectStacksComponent,
-    ProjectSideTextsComponent,
-    ProjectNutshellComponent,
-    ProjectStrategicComponent,
-    ProjectProcessComponent,
-    ProjectSideImgCardsComponent,
-    ProjectAudienceComponent,
-    ProjectPersonasComponent,
-    ProjectLogoViewComponent,
-    ProjectStyleGuideComponent,
-    ProjectDesignSystemComponent,
-    ProjectSideImgTextComponent,
-    TableOfContentsComponent,
-    ProjectThanksComponent,
-  ],
-  templateUrl: './tierro-project.html',
-  styleUrl: './tierro-project.scss',
-})
-export class TierroProjectComponent {
-  tocSections: TocSection[] = [
+
+const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
     { id: 'header', title: 'Overview' },
     { id: 'stacks', title: 'Tech Stack' },
     { id: 'role-impact', title: 'Role & Impact' },
@@ -103,9 +80,9 @@ export class TierroProjectComponent {
     { id: 'admin-screens', title: 'Admin Screens' },
     { id: 'lessons-learned', title: 'Lessons Learned' },
     { id: 'thanks', title: 'Thanks For Watching!' },
-  ];
+];
 
-  projectData: ProjectData = {
+const TIERRO_PROJECT_DATA = {
     headerData: {
       name: 'tierro',
       title: 'Building a Custom Music Platform from Scratch',
@@ -706,5 +683,34 @@ export class TierroProjectComponent {
         ''
       ],
     }
-  };
+  } as const satisfies ProjectData;
+
+@Component({
+  selector: 'app-tierro-project',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    ProjectHeaderComponent,
+    CommonModule,
+    ProjectStacksComponent,
+    ProjectSideTextsComponent,
+    ProjectNutshellComponent,
+    ProjectStrategicComponent,
+    ProjectProcessComponent,
+    ProjectSideImgCardsComponent,
+    ProjectAudienceComponent,
+    ProjectPersonasComponent,
+    ProjectLogoViewComponent,
+    ProjectStyleGuideComponent,
+    ProjectDesignSystemComponent,
+    ProjectSideImgTextComponent,
+    TableOfContentsComponent,
+    ProjectThanksComponent,
+  ],
+  templateUrl: './tierro-project.html',
+  styleUrl: './tierro-project.scss',
+})
+export class TierroProjectComponent {
+  readonly tocSections: TocSection[] = [...TIERRO_TOC_SECTIONS];
+  readonly projectData: ProjectData = TIERRO_PROJECT_DATA;
 }

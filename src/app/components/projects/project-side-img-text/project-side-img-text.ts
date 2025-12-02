@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectSideImgTextData {
@@ -14,7 +14,8 @@ export interface ProjectSideImgTextData {
   selector: 'app-project-side-img-text',
   imports: [CommonModule],
   templateUrl: './project-side-img-text.html',
-  styleUrl: './project-side-img-text.scss'
+  styleUrl: './project-side-img-text.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectSideImgTextComponent {
   @Input() projectSideImgTextData: ProjectSideImgTextData = {

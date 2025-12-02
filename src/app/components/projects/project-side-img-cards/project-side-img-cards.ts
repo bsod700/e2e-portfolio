@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectSideImgCardsData {
@@ -20,7 +20,8 @@ export interface ProjectSideImgCardsData {
   selector: 'app-project-side-img-cards',
   imports: [CommonModule],
   templateUrl: './project-side-img-cards.html',
-  styleUrl: './project-side-img-cards.scss'
+  styleUrl: './project-side-img-cards.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectSideImgCardsComponent {
   @Input() projectSideImgCardsData: ProjectSideImgCardsData = {

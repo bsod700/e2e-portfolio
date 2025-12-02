@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../components/layout';
 
@@ -9,7 +9,8 @@ import { NavbarComponent } from '../../components/layout';
     RouterLink
   ],
   templateUrl: './sitemap-page.html',
-  styleUrl: './sitemap-page.scss'
+  styleUrl: './sitemap-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SitemapPageComponent {
   currentYear = new Date().getFullYear();

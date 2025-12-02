@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectAudienceData {
@@ -24,7 +24,8 @@ export interface ProjectAudienceData {
   selector: 'app-project-audience',
   imports: [CommonModule],
   templateUrl: './project-audience.html',
-  styleUrl: './project-audience.scss'
+  styleUrl: './project-audience.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectAudienceComponent {
   @Input() projectAudienceData: ProjectAudienceData = {

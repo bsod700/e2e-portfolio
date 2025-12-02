@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CtaButtonComponent } from '../../ui';
 import { CtaButtonData } from '../../ui/cta-button/cta-button';
@@ -20,7 +20,8 @@ export interface ProjectHeaderData {
   selector: 'app-project-header',
   imports: [CommonModule, CtaButtonComponent],
   templateUrl: './project-header.html',
-  styleUrl: './project-header.scss'
+  styleUrl: './project-header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectHeaderComponent {
   @Input() projectHeaderData: ProjectHeaderData = {

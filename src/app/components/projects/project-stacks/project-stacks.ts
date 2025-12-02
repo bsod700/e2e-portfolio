@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 export interface ProjectStacksData {
   services: {
@@ -16,7 +16,8 @@ export interface ProjectStacksData {
   selector: 'app-project-stacks',
   imports: [CommonModule],
   templateUrl: './project-stacks.html',
-  styleUrl: './project-stacks.scss'
+  styleUrl: './project-stacks.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectStacksComponent {
   @Input() projectStacksData: ProjectStacksData = {

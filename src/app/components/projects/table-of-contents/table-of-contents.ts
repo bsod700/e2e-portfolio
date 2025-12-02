@@ -1,4 +1,16 @@
-import { Component, Input, OnInit, OnDestroy, signal, effect, PLATFORM_ID, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+  signal,
+  effect,
+  PLATFORM_ID,
+  inject,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 export interface TocSection {
@@ -11,24 +23,51 @@ export interface TocSection {
   imports: [CommonModule],
   templateUrl: './table-of-contents.html',
   styleUrl: './table-of-contents.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableOfContentsComponent implements OnInit, OnDestroy {
+export class TableOfContentsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() sections: TocSection[] = [];
-  
-  isOpen = signal(false);
-  activeSection = signal('');
-  isDragging = signal(false);
-  position = signal({ x: 0, y: 50 }); // Position in percentage (x: 0 = left, y: 50 = middle)
-  isOnRightSide = signal(false); // Track which side of screen we're on
+
+  /**
+   * Whether the TOC menu is currently open.
+   */
+  readonly isOpen = signal(false);
+
+  /**
+   * Id of the currently visible section.
+   */
+  readonly activeSection = signal('');
+
+  /**
+   * Whether a drag interaction is currently in progress.
+   */
+  readonly isDragging = signal(false);
+
+  /**
+   * Menu position in viewport percentage.
+   * x: 0 = left, 100 = right; y: 0 = top, 100 = bottom.
+   */
+  readonly position = signal<{ x: number; y: number }>({ x: 0, y: 50 });
+
+  /**
+   * Track on which side of the screen the menu is currently snapped.
+   */
+  readonly isOnRightSide = signal(false);
+
+  private static readonly MIN_DRAG_DISTANCE_PX = 5;
+  private static readonly OBSERVER_ROOT_MARGIN = '-20% 0px -60% 0px';
+  private static readonly OBSERVER_THRESHOLD = 0;
+  private static readonly DOM_READY_TIMEOUT_MS = 100;
 
   private observer?: IntersectionObserver;
   private startX = 0;
   private startY = 0;
   private currentX = 0;
   private currentY = 0;
-  private initialPosition = { x: 0, y: 50 };
-  private platformId = inject(PLATFORM_ID);
-  private isBrowser = isPlatformBrowser(this.platformId);
+  private initialPosition: { x: number; y: number } = { x: 0, y: 50 };
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private pendingRafId: number | null = null;
 
   constructor() {
     // Auto-scroll active item into view when activeSection changes
@@ -44,14 +83,25 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
     this.setupIntersectionObserver();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    // Re-attach observer if the list of sections changes
+    if (changes['sections'] && !changes['sections'].firstChange) {
+      this.reObserveSections();
+    }
+  }
+
   ngOnDestroy() {
     if (this.observer) {
       this.observer.disconnect();
     }
+
+    if (this.pendingRafId !== null && this.isBrowser) {
+      cancelAnimationFrame(this.pendingRafId);
+    }
   }
 
   toggleMenu() {
-    this.isOpen.update(value => !value);
+    this.isOpen.update((value) => !value);
   }
 
   scrollToSection(sectionId: string) {
@@ -73,30 +123,34 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
     if (!this.isBrowser) {
       return;
     }
-    
+
     // Small delay to ensure DOM is ready
     setTimeout(() => {
-      const tocMenu = document.querySelector('.toc-menu');
-      const activeButton = document.querySelector(`.toc-link[data-section-id="${sectionId}"]`);
-      
-      if (tocMenu && activeButton) {
-        const menuRect = tocMenu.getBoundingClientRect();
-        const buttonRect = activeButton.getBoundingClientRect();
-        
-        // Check if button is outside visible area of menu
-        const isAboveView = buttonRect.top < menuRect.top;
-        const isBelowView = buttonRect.bottom > menuRect.bottom;
-        
-        if (isAboveView || isBelowView) {
-          // Scroll the button into view within the menu
-          activeButton.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'nearest'
-          });
-        }
+      const tocMenu = document.querySelector<HTMLElement>('.toc-menu');
+      const activeButton = document.querySelector<HTMLElement>(
+        `.toc-link[data-section-id="${sectionId}"]`,
+      );
+
+      if (!tocMenu || !activeButton) {
+        return;
       }
-    }, 100);
+
+      const menuRect = tocMenu.getBoundingClientRect();
+      const buttonRect = activeButton.getBoundingClientRect();
+
+      // Check if button is outside visible area of menu
+      const isAboveView = buttonRect.top < menuRect.top;
+      const isBelowView = buttonRect.bottom > menuRect.bottom;
+
+      if (isAboveView || isBelowView) {
+        // Scroll the button into view within the menu
+        activeButton.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest',
+        });
+      }
+    }, TableOfContentsComponent.DOM_READY_TIMEOUT_MS);
   }
 
   onDragStart(event: MouseEvent | TouchEvent) {
@@ -109,53 +163,74 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
   }
 
   onDrag(event: MouseEvent | TouchEvent) {
-    if (!this.isDragging() || !this.isBrowser) return;
-    
+    if (!this.isDragging() || !this.isBrowser) {
+      return;
+    }
+
     this.currentX = this.getClientX(event);
     this.currentY = this.getClientY(event);
     const diffX = this.currentX - this.startX;
     const diffY = this.currentY - this.startY;
-    
-    // Only start dragging if moved more than 5px (to distinguish from clicks)
-    if (Math.abs(diffX) < 5 && Math.abs(diffY) < 5) return;
-    
+
+    // Only start dragging if moved more than minimal distance (to distinguish from clicks)
+    if (
+      Math.abs(diffX) < TableOfContentsComponent.MIN_DRAG_DISTANCE_PX &&
+      Math.abs(diffY) < TableOfContentsComponent.MIN_DRAG_DISTANCE_PX
+    ) {
+      return;
+    }
+
     // Prevent default only when actually dragging
     event.preventDefault();
-    
-    // Calculate new position in percentage
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    
-    const deltaXPercent = (diffX / viewportWidth) * 100;
-    const deltaYPercent = (diffY / viewportHeight) * 100;
-    
-    const newX = Math.max(0, Math.min(100, this.initialPosition.x + deltaXPercent));
-    const newY = Math.max(0, Math.min(100, this.initialPosition.y + deltaYPercent));
-    
-    this.position.set({ x: newX, y: newY });
+
+    // Throttle updates using requestAnimationFrame to avoid layout thrash
+    if (this.pendingRafId !== null) {
+      return;
+    }
+
+    this.pendingRafId = requestAnimationFrame(() => {
+      this.pendingRafId = null;
+
+      // Calculate new position in percentage
+      const viewportWidth = window.innerWidth || 1;
+      const viewportHeight = window.innerHeight || 1;
+
+      const deltaXPercent = (diffX / viewportWidth) * 100;
+      const deltaYPercent = (diffY / viewportHeight) * 100;
+
+      const newX = Math.max(0, Math.min(100, this.initialPosition.x + deltaXPercent));
+      const newY = Math.max(0, Math.min(100, this.initialPosition.y + deltaYPercent));
+
+      this.position.set({ x: newX, y: newY });
+    });
   }
 
   onDragEnd() {
-    if (!this.isDragging()) return;
-    
+    if (!this.isDragging()) {
+      return;
+    }
+
     const diffX = this.currentX - this.startX;
     const diffY = this.currentY - this.startY;
-    
+
     // If barely moved, treat as click (not drag)
-    if (Math.abs(diffX) < 5 && Math.abs(diffY) < 5) {
+    if (
+      Math.abs(diffX) < TableOfContentsComponent.MIN_DRAG_DISTANCE_PX &&
+      Math.abs(diffY) < TableOfContentsComponent.MIN_DRAG_DISTANCE_PX
+    ) {
       this.isDragging.set(false);
       return;
     }
-    
+
     // Snap to left or right side based on current position
     const currentPos = this.position();
     const snapToRight = currentPos.x > 50;
-    
+
     this.position.set({
       x: snapToRight ? 100 : 0,
-      y: currentPos.y
+      y: currentPos.y,
     });
-    
+
     this.isOnRightSide.set(snapToRight);
     this.isDragging.set(false);
   }
@@ -171,9 +246,9 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
   private getClientY(event: MouseEvent | TouchEvent): number {
     if (event instanceof MouseEvent) {
       return event.clientY;
-    } else {
-      return event.touches[0]?.clientY || 0;
     }
+
+    return event.touches[0]?.clientY || 0;
   }
 
   private setupIntersectionObserver() {
@@ -184,9 +259,11 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
 
     const options = {
       root: null,
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0,
+      rootMargin: TableOfContentsComponent.OBSERVER_ROOT_MARGIN,
+      threshold: TableOfContentsComponent.OBSERVER_THRESHOLD,
     };
+
+    this.observer?.disconnect();
 
     this.observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -197,14 +274,29 @@ export class TableOfContentsComponent implements OnInit, OnDestroy {
     }, options);
 
     // Observe all sections
-    setTimeout(() => {
-      this.sections.forEach((section) => {
-        const element = document.getElementById(section.id);
-        if (element && this.observer) {
-          this.observer.observe(element);
-        }
-      });
-    }, 100);
+    setTimeout(() => this.observeSections(), TableOfContentsComponent.DOM_READY_TIMEOUT_MS);
+  }
+
+  private observeSections(): void {
+    if (!this.observer || !this.isBrowser) {
+      return;
+    }
+
+    this.sections.forEach((section) => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        this.observer!.observe(element);
+      }
+    });
+  }
+
+  private reObserveSections(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    this.observer?.disconnect();
+    this.setupIntersectionObserver();
   }
 }
 

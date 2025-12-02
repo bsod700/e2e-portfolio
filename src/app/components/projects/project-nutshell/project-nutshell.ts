@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 export interface ProjectNutshellData {
   title: string;
@@ -9,7 +9,8 @@ export interface ProjectNutshellData {
   selector: 'app-project-nutshell',
   imports: [],
   templateUrl: './project-nutshell.html',
-  styleUrl: './project-nutshell.scss'
+  styleUrl: './project-nutshell.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectNutshellComponent {
   @Input() projectNutshellData: ProjectNutshellData = {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface ProjectDesignSystemData {
@@ -15,9 +15,12 @@ export interface ProjectDesignSystemData {
   selector: 'app-project-design-system',
   imports: [CommonModule],
   templateUrl: './project-design-system.html',
-  styleUrl: './project-design-system.scss'
+  styleUrl: './project-design-system.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectDesignSystemComponent {
+  private readonly swipeThreshold = 15; // percentage
+
   @Input() projectDesignSystemData: ProjectDesignSystemData = {
     projectName: '',
     title: '',
@@ -28,24 +31,24 @@ export class ProjectDesignSystemComponent {
 
   // Carousel state
   currentSlide = 0;
-  itemsPerView = 3;
-  isDragging = false;
-  startX = 0;
-  currentTranslate = 0;
-  prevTranslate = 0;
+  readonly itemsPerView = 3;
+  private isDragging = false;
+  private startX = 0;
+  private currentTranslate = 0;
+  private prevTranslate = 0;
 
   // Overlay state
   isOverlayOpen = false;
   overlayImageIndex = 0;
   zoomLevel = 1;
-  minZoom = 1;
-  maxZoom = 3;
-  zoomStep = 0.5;
+  readonly minZoom = 1;
+  readonly maxZoom = 3;
+  readonly zoomStep = 0.5;
   
   // Pan/drag state for zoomed image
-  isPanning = false;
-  panStartX = 0;
-  panStartY = 0;
+  private isPanning = false;
+  private panStartX = 0;
+  private panStartY = 0;
   panX = 0;
   panY = 0;
   currentPanX = 0;
@@ -111,10 +114,10 @@ export class ProjectDesignSystemComponent {
     
     const movedBy = this.currentTranslate - this.prevTranslate;
     
-    // Swipe threshold: 15%
-    if (movedBy < -15 && this.canGoNext) {
+    // Swipe threshold: percentage of slide width
+    if (movedBy < -this.swipeThreshold && this.canGoNext) {
       this.nextSlide();
-    } else if (movedBy > 15 && this.canGoPrev) {
+    } else if (movedBy > this.swipeThreshold && this.canGoPrev) {
       this.prevSlide();
     }
     
@@ -128,14 +131,18 @@ export class ProjectDesignSystemComponent {
     this.isOverlayOpen = true;
     this.zoomLevel = 1;
     this.resetPan();
-    document.body.style.overflow = 'hidden';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   closeOverlay(): void {
     this.isOverlayOpen = false;
     this.zoomLevel = 1;
     this.resetPan();
-    document.body.style.overflow = '';
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
   }
 
   nextOverlayImage(): void {
@@ -236,6 +243,7 @@ export class ProjectDesignSystemComponent {
     }
   }
 
+  @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (!this.isOverlayOpen) return;
 

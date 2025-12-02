@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Input } from '@angular/core';
 
@@ -21,7 +21,8 @@ export interface ProjectStyleGuideData {
   selector: 'app-project-style-guide',
   imports: [CommonModule],
   templateUrl: './project-style-guide.html',
-  styleUrl: './project-style-guide.scss'
+  styleUrl: './project-style-guide.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectStyleGuideComponent {
   @Input() projectStyleGuideData: ProjectStyleGuideData = {
