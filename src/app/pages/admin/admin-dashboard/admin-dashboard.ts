@@ -14,6 +14,7 @@ import { ProjectsEditorComponent } from './components/projects-editor/projects-e
 import { TestimonialsEditorComponent } from './components/testimonials-editor/testimonials-editor';
 import { FAQEditorComponent } from './components/faq-editor/faq-editor';
 import { LegalPageEditorComponent } from './components/legal-page-editor/legal-page-editor';
+import { ConfirmDialogComponent } from '../../../components/ui/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -29,7 +30,8 @@ import { LegalPageEditorComponent } from './components/legal-page-editor/legal-p
     ProjectsEditorComponent,
     TestimonialsEditorComponent,
     FAQEditorComponent,
-    LegalPageEditorComponent
+    LegalPageEditorComponent,
+    ConfirmDialogComponent
   ],
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.scss'

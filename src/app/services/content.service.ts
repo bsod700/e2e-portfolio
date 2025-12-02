@@ -667,31 +667,70 @@ export class ContentService {
           return of({ success: true, data: pageData as LegalPageContent });
         }
 
-        // Update sections
+        // Update sections and remove any that were deleted
         const sectionUpdates = sections.map((section, index) => ({
           ...section,
           page_id: pageData.id,
           display_order: section.display_order ?? index
         }));
 
-        return from(
-          client
+        return from((async () => {
+          // Upsert current sections
+          const { data: upsertedSections, error: sectionsError } = await client
             .from('legal_page_sections')
             .upsert(sectionUpdates, {
               onConflict: 'id'
             })
-            .select()
-        ).pipe(
-          map(({ data: sectionsData, error: sectionsError }) => {
-            if (sectionsError) {
-              return { success: false, error: sectionsError.message };
+            .select();
+
+          if (sectionsError) {
+            return { success: false, error: sectionsError.message };
+          }
+
+          // Determine which IDs should remain
+          const idsToKeep = (sectionUpdates
+            .map(s => (s as any).id)
+            .filter((id: unknown): id is string | number => !!id));
+
+          // Delete sections that are no longer present
+          if (idsToKeep.length > 0) {
+            const { error: deleteError } = await client
+              .from('legal_page_sections')
+              .delete()
+              .eq('page_id', pageData.id)
+              .not('id', 'in', `(${idsToKeep.join(',')})`);
+
+            if (deleteError) {
+              return { success: false, error: deleteError.message };
             }
-            return { 
-              success: true, 
-              data: { ...pageData, sections: sectionsData || [] } as LegalPageContent 
-            };
-          })
-        );
+          } else {
+            // If no sections left, remove all for this page
+            const { error: deleteError } = await client
+              .from('legal_page_sections')
+              .delete()
+              .eq('page_id', pageData.id);
+
+            if (deleteError) {
+              return { success: false, error: deleteError.message };
+            }
+          }
+
+          // Fetch final sections list for this page, ordered
+          const { data: finalSections, error: finalError } = await client
+            .from('legal_page_sections')
+            .select('*')
+            .eq('page_id', pageData.id)
+            .order('display_order', { ascending: true });
+
+          if (finalError) {
+            return { success: false, error: finalError.message };
+          }
+
+          return {
+            success: true,
+            data: { ...pageData, sections: finalSections || [] } as LegalPageContent
+          };
+        })());
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
     );

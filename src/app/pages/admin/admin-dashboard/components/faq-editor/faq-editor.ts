@@ -1,25 +1,27 @@
-import { Component, Input, Output, EventEmitter, inject, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, FAQContent } from '../../../../../services/content.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-faq-editor',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './faq-editor.html',
-  styleUrl: './faq-editor.scss'
+  styleUrl: './faq-editor.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FAQEditorComponent {
-  private contentService = inject(ContentService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly contentService = inject(ContentService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   @Input() faqs: FAQContent[] = [];
   @Output() faqsUpdated = new EventEmitter<FAQContent[]>();
 
-  editingFAQIds: Set<string> = new Set();
-  savingIds: Set<string> = new Set();
-  deletingIds: Set<string> = new Set();
+  readonly editingFAQIds = new Set<string>();
+  readonly savingIds = new Set<string>();
+  readonly deletingIds = new Set<string>();
   error = '';
   successMessage = '';
   draggedIndex: number | null = null;
@@ -53,7 +55,7 @@ export class FAQEditorComponent {
     }
   }
 
-  async saveFAQ(faq: FAQContent): Promise<void> {
+  saveFAQ(faq: FAQContent): void {
     if (!faq.id) return;
 
     const faqId = faq.id; // Store in constant for type narrowing
@@ -94,7 +96,7 @@ export class FAQEditorComponent {
     });
   }
 
-  async deleteFAQ(faq: FAQContent): Promise<void> {
+  deleteFAQ(faq: FAQContent): void {
     if (!faq.id || !confirm('Are you sure you want to delete this FAQ?')) {
       return;
     }
@@ -224,36 +226,42 @@ export class FAQEditorComponent {
     this.cdr.markForCheck();
   }
 
-  private async saveAllFAQs(faqs: FAQContent[]): Promise<void> {
-    // Save all FAQs to update their display_order
-    const savePromises = faqs.map(faq => {
-      return new Promise<void>((resolve) => {
-        this.contentService.updateFAQContent(faq).subscribe({
-          next: (result) => {
-            if (result.success && result.data) {
-              const index = this.faqs.findIndex(f => f.id === result.data!.id);
-              if (index >= 0) {
-                this.faqs[index] = result.data;
-              }
-            }
-            resolve();
-          },
-          error: () => resolve() // Continue even if one fails
-        });
-      });
-    });
+  private saveAllFAQs(faqs: FAQContent[]): void {
+    const updateRequests = faqs.map(faq => this.contentService.updateFAQContent(faq));
 
-    await Promise.all(savePromises);
-    this.faqs.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-    this.faqsUpdated.emit([...this.faqs]);
-    this.cdr.markForCheck();
+    if (!updateRequests.length) {
+      return;
+    }
+
+    forkJoin(updateRequests).subscribe({
+      next: (results) => {
+        results.forEach((result) => {
+          if (result.success && result.data) {
+            const index = this.faqs.findIndex(f => f.id === result.data!.id);
+            if (index >= 0) {
+              this.faqs[index] = result.data;
+            }
+          }
+        });
+
+        this.faqs.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+        this.faqsUpdated.emit([...this.faqs]);
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Error saving FAQs:', error);
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   private updateDisplayOrders(): void {
-    this.sortedFAQs.forEach((faq, index) => {
+    const sorted = this.sortedFAQs;
+
+    sorted.forEach((faq, index) => {
       faq.display_order = index;
     });
-    this.saveAllFAQs(this.sortedFAQs);
+    this.saveAllFAQs(sorted);
   }
 }
 

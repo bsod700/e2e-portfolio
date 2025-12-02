@@ -1,0 +1,31 @@
+@if (dialog.isOpen()) {
+  <div class="confirm-dialog-backdrop" aria-modal="true" role="dialog">
+    <div class="confirm-dialog" role="document">
+      <h3 class="confirm-dialog__title">
+        {{ dialog.config()?.title || 'Are you sure?' }}
+      </h3>
+      <p class="confirm-dialog__message">
+        {{ dialog.config()?.message }}
+      </p>
+      <div class="confirm-dialog__actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="onCancel()"
+        >
+          {{ dialog.config()?.cancelLabel || 'Cancel' }}
+        </button>
+        <button
+          type="button"
+          class="btn-primary"
+          [class.btn-danger]="dialog.config()?.variant === 'danger'"
+          (click)="onConfirm()"
+        >
+          {{ dialog.config()?.confirmLabel || 'Confirm' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+

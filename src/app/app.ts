@@ -5,12 +5,7 @@ import { ContactModalComponent } from './components/ui';
 
 @Component({
   selector: 'app-root',
-  imports: [
-    RouterOutlet,
-    NavbarComponent,
-    FooterComponent,
-    ContactModalComponent
-  ],
+  imports: [RouterOutlet, NavbarComponent, FooterComponent, ContactModalComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

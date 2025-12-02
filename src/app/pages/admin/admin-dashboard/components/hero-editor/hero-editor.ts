@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, HomePageContent } from '../../../../../services/content.service';
@@ -8,10 +8,11 @@ import { ContentService, HomePageContent } from '../../../../../services/content
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './hero-editor.html',
-  styleUrl: './hero-editor.scss'
+  styleUrl: './hero-editor.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeroEditorComponent {
-  private contentService = inject(ContentService);
+  private readonly contentService = inject(ContentService);
 
   @Input() content: HomePageContent = {
     badge_text: '',
@@ -26,10 +27,10 @@ export class HeroEditorComponent {
   successMessage = '';
 
   previewTitle(): string {
-    return this.content.hero_title.replace(/\n/g, '<br>');
+    return (this.content.hero_title || '').replace(/\n/g, '<br>');
   }
 
-  async saveContent(): Promise<void> {
+  saveContent(): void {
     this.saving = true;
     this.error = '';
     this.successMessage = '';

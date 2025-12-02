@@ -13,7 +13,7 @@
     @if (sections.length > 0) {
       <div class="sections-list">
         @for (section of sections; track section.id || $index) {
-          <div class="section-card-wrapper">
+          <div class="section-card-wrapper" #sectionCard>
             <!-- Section Card -->
             <div class="section-card" [class.editing]="isEditing($index)">
               <div class="section-card-header">
@@ -116,6 +116,7 @@
                         <input
                           type="text"
                           [(ngModel)]="newListItem"
+                          name="new_list_item_{{$index}}"
                           (keyup.enter)="addLegalListItem()"
                           placeholder="Add list item and press Enter"
                           class="form-input"
