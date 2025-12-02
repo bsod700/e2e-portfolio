@@ -3,7 +3,7 @@
 .testimonials {
   background: var(--color-bg-primary);
   position: relative;
-  padding: 64px 0 0;
+  padding: 64px 0 80px;
   overflow: hidden; 
 
   .background {
@@ -25,6 +25,9 @@
       background-size: 200px 200px;
       opacity: 0.6;
     }
+  }
+  .container {
+    margin-bottom: 24px;
   }
 }
 
@@ -82,7 +85,6 @@
   &:hover {
     background: var(--color-primary);
     border-color: var(--color-primary);
-    transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
   }
 
@@ -114,7 +116,6 @@
   flex-direction: column;
   gap: 16px;
   position: relative;
-  padding: 24px 0 80px;
   max-width: 2000px;
   margin: 0 auto;
   
@@ -216,9 +217,8 @@
   background: #080C1A;
   // Simplified shadow to reduce paint/compositing cost during scroll.
   box-shadow: 0 24px 40px rgba(0, 0, 0, 0.45);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
   &:hover {
-    transform: translateY(-5px);
     border-color: rgba(102, 126, 234, 0.3);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   }

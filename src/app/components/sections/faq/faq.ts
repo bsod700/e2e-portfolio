@@ -205,19 +205,10 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
     const wasOpen = clickedFaq.isOpen;
     
     // Close all FAQs first
-    const updatedFaqs = currentFaqs.map((faq, i) => {
-      const updatedFaq = { ...faq, isOpen: false };
-      
-      // Close height immediately for visual feedback
-      if (i !== index && this.detailsWrappers) {
-        const wrapper = this.detailsWrappers.get(i);
-        if (wrapper) {
-          wrapper.nativeElement.style.height = '0px';
-        }
-      }
-      
-      return updatedFaq;
-    });
+    const updatedFaqs = currentFaqs.map((faq) => ({
+      ...faq,
+      isOpen: false
+    }));
     
     // If the clicked FAQ wasn't open, open it now (accordion behavior)
     if (!wasOpen) {
@@ -226,37 +217,8 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._faqs.set(updatedFaqs);
     this.cdr.markForCheck();
-    
-    // Measure and set height after DOM update
-    if (!wasOpen && this.detailsWrappers) {
-      // Only use requestAnimationFrame in browser environment
-      if (!isPlatformBrowser(this.platformId)) {
-        // In SSR, update height directly
-        const wrapper = this.detailsWrappers.get(index);
-        if (wrapper) {
-          const details = wrapper.nativeElement.querySelector('.faq-details') as HTMLElement;
-          if (details) {
-            wrapper.nativeElement.style.height = `${details.scrollHeight}px`;
-          }
-        }
-        return;
-      }
 
-      // Use requestAnimationFrame for better performance in browser
-      if (this.rafId !== null) {
-        cancelAnimationFrame(this.rafId);
-      }
-
-      this.rafId = requestAnimationFrame(() => {
-        const wrapper = this.detailsWrappers.get(index);
-        if (wrapper) {
-          const details = wrapper.nativeElement.querySelector('.faq-details') as HTMLElement;
-          if (details) {
-            wrapper.nativeElement.style.height = `${details.scrollHeight}px`;
-          }
-        }
-        this.rafId = null;
-      });
-    }
+    // Recalculate all heights based on the new open/closed state
+    this.scheduleHeightUpdate();
   }
 }
