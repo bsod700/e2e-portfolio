@@ -44,8 +44,8 @@
   .glow {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(100px);
-    opacity: 0;
+    filter: blur(40px);
+    opacity: 0; 
     mix-blend-mode: screen;
     will-change: opacity, transform;
     animation: glowBounceIn 0.9s ease-out 2.15s forwards;
@@ -392,11 +392,11 @@
     transform: translateY(8px) scale(0.92);
   }
   50% {
-    opacity: 0.8;
+    opacity: 0.2;
     transform: translateY(-4px) scale(1.04);
   }
   100% {
-    opacity: 0.9;
+    opacity: 0.4;
     transform: translateY(0) scale(1);
   }
 }

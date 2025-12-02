@@ -29,11 +29,12 @@
     top: 16px;
     left: 16px;
     &.glow-blue-1 {
-      width: 205px;
-      height: 205px;
-      transform: translate(75px, 240px);
+      width: 500px;
+      height: 500px;
+      transform: translate(5px, 40px);
       background-color: var(--color-secondary);
-      filter: blur(200px);
+      filter: blur(40px);
+      opacity: .2;
     }
     &.glow-blue-2 {
       width: 380px;

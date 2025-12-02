@@ -117,7 +117,8 @@ export class TestimonialsComponent {
   );
 
   // Reactive state using signals
-  readonly isAnimationPaused = signal(false);
+  // Start paused by default; user can explicitly enable the marquee animation.
+  readonly isAnimationPaused = signal(true);
   readonly ratingStars = [1, 2, 3, 4, 5] as const;
 
   // Computed signal for testimonials - uses database data or fallback

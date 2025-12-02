@@ -17,11 +17,11 @@
     top: 16px;
     left: 16px;
     &.glow-blue-1 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(75px, 240px);
       background-color: var(--color-secondary);
-      filter: blur(200px);
+      filter: blur(20px);
     }
     &.glow-blue-2 {
       width: 205px;
@@ -33,79 +33,80 @@
       opacity: .3;
     }
     &.glow-red-1 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(205px, 355px);
       background-color: var(--color-primary-light);
-      filter: blur(200px);
+      filter: blur(40px);
     }
 
     &.glow-red-2 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(240px, 160px);
       background-color: var(--color-primary-light);
-      filter: blur(200px);
+      filter: blur(50px);
     }
     &.glow-red-3 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(-45px, 100px);
       background-color: var(--color-primary-light);
-      filter: blur(100px);
+      filter: blur(70px);
       opacity: .2;
     }
     &.glow-red-4 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(85px, 45px);
       background-color: var(--color-primary-light);
-      filter: blur(100px);
-      opacity: 0.5;
+      filter: blur(30px);
+      opacity: 0.2;
     }
 
     &.glow-big-blue-1 {
-      width: 600px;
-      height: 600px;
-      transform: translate(-75px, 110px);
-      background-color: #1d4ca796;
-      filter: blur(200px);
+      width: 520px;
+      height: 520px;
+      transform: translate(-75px, 10px);
+      background-color: rgba(29, 76, 167, 0.5882352941);
+      filter: blur(50px);
     }
     &.glow-dark-1 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(275px, -45px);
       background-color: #09102E;
-      filter: blur(80px);
+      filter: blur(20px);
     }
     &.glow-dark-2 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(-70px, -70px);
       background-color: #09102E;
-      filter: blur(80px);
+      filter: blur(20px);
     }
     &.glow-big-light-blue-1 {
-      width: 725px;
+      width: 640px;
       height: 205px;
       transform: translate(-70px, -70px);
       background-color: #8de6ff33;
-      filter: blur(100px);
+      background-color: rgb(60 117 195 / 20%);
+      filter: blur(40px);
     }
   
     &.glow-dark-3 {
-      width: 205px;
-      height: 205px;
+      width: 180px;
+      height: 180px;
       transform: translate(-45px, 165px);
       background-color: #09102E;
-      filter: blur(100px);;
+      filter: blur(70px);
     }
     &.glow-dark-4 {
-      width: 205px;
+      width: 180px;
       height: 140px;
       transform: translate(55px, 165px) rotate(-20deg);
       background-color: #09102E;
-      filter: blur(100px);
+      filter: blur(70px);
     }
   }
 
