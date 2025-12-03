@@ -27,10 +27,10 @@
                 top: -20px;
                 width: 248px;
                 height: 93px;
-                background-color: #70B9EE;
+                background: radial-gradient(#70b9ee, transparent 70%);
                 border-radius: 100%;
                 opacity: 0.2;
-                filter: blur(50px);
+                filter: blur(20px);
                 z-index: 2;
             }
         }

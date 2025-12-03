@@ -4,6 +4,7 @@
   padding: 64px 0 128px;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(to bottom, #050A27, #030816);
   .background {
     position: absolute;
     inset: 0;
@@ -20,17 +21,16 @@
       &.glow-blue-1 {
         width: 900px;
         height: 900px;
-        background: rgba(29, 76, 167, 0.37);
+        background: radial-gradient(#1d4ca75e, transparent 70%);
         mix-blend-mode: soft-light;
-        filter: blur(200px);
         transform: translate(calc(50% - 225px), 240px);
         z-index: 2;
       }
       &.glow-blue-2 {
         width: 400px;
         height: 400px;
-        background: #70b9ee;
-        filter: blur(65px);
+        background: radial-gradient(#70b9ee, transparent 70%); 
+        filter: blur(25px);
         transform: translate(calc(50% + 225px), 652px);
         opacity: 0.3;
         z-index: 1;
@@ -38,18 +38,10 @@
       &.glow-red-1 {
         width: 500px;
         height: 500px;
-        background: #ff7474;
-        filter: blur(65px);
+        background:radial-gradient(#ff7474, transparent 70%);
+        filter: blur(25px);
         transform: translate(calc(50% - 500px), 215px);
         opacity: 0.2;
-      }
-      &.glow-red-2 {
-        width: 500px;
-        height: 500px;
-        background: #ff7474;
-        filter: blur(65px);
-        transform: translate(calc(50% - 1000px / 2), 300px);
-        opacity: 0.1;
       }
     }
   }

@@ -20,15 +20,15 @@
       width: 180px;
       height: 180px;
       transform: translate(75px, 240px);
-      background-color: var(--color-secondary);
+      background: radial-gradient(var(--color-secondary), transparent 70%);
       filter: blur(20px);
     }
     &.glow-blue-2 {
       width: 205px;
       height: 205px;
       transform: translate(-20px, -65px);
-      background-color: var(--color-secondary);
-      filter: blur(50px);
+      background: radial-gradient(var(--color-secondary), transparent 70%);
+      filter: blur(20px);
       z-index: -1;
       opacity: .3;
     }
@@ -36,31 +36,31 @@
       width: 180px;
       height: 180px;
       transform: translate(205px, 355px);
-      background-color: var(--color-primary-light);
-      filter: blur(40px);
+      background: radial-gradient(var(--color-primary-light), transparent 70%);
+      filter: blur(20px);
     }
 
     &.glow-red-2 {
       width: 180px;
       height: 180px;
       transform: translate(240px, 160px);
-      background-color: var(--color-primary-light);
-      filter: blur(50px);
+      background: radial-gradient(var(--color-primary-light), transparent 70%);
+      filter: blur(20px);
     }
     &.glow-red-3 {
       width: 180px;
       height: 180px;
       transform: translate(-45px, 100px);
-      background-color: var(--color-primary-light);
-      filter: blur(70px);
+      background: radial-gradient(var(--color-primary-light), transparent 70%);
+      filter: blur(20px);
       opacity: .2;
     }
     &.glow-red-4 {
       width: 180px;
       height: 180px;
       transform: translate(85px, 45px);
-      background-color: var(--color-primary-light);
-      filter: blur(30px);
+      background: radial-gradient(var(--color-primary-light), transparent 70%);
+      filter: blur(20px);
       opacity: 0.2;
     }
 
@@ -68,14 +68,14 @@
       width: 520px;
       height: 520px;
       transform: translate(-75px, 10px);
-      background-color: rgba(29, 76, 167, 0.5882352941);
-      filter: blur(50px);
+      background: radial-gradient(rgba(29, 76, 167, 0.5882352941), transparent 70%);
+      filter: blur(20px);
     }
     &.glow-dark-1 {
       width: 180px;
       height: 180px;
       transform: translate(275px, -45px);
-      background-color: #09102E;
+      background: radial-gradient(#09102E, transparent 70%);
       filter: blur(20px);
     }
     &.glow-dark-2 {
@@ -89,24 +89,23 @@
       width: 640px;
       height: 205px;
       transform: translate(-70px, -70px);
-      background-color: #8de6ff33;
-      background-color: rgb(60 117 195 / 20%);
-      filter: blur(40px);
+      background: radial-gradient(rgb(60 117 195 / 20%), transparent 70%);
+      filter: blur(20px);
     }
   
     &.glow-dark-3 {
       width: 180px;
       height: 180px;
       transform: translate(-45px, 165px);
-      background-color: #09102E;
-      filter: blur(70px);
+      background: radial-gradient(#09102E, transparent 70%);
+      filter: blur(20px);
     }
     &.glow-dark-4 {
       width: 180px;
       height: 140px;
       transform: translate(55px, 165px) rotate(-20deg);
-      background-color: #09102E;
-      filter: blur(70px);
+      background: radial-gradient(#09102E, transparent 70%);
+      filter: blur(20px);
     }
   }
 

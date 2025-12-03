@@ -75,15 +75,14 @@
       &.glow-dark-3 {
         width: 200px;
         height: 200px;
-        background: var(--color-bg-primary);
-        filter: blur(10px);
+        background: radial-gradient(var(--color-bg-primary), transparent 70%);
+        filter: blur(20px);
         transform: translate(calc(50% - 205px), 10px);
         left: 50%;
         right: 50%;
         @include respond-to(md) {
           width: 450px;
           height: 450px;
-          filter: blur(50px);
           transform: translate(calc(50% - 900px / 2), -90px);
         }
       }

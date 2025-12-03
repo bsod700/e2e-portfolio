@@ -32,32 +32,32 @@
       width: 500px;
       height: 500px;
       transform: translate(5px, 40px);
-      background-color: var(--color-secondary);
-      filter: blur(40px);
+      background: radial-gradient(var(--color-secondary), transparent 70%);
+      filter: blur(20px);
       opacity: .2;
     }
     &.glow-blue-2 {
       width: 380px;
       height: 135px;
       transform: translate(calc(50% - 485px / 2), -65px);
-      background-color: var(--color-secondary);
-      filter: blur(30px);
+      background: radial-gradient(var(--color-secondary), transparent 70%);
+      filter: blur(20px);
       opacity: 0.2;
     }
     &.glow-red-1 {
       width: 200px;
       height: 200px;
-      background: #FF7474;
+      background: radial-gradient(#FF7474, transparent 70%);
       opacity: 0.2;
-      filter: blur(50px);
+      filter: blur(20px);
       transform: translate(180px, 55px);
     }
     &.glow-dark-1 {
       width: 200px;
       height: 200px;
       opacity: 0.7;
-      background: #09102E;
-      filter: blur(45px);
+      background: radial-gradient(#09102E, transparent 70%);
+      filter: blur(20px);
       transform: translate(190px, -45px);
     }
   }

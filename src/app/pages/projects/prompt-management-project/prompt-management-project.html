@@ -1,8 +1,41 @@
 
 <main class="prompt-management-project-page">
-  <div class="container">
-    <h1>Prompt Management Project</h1>
-    <p>Complete Prompt Management Solution</p>
+  <app-table-of-contents [sections]="tocSections"></app-table-of-contents>
+  
+  <div id="header">
+    <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
+  </div>
+  
+  <div id="stacks">
+    <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
+  </div>
+  
+  <div id="role-impact">
+    <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
+  </div>
+  
+  <div id="nutshell">
+    <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
+  </div>
+  
+  <div id="strategic-goals">
+    <app-project-strategic [projectStrategicData]="projectData.strategicData"></app-project-strategic>
+  </div>
+  
+  <div id="design-process">
+    <app-project-process [projectProcessData]="projectData.processData"></app-project-process>
+  </div>
+  
+  <div id="the-extension">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.theExtensionData"></app-project-side-img-cards>
+  </div>
+
+  <div id="lessons-learned">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.lessonLearnedData"></app-project-side-img-cards>
+  </div>
+
+  <div id="thanks">
+    <app-project-thanks [projectThanksData]="projectData.thanksData"></app-project-thanks>
   </div>
 </main>
 

@@ -15,9 +15,9 @@
         width: 365px;
         height: 365px;
         border-radius: 100%;
-        background: #70b9ee;
-        filter: blur(50px);
-        opacity: 0.05;
+        background: radial-gradient(#70b9ee, transparent 70%);  
+        filter: blur(20px);
+        opacity: 0.1;
       }
       &.circle-2 {
         width: 567px;
