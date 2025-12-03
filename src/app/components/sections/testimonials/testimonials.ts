@@ -29,13 +29,13 @@ interface CarouselRow {
 const FALLBACK_TESTIMONIALS: readonly Testimonial[] = [
   {
     name: 'Dor',
-    role: 'CEO, Pointline',
+    role: 'Producer, Tierro',
     avatar: 'assets/images/testimonials/avatar-dor.webp',
     text: 'I was amazed at how well Guy delivered, and has a team of skilled problem-solvers who are always one step ahead! Happy to have them on this project!'
   },
   {
     name: 'Sherry',
-    role: 'Head of Marketing Strategy, Lempert',
+    role: 'Head of Accessibility, TCAbility',
     avatar: 'assets/images/testimonials/avatar-sherry.webp',
     text: 'Their creativity and efficiency never cease to amaze me. The quality of work and attention to detail is outstanding. Highly recommend!'
   },
@@ -52,14 +52,14 @@ const FALLBACK_TESTIMONIALS: readonly Testimonial[] = [
     text: 'Exceptional work! Guy understood our vision perfectly and brought it to life with modern technologies and best practices. Couldn\'t be happier!'
   },
   {
-    name: 'Marcus',
-    role: 'CTO, FinTech',
+    name: 'Dor',
+    role: 'CEO, Pointline Agency',
     avatar: 'assets/images/testimonials/avatar-marcus.webp',
     text: 'The technical expertise and problem-solving skills are top-notch. Our project was completed on time and the results speak for themselves.'
   },
   {
-    name: 'Sarah',
-    role: 'Design Lead',
+    name: 'Oded',
+    role: 'CEO, Glypho',
     avatar: 'assets/images/testimonials/avatar-sarah.webp',
     text: 'Amazing collaboration! Guy bridges the gap between design and development seamlessly. The final product was pixel-perfect and performant.'
   }

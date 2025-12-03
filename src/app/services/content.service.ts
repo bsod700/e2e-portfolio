@@ -521,6 +521,32 @@ export class ContentService {
     );
   }
 
+  deleteTestimonialContent(id: string): Observable<{ success: boolean; error?: string }> {
+    const client = this.supabaseService.client;
+    if (!client) {
+      return of({ success: false, error: 'Supabase client not initialized' });
+    }
+
+    if (!id) {
+      return of({ success: false, error: 'Testimonial ID is required' });
+    }
+
+    return from(
+      client
+        .from('testimonials_content')
+        .delete()
+        .eq('id', id)
+    ).pipe(
+      map(({ error }) => {
+        if (error) {
+          return { success: false, error: error.message };
+        }
+        return { success: true };
+      }),
+      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+    );
+  }
+
   // FAQ Content
   getFAQContent(): Observable<FAQContent[]> {
     const client = this.supabaseService.client;
