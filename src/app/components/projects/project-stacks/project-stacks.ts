@@ -10,6 +10,7 @@ export interface ProjectStacksData {
     icon: string;
   }[];
   backgroundImages?: string[];
+  circles?: string[];
   projectName: string;
 }
 @Component({

@@ -49,6 +49,58 @@
       }
     }
   }
+  &.project-prompt-management {
+    &.section-name-strategic-goals {
+      background: #080C1A;
+      app-project-number-card {
+        height: 100%;
+        ::ng-deep .project-card {
+          height: 100%;
+        }
+      }
+      .background {
+        img:first-child {
+          width: 1252px;
+          height: 1320px;
+          top: 0px;
+          right: calc(50% - 1390px);
+          position: absolute;
+        }
+        img:last-child {
+         width: 100%;
+         height: 100%;
+         object-fit: cover;
+         top: 0;
+         left: 0;
+         position: absolute;
+         z-index: 1;
+         opacity: 0.1;
+        }
+      }
+    }
+  
+    &.section-name-insights {
+      .background {
+        img {
+          position: absolute;
+          &:nth-child(1) {
+            width: 426px;
+            height: 476px;
+            left: 50%;
+            top: 50%;
+            transform: translate(calc(-50% - 400px), calc(-50% - 100px));
+          }
+          &:nth-child(2) {
+            width: 290px;
+            height: 284px;
+            left: 50%;
+            top: 50%;
+            transform: translate(calc(-50% + 450px), calc(-50% + 150px));
+          }
+        }
+      }
+    }
+  }
   .background {
     position: absolute;
     top: 0;

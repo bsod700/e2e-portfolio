@@ -141,6 +141,7 @@ const TIERRO_PROJECT_DATA = {
         "The platform established Tierro's professional digital presence, enabling him to showcase his music portfolio and connect directly with his audience. Through the custom admin dashboard, he maintains full control over content updates and brand management. This integrated solution provides a seamless experience for visitors while positioning him to attract clients and grow his reach independently of third-party platforms.",
     },
     nutshellData: {
+      projectName: 'tierro',
       title: 'In a Nutshell',
       text: 'Tierro is a professional music producer specializing in pop, R&B, and electronic music. He works with singers to craft tracks that match their unique vision and style. His productions have generated millions of streams and caught the attention of major labels like Warner and Global Records.',
     },

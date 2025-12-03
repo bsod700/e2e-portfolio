@@ -49,18 +49,24 @@ const TIERRO_PROJECT_DATA = {
     headerData: {
       name: 'prompt-management',
       title: 'Complete Prompt Management Solution',
+      logoComponent: true,
       description:
         'Built a personal prompt library extension for ChatGPT. Custom UI/UX design and full development to organize and manage prompts efficiently.',
-      logoUrl: 'assets/images/projects/project-logo-p.svg',
       img: { src: 'assets/images/projects/prompt-management/header-image.webp', alt: 'Prompt management project image' },
       cta: {
         text: 'Download Extension',
         href: '',
         target: '_blank',
       },
+      circles: [
+        ''
+      ],
     },
     stacksData: {
       projectName: 'prompt-management',
+      circles: [
+        '','',''
+      ],
       services: [
         { name: 'UI/UX Design', icon: 'assets/images/icons/uiux.svg' },
         { name: 'Logo', icon: 'assets/images/icons/logo.svg' },
@@ -69,12 +75,8 @@ const TIERRO_PROJECT_DATA = {
           icon: 'assets/images/icons/development.svg',
         },
         {
-          name: 'Extension Development',
-          icon: 'assets/images/icons/extension-development.svg',
-        },
-        {
           name: 'Prompt Engineering',
-          icon: 'assets/images/icons/prompt-engineering.svg',
+          icon: 'assets/images/icons/cpu.svg',
         },
         {
           name: 'AI Integration',
@@ -82,15 +84,15 @@ const TIERRO_PROJECT_DATA = {
         },
         {
           name: 'Retrieval Search',
-          icon: 'assets/images/icons/api-integration.svg',
+          icon: 'assets/images/icons/box-search.svg',
         },
         {
           name: 'E2E Testing',
-          icon: 'assets/images/icons/database.svg',
+          icon: 'assets/images/icons/test.svg',
         },
         {
           name: 'JWT',
-          icon: 'assets/images/icons/deployment.svg',
+          icon: 'assets/images/icons/connection-cloud.svg',
         }
       ],
       technologies: [
@@ -108,53 +110,71 @@ const TIERRO_PROJECT_DATA = {
       titleLeft: 'Role',
       titleRight: 'Impact',
       textLeft:
-        "I handled the complete development of Tierro's digital brand from start to finish. This included designing the visual identity and logo, creating a user-friendly webpage layout that showcases his work, and building a custom music player tailored to his needs. I ensured the site was fully responsive across all devices and designed an intuitive user experience that encourages exploration. On the development side, I coded the entire frontend and backend, implemented the admin dashboard for easy content management, and conducted thorough testing to ensure smooth functionality across all platforms.",
+        "I handled the entire project independently, from initial concept to final deployment. This included identifying my own workflow pain points, designing the user interface and experience, and developing the complete extension from scratch. I made all product decisions, implemented the frontend and backend functionality, and tested the tool extensively through real daily use with ChatGPT.",
       textRight:
-        "The platform established Tierro's professional digital presence, enabling him to showcase his music portfolio and connect directly with his audience. Through the custom admin dashboard, he maintains full control over content updates and brand management. This integrated solution provides a seamless experience for visitors while positioning him to attract clients and grow his reach independently of third-party platforms.",
+      "The extension transformed how I work with ChatGPT on a daily basis. What used to be scattered prompts across different files and notes became an organized, instantly accessible library. I can now find and use prompts in seconds instead of minutes, significantly speeding up my workflow. The tool eliminated the frustration of recreating prompts from memory and gave me a reliable system for managing my growing collection. Beyond personal productivity, it validated my ability to identify problems and build practical solutions that make a real difference in how I work."
     },
     nutshellData: {
+      projectName: 'prompt-management',
       title: 'In a Nutshell',
-      text: 'Tierro is a professional music producer specializing in pop, R&B, and electronic music. He works with singers to craft tracks that match their unique vision and style. His productions have generated millions of streams and caught the attention of major labels like Warner and Global Records.',
+      text: 'P is a personal productivity tool built to solve a real workflow challenge. As someone who frequently uses ChatGPT for various tasks, managing and organizing prompts became increasingly difficult. The extension was created to streamline this process, providing quick access to a growing library of prompts and eliminating the time spent searching through scattered notes and files.'
     },
     strategicData: {
       title: 'Strategic Goals',
       sectionName: 'strategic-goals',
-      text: 'Tierro needed a digital platform that would elevate his professional presence and provide direct access to his audience. Without an existing logo or visual identity, the goal was to create a complete brand experience from scratch that showcases his work, attracts potential collaborators, and gives him full control over his content without depending on third-party platforms.',
+      text: 'As a frequent ChatGPT user, I needed a solution to manage my growing collection of prompts efficiently. Without a centralized system, prompts were scattered across notes, documents, and memory, slowing down my workflow. The goal was to create a personal tool that would organize, store, and provide instant access to prompts, eliminating frustration and improving daily productivity.',
       cards: [
         {
           title: '01',
-          text: "Design a logo and visual identity that speaks Tierro's language and reflects his creative style. Establish a consistent brand presence that makes him instantly recognizable across all touchpoints and elevates his professional image in the music industry.",
-          subtitle: 'Create a Cohesive Brand Identity',
-          projectName: 'tierro',
+          text: "Create a single, organized library where all prompts are stored and easily accessible. Eliminate the scattered approach of keeping prompts in different files, notes, and trying to remember variations from memory.",
+          subtitle: 'Centralize Prompt Management',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '02',
-          text: 'Build a branded platform that positions Tierro as a serious industry professional, making it easy for labels, artists, and fans to discover his work and understand his unique production style through a polished, cohesive experience.',
-          subtitle: 'Establish Professional Digital Presence',
-          projectName: 'tierro',
+          text: 'Build an interface that allows instant retrieval of prompts without searching through files or folders. Reduce the time from needing a prompt to actually using it in ChatGPT.',
+          subtitle: 'Enable Quick Access',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '03',
-          text: 'Create a seamless experience where visitors can explore his music catalog, understand his creative process, and engage with his brand without leaving the platform or relying on external streaming services.',
-          subtitle: 'Enable Direct Audience Connection',
-          projectName: 'tierro',
+          text: 'Streamline the process of working with ChatGPT by removing friction points. Make prompt usage seamless and efficient, allowing focus on the actual work rather than prompt management.',
+          subtitle: 'Improve Daily Workflow',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '04',
-          text: 'Provide full control through an admin dashboard, allowing Tierro to update music, manage projects, and maintain his brand identity independently while scaling his reach and client base.',
-          subtitle: 'Achieve Content Independence',
-          projectName: 'tierro',
+          text: 'Provide intuitive categorization and tagging systems that make sense for different use cases. Allow flexible organization that adapts to various types of prompts and workflows.',
+          subtitle: 'Support Prompt Organization',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
+        {
+          title: '05',
+          text: 'Build a lightweight, fast-loading extension that doesn\'t slow down the browser or ChatGPT interface. Ensure prompts are always available when needed without technical issues.',
+          subtitle: 'Ensure Reliability and Speed',
+          projectName: 'prompt-management',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '06',
+          text: 'Design a system that can grow with an expanding prompt library. Ensure the tool remains efficient and usable even with hundreds of saved prompts over time.',
+          subtitle: 'Create Scalable Solution',
+          projectName: 'prompt-management',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        }
       ],
       backgroundImages: [
-        'assets/images/projects/tierro/cable.svg',
         'assets/images/projects/tierro/lines.svg',
       ],
-      projectName: 'tierro',
+      backgroundCircles: [
+        '',
+        '',
+      ],
+      projectName: 'prompt-management',
     },
     processData: {
       projectName: 'tierro',

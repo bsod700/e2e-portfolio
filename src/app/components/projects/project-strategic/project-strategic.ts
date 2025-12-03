@@ -7,6 +7,7 @@ export interface ProjectStrategicData {
   text: string;
   cards: ProjectNumberCardData[];
   backgroundImages?: string[];
+  backgroundCircles?: string[];
   projectName: string;
   sectionName: string;
 }

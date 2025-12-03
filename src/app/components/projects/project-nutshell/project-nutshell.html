@@ -1,4 +1,4 @@
-<section class="project-nutshell">
+<section class="project-nutshell" [ngClass]="['project-'+projectNutshellData.projectName]">
   <div class="container">
     <h3>{{ projectNutshellData.title }}</h3>
     <p>{{ projectNutshellData.text }}</p>

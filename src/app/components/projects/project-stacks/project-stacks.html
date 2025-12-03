@@ -1,8 +1,17 @@
 <section [ngClass]="['project-stacks','project-'+projectStacksData.projectName]">
-  @if (projectStacksData.backgroundImages) {
+  @if (projectStacksData.backgroundImages || projectStacksData.circles) {
     <div class="background">
-      @for (image of projectStacksData.backgroundImages; track $index) {
-        <img [src]="image" alt="background" />
+      @if (projectStacksData.backgroundImages) {
+        @for (image of projectStacksData.backgroundImages; track $index) {
+          <img [src]="image" alt="background" />
+        }
+      }
+      @if (projectStacksData.circles) {
+        <div class="circles">
+          @for (circle of projectStacksData.circles; track $index) {
+            <div class="circle" [ngClass]="['circle-'+$index]"></div>
+          }
+        </div>
       }
     </div>
   }

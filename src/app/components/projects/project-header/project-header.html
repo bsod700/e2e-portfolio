@@ -1,24 +1,38 @@
 <section class="project-header">
   <!-- Project Background Images -->
-  @if (projectHeaderData.backgroundImages) {
-  <div [ngClass]="['background-images',`project-${projectHeaderData.name}`]">
-    @for (image of projectHeaderData.backgroundImages; track $index) {
-    <img [src]="image" alt="background" />
-    }
-  </div>
+  @if (projectHeaderData.backgroundImages || projectHeaderData.circles) {
+    <div [ngClass]="['background-images',`project-${projectHeaderData.name}`]">
+      @if (projectHeaderData.backgroundImages) {
+        @for (image of projectHeaderData.backgroundImages; track $index) {
+          <img [src]="image" alt="background" />
+        }
+      }
+      @if (projectHeaderData.circles) {
+        <div class="circles">
+          @for (circle of projectHeaderData.circles; track $index) {
+            <div class="circle" [ngClass]="['circle-'+$index]"></div>
+          }
+        </div>
+      }
+    </div>
   }
 
   <div class="container">
     <div class="content">
       <!-- Project Logo -->
       @if (projectHeaderData.logoUrl) {
-      <div class="project-logo-wrapper">
-        <img
-          [src]="projectHeaderData.logoUrl"
-          [alt]="projectHeaderData.title + ' logo'"
-          class="project-logo"
-        />
-      </div>
+        <div class="project-logo-wrapper">
+          <img
+            [src]="projectHeaderData.logoUrl"
+            [alt]="projectHeaderData.title + ' logo'"
+            class="project-logo"
+          />
+        </div>
+      }
+      @if (projectHeaderData.logoComponent) {
+        <div class="project-logo-wrapper">
+          <app-p-logo></app-p-logo>
+        </div>
       }
 
       <!-- Project Title -->

@@ -2,23 +2,26 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CtaButtonComponent } from '../../ui';
 import { CtaButtonData } from '../../ui/cta-button/cta-button';
+import { PLogo } from '../../ui/p-logo/p-logo';
 
 export interface ProjectHeaderData {
   name: string;
   title: string;
   description: string;
-  logoUrl: string;
+  logoUrl?: string;
+  logoComponent?: boolean;
   cta?: CtaButtonData,
   img: {
     src: string;
     alt: string;
   };
   backgroundImages?: string[];
+  circles?: string[];
 }
 
 @Component({
   selector: 'app-project-header',
-  imports: [CommonModule, CtaButtonComponent],
+  imports: [CommonModule, CtaButtonComponent, PLogo],
   templateUrl: './project-header.html',
   styleUrl: './project-header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,7 +31,6 @@ export class ProjectHeaderComponent {
     name: '',
     title: '',
     description: '',
-    logoUrl: '',
     img: { src: '', alt: '' }
   };
 }

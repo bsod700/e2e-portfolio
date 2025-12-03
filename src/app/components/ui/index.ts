@@ -13,4 +13,5 @@ export { ScrollToTopComponent } from './scroll-to-top/scroll-to-top';
 export { ProjectInquiryComponent } from './project-inquiry/project-inquiry';
 export { ContactModalComponent } from './contact-modal/contact-modal';
 export { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog';
+export { PLogo } from './p-logo/p-logo';
 
