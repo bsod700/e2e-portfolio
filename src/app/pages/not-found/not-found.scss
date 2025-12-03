@@ -18,8 +18,8 @@
     position: absolute;
     width: 600px;
     height: 600px;
-    background: var(--gradient-glow);
-    filter: blur(40px);
+    background: radial-gradient(var(--gradient-glow), transparent 70%);
+    filter: blur(20px);
     z-index: 0;
   }
 

@@ -28,16 +28,18 @@
       &.glow-blue-1 {
         width: 50px;
         height: 50px;
-        background: var(--color-secondary);
-        filter: blur(40px);
+        background: radial-gradient(var(--color-secondary), transparent 70%);
+        filter: blur(20px);
         transform: translate(-30px, -50px);
+        opacity: .4;
       }
       &.glow-red-1 {
         width: 50px;
         height: 50px;
-        background: var(--color-primary-light);
-        filter: blur(40px);
+        background: radial-gradient(var(--color-primary-light), transparent 70%);
+        filter: blur(20px);
         transform: translate(-100px, 17px);
+        opacity: .4;
       }
     }
   }

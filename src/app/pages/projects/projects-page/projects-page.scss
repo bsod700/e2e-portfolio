@@ -22,8 +22,8 @@
       &.glow-blue-1 {
         width: 500px;
         height: 500px;
-        background: #1a6ba5;
-        filter: blur(200px);
+        background: radial-gradient(#1a6ba5, transparent 70%);
+        filter: blur(20px);
         transform: translate(-50%, 300px);
         opacity: .5;
       }

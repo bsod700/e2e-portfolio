@@ -15,11 +15,12 @@
     top: 16px;
     left: 16px;
     &.glow-blue-1 {
-      width: 205px;
-      height: 205px;
-      transform: translate(75px, 240px);
-      background-color: var(--color-secondary);
-      filter: blur(200px);
+      width: 600px;
+      height: 600px;
+      transform: translate(-75px, -40px);
+      background: radial-gradient(var(--color-secondary), transparent 70%);
+      filter: blur(20px);
+      opacity: .2;
     }
   }
 

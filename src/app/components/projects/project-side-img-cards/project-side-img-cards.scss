@@ -70,8 +70,8 @@
           width: 365px;
           height: 365px;
           border-radius: 100%;
-          background: #FDC45D;
-          filter: blur(40px);
+          background: radial-gradient(#FDC45D, transparent 70%);
+          filter: blur(20px);
           opacity: 0.05;
         }
         &.circle-2 {
@@ -79,8 +79,8 @@
           height: 567px;
           border-radius: 100%;
           opacity: 0.05;
-          background: #FDC45D;
-          filter: blur(40px);
+          background: radial-gradient(#FDC45D, transparent 70%);
+          filter: blur(20px);
           right: -192px;
           top: -62px;
         }

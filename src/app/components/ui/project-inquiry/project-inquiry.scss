@@ -53,15 +53,15 @@
 
   .glow--blue-1 {
     right: -50px;
-    top: 65px;
+    top: 100px;
     width: 150px;
-    height: 150px;
+    height: 50px;
     background-color: var(--color-secondary);  
     animation-delay: 2.7s;
     @include respond-to(md) {
       right: auto;
       left: calc(50% + 250px);
-      top: 55px;
+      top: 100px;
     }
   }
   .glow--blue-2 {
@@ -96,15 +96,15 @@
 
   .glow--red-1 {
     left: 0px;
-    top: 43px;
+    top: 100px;
     width: 150px;
-    height: 150px;
+    height: 50px;
     background-color: var(--color-primary-light);  
     animation-delay: 2.2s;
     @include respond-to(md) {
       left: auto;
       right: calc(50% + 225px);
-      top: 43px;
+      top: 100px;
     }
   }
   .glow--red-2 {
