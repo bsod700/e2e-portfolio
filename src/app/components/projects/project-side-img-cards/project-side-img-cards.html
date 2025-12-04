@@ -7,9 +7,11 @@
                 }
             }
             @if (projectSideImgCardsData.backgroundCircles) {
-                @for(circle of projectSideImgCardsData.backgroundCircles; track $index) {
-                    <div [ngClass]="['circle','circle-' + ($index + 1)]"></div>
-                }
+                <div class="circles">
+                    @for(circle of projectSideImgCardsData.backgroundCircles; track $index) {
+                        <div [ngClass]="['circle','circle-' + ($index + 1)]"></div>
+                    }
+                </div>
             }
         </div>
     }

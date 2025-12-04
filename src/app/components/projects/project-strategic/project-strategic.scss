@@ -51,7 +51,6 @@
   }
   &.project-prompt-management {
     &.section-name-strategic-goals {
-      background: #080C1A;
       app-project-number-card {
         height: 100%;
         ::ng-deep .project-card {
@@ -59,14 +58,7 @@
         }
       }
       .background {
-        img:first-child {
-          width: 1252px;
-          height: 1320px;
-          top: 0px;
-          right: calc(50% - 1390px);
-          position: absolute;
-        }
-        img:last-child {
+        img {
          width: 100%;
          height: 100%;
          object-fit: cover;
@@ -77,26 +69,22 @@
          opacity: 0.1;
         }
       }
-    }
-  
-    &.section-name-insights {
-      .background {
-        img {
-          position: absolute;
-          &:nth-child(1) {
-            width: 426px;
-            height: 476px;
-            left: 50%;
-            top: 50%;
-            transform: translate(calc(-50% - 400px), calc(-50% - 100px));
-          }
-          &:nth-child(2) {
-            width: 290px;
-            height: 284px;
-            left: 50%;
-            top: 50%;
-            transform: translate(calc(-50% + 450px), calc(-50% + 150px));
-          }
+      .circles {
+        .circle-0 {
+          width: 900px;
+          height: 900px;
+          background: radial-gradient(circle, rgba(112, 185, 238, 0.4) 0%, transparent 65%);
+          transform: translate(calc(50% - 300px), 155px);
+          opacity: 0.4;
+          top: unset !important; 
+          bottom: 0;
+        }
+        .circle-1 {
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, #FF7474 0%, transparent 65%);
+          transform: translate(calc(50% - 1000px), 255px);
+          opacity: 0.2;
         }
       }
     }
@@ -108,6 +96,20 @@
     width: 100%;
     height: 100%;
     z-index: 1;
+    .circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      .circle {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-radius: 50%;
+      }
+    }
   }
   .container {
     display: flex;

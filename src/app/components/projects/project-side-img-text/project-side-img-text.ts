@@ -7,6 +7,7 @@ export interface ProjectSideImgTextData {
   text: string;
   image: string;
   backgroundImages?: string[];
+  circles?: string[];
   sideDirection: 'left' | 'right';
   sectionName: string;
 }

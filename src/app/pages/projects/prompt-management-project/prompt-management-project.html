@@ -30,6 +30,24 @@
     <app-project-side-img-cards [projectSideImgCardsData]="projectData.theExtensionData"></app-project-side-img-cards>
   </div>
 
+  <div id="style-guide">
+    <app-project-style-guide [projectStyleGuideData]="projectData.styleGuideData"></app-project-style-guide>
+  </div>
+
+  <div id="prompt-library-screens" class="projects-side-img-text-container">
+    <div class="background">
+      <div class="circle"></div>
+    </div>
+    <div class="container">
+      <h3>{{ projectData.screensSection.title }}</h3>
+      <p>{{ projectData.screensSection.text }}</p>
+    </div>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.onboardingScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.homeScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.categoryScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.settingsScreenData"></app-project-side-img-text>
+  </div>
+
   <div id="lessons-learned">
     <app-project-side-img-cards [projectSideImgCardsData]="projectData.lessonLearnedData"></app-project-side-img-cards>
   </div>

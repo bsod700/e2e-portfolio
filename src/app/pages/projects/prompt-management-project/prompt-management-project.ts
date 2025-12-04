@@ -18,6 +18,10 @@ import {
   TocSection,
   ProjectThanksData,
   ProjectThanksComponent,
+  ProjectStyleGuideData,
+  ProjectStyleGuideComponent,
+  ProjectSideImgTextData,
+  ProjectSideImgTextComponent,
 } from '../../../components/projects';
 import { CommonModule } from '@angular/common';
 
@@ -29,6 +33,15 @@ export interface ProjectData {
   strategicData: ProjectStrategicData;
   processData: ProjectProcessData;
   theExtensionData: ProjectSideImgCardsData;
+  styleGuideData: ProjectStyleGuideData;
+  screensSection: {
+    title: string;
+    text: string;
+  },
+  onboardingScreenData: ProjectSideImgTextData;
+  homeScreenData: ProjectSideImgTextData;
+  categoryScreenData: ProjectSideImgTextData;
+  settingsScreenData: ProjectSideImgTextData;
   lessonLearnedData: ProjectSideImgCardsData;
   thanksData: ProjectThanksData;
 }
@@ -41,7 +54,9 @@ const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
     { id: 'strategic-goals', title: 'Strategic Goals' },
     { id: 'design-process', title: 'Design Process' },
     { id: 'the-extension', title: 'The Extension' },
+    { id: 'prompt-library-screens', title: 'Prompt Library Screens' },
     { id: 'lessons-learned', title: 'Lessons Learned' },
+    { id: 'style-guide', title: 'Style Guide' },
     { id: 'thanks', title: 'Thanks For Watching!' },
 ];
 
@@ -177,124 +192,204 @@ const TIERRO_PROJECT_DATA = {
       projectName: 'prompt-management',
     },
     processData: {
-      projectName: 'tierro',
+      projectName: 'prompt-management',
       title: 'Design Process',
       description:
-        "From initial research to final launch, the design process focused on understanding Tierro's vision and translating it into a functional, beautiful platform. Every decision was guided by user needs and brand authenticity.",
+        "This project followed a practical, iterative approach driven by personal need and real-world testing. Each phase focused on solving specific workflow challenges, ensuring the final tool genuinely improved daily productivity with ChatGPT.",
       steps: [
         {
           title: '01.',
           subtitle: 'Research',
-          text: "Conducted thorough research to understand the client's needs and current trends in music industry web design.",
-          projectName: 'tierro',
+          text: "Analyzed my workflow, identified pain points, and defined what features would genuinely solve prompt management issues.",
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '02.',
-          subtitle: 'Wireframes',
-          text: 'Created wireframes to visualize the layout and structure of the webpage, focusing on usability and aesthetics.',
-          projectName: 'tierro',
+          subtitle: 'User Flow',
+          text: 'Mapped out how I\'d interact with prompts daily: saving, searching, organizing, and quickly inserting into ChatGPT.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '03.',
-          subtitle: 'Design',
-          text: 'Developed engaging visuals and a cohesive brand identity, including the logo and overall visual style.',
-          projectName: 'tierro',
+          subtitle: 'Screens',
+          text: 'Sketched key screens: library view, search interface, add prompt form, and settings for managing the extension.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '04.',
-          subtitle: 'Development',
-          text: 'Implemented the design using Angular, ensuring responsiveness and performance, and developing a custom music player.',
-          projectName: 'tierro',
+          subtitle: 'Design',
+          text: 'Created clean, minimal UI focused on speed. Designed intuitive layouts that required minimal clicks to access prompts.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '05.',
-          subtitle: 'Admin Page Development',
-          text: 'Created an admin page for the client to update content such as reviews and music.',
-          projectName: 'tierro',
+          subtitle: 'Development',
+          text: 'Built the complete extension: storage system, search functionality, ChatGPT integration, and all interface components from scratch.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '06.',
           subtitle: 'Testing',
-          text: 'Conducted extensive testing to identify and resolve any issues, ensuring a smooth and error-free user experience.',
-          projectName: 'tierro',
+          text: 'Tested through daily real-world use. Identified bugs, usability issues, and areas where workflow could be smoother.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
         {
           title: '07.',
-          subtitle: 'Launch',
-          text: 'Deployed the final product, ensuring everything was optimized and functioning as intended.',
-          projectName: 'tierro',
+          subtitle: 'Refinement',
+          text: 'Improved based on testing feedback. Added helpful features, removed friction points, and optimized overall user experience continuously.',
+          projectName: 'prompt-management',
+          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+        },
+        {
+          title: '08.',
+          subtitle: 'Final Polish',
+          text: 'Refined visual details, optimized performance, ensured stability. Created a reliable tool that became essential for daily work.',
+          projectName: 'prompt-management',
           backgroundImages: ['assets/images/projects/tierro/lines.svg'],
         },
       ],
     },
     theExtensionData: {
-      projectName: 'tierro',
-      title: 'Producer Client Page',
-      text: "The Producer Client Page is a visually appealing and user-friendly platform designed for clients and fans to explore the music producer's work.",
+      projectName: 'prompt-management',
+      title: 'Prompt Library Extension',
+      text: "The P Extension is a lightweight and intuitive tool designed to streamline prompt management directly within the ChatGPT interface for efficient daily workflow.",
       sideDirection: 'left',
       cards: [
         {
-          title: 'Showcase Music',
-          text: "Features a custom music player to seamlessly showcase the producer's tracks without relying on external platforms.",
-          icon: 'assets/images/icons/music-tav.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Quick Access Library',
+          text: "Provides instant access to saved prompts through a clean, organized interface that appears seamlessly alongside ChatGPT conversations.",
+          icon: 'assets/images/icons/book.svg',
         },
         {
-          title: 'Engaging Visuals',
-          text: "Utilizes engaging visuals and a cohesive brand identity to capture the essence of the music producer's style and creative vision.",
-          icon: 'assets/images/icons/smileys.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Smart Organization',
+          text: "Features categorization and tagging systems that allow prompts to be organized by type, project, or use case for easy retrieval.",
+          icon: 'assets/images/icons/light-bulb.svg',
         },
         {
-          title: 'Client Reviews',
-          text: 'Highlights client reviews and testimonials to build credibility, establish trust, and connect authentically with the audience.',
-          icon: 'assets/images/icons/like-tag.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'One-Click Integration',
+          text: 'Enables users to insert prompts directly into ChatGPT with a single click, eliminating copy-paste friction and speeding up workflow.',
+          icon: 'assets/images/icons/mouse.svg',
+        },
+        {
+          title: 'Search and Filter',
+          text: 'Includes powerful search functionality to quickly find specific prompts from a growing library, even with hundreds of saved items.',
+          icon: 'assets/images/icons/search.svg',
         },
       ],
-      image: 'assets/images/projects/tierro/producer-mac.webp',
-      sectionName: 'producer-client-page',
+      image: 'assets/images/projects/prompt-management/header-image.webp',
+      sectionName: 'prompt-library-extension',
+    },
+    styleGuideData: {
+      projectName: 'prompt-management',
+      title: 'Style Guide',
+      text: 'Developed a complete style guide defining typography, colors, and visual elements to ensure brand consistency and unified user experience across the entire platform.',
+      fontGuideTitle: 'Geist',
+      fontGuide: ['Light', 'Regular', 'Bold'],
+      colorGuideTitle: 'Color Palette',
+      colorGuide: [
+        { title: 'Brand', colors: [
+          { name: 'Aero', value: '#70B9EE' },
+          { name: 'Smoky Black', value: '#0C0C0D' },
+        ] },
+        { title: 'CTA', colors: [
+          { name: 'Spartan Crimson', value: '#961416' },
+          { name: 'Fire Opal', value: '#EA624A' },
+        ] },
+        { title: 'Background', colors: [
+          { name: 'Dark Gunmetal', value: '#182434' },
+          { name: 'Yankees Blue', value: '#172437' },
+        ] },
+        { title: 'Text', colors: [
+          { name: 'Lotion', value: '#FCFCFC' },
+          { name: 'International Orange', value: '#C03B30' }
+        ] },
+        { title: 'System', colors: [
+          { name: 'CG Red', value: '#E24428' },
+          { name: 'Chrome Yellow', value: '#F8AA08' },
+          { name: 'UFO Green', value: '#20CC6B' },
+          { name: 'Fluorescent Blue', value: '#19DEFB' },
+        ] },
+      ],
+    },
+    screensSection: {
+      title: 'Prompt Library Extension',
+      text: 'Complete interface design featuring organized library views, search functionality, and management screens that prioritize speed and efficiency for daily ChatGPT workflow optimization.',
+    },
+    onboardingScreenData: {
+      sideDirection: 'left',
+      projectName: 'prompt-management',
+      title: 'Simplified Onboarding',
+      text: 'Quick and flexible authentication options including email login, sign up, password recovery, and social login through Google or LinkedIn. Designed to get users into the extension fast without friction.',
+      image: 'assets/images/projects/prompt-management/onboarding-screen.webp',
+      sectionName: 'review-screen',
+    },
+    homeScreenData: {
+      sideDirection: 'right',
+      projectName: 'prompt-management',
+      title: 'Home & Search Interface',
+      text: 'Organized homepage displaying categorized prompts: Favorites, Writing, Code, Design, and Research. Features robust search functionality and tag filtering system for pinpoint accuracy when finding specific prompts.',
+      image: 'assets/images/projects/prompt-management/home-screen.webp',
+      sectionName: 'review-screen',
+    },
+    categoryScreenData: {
+      sideDirection: 'left',
+      projectName: 'prompt-management',
+      title: 'Category & Prompt View',
+      text: 'Displays all prompts within each selected category. Users can mark prompts as favorites for quick access and click any prompt to automatically insert it into the ChatGPT chat box, eliminating manual copying and pasting.',
+      image: 'assets/images/projects/prompt-management/category-screen.webp',
+      sectionName: 'review-screen',
+    },
+    settingsScreenData: {
+      sideDirection: 'right',
+      projectName: 'prompt-management',
+      title: 'Settings & Management',
+      text: 'Comprehensive settings panel for importing and exporting prompt libraries, managing account preferences, switching between light and dark modes, selecting language preferences, and accessing FAQ and about information.',
+      image: 'assets/images/projects/prompt-management/settings-screen.webp',
+      sectionName: 'settings-screen',
+      circles: [
+       ''
+      ],
     },
     lessonLearnedData: {
-      projectName: 'tierro',
+      projectName: 'prompt-management',
       title: 'Lessons Learned',
       sideDirection: 'left',
       cards: [
         {
-          title: 'Building a Brand Identity from Nothing',
-          text: 'Creating a brand from scratch taught me to spend real time understanding what the client wants their identity to feel like.',
-          icon: 'assets/images/icons/document.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Building for Yourself Is Different',
+          text: 'Creating a tool for my own use meant I could iterate based on real needs instead of assumptions. Every decision was tested immediately.',
+          icon: 'assets/images/icons/user.svg',
         },
         {
-          title: 'Custom Audio Players Are Tricky',
-          text: 'Building the music player was harder than expected. Balancing visual appeal with performance, loading speed, and browser compatibility took serious tweaking.',
-          icon: 'assets/images/icons/music-tav.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Simplicity Beats Feature Bloat',
+          text: 'I initially planned too many features. Stripping it down to essentials made the tool faster and actually more useful in practice.',
+          icon: 'assets/images/icons/flash.svg',
         },
         {
-          title: 'Making Things Easy for Non-Technical Users',
-          text: 'The admin page showed me that developer-friendly isn\'t user-friendly. I had to design for someone who\'d never need my help again.',
-          icon: 'assets/images/icons/user-tag.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Real Testing Happens in Daily Use',
+          text: 'Using the extension every day revealed issues I\'d never catch in formal testing. Small friction points became obvious through repetition.',
+          icon: 'assets/images/icons/calendar-circle.svg',
         },
         {
-          title: 'Testing and Tweaking Makes All the Difference',
-          text: 'I went through way more iterations than planned. But that\'s where things got good. Feedback helped me catch what I missed initially.',
-          icon: 'assets/images/icons/task-square.svg',
-          backgroundImages: ['assets/images/projects/tierro/lines.svg'],
+          title: 'Performance Matters More Than Expected',
+          text: 'Even slight delays in loading or searching became annoying with frequent use. Optimizing speed made a huge difference in actual adoption.',
+          icon: 'assets/images/icons/diagram.svg',
+        },
+        {
+          title: 'Room to Grow',
+          text: 'This project showed me the value of starting simple and expanding based on use. I\'m planning to add support for Claude, Gemini, and other AI platforms to make prompt management universal across all tools.',
+          icon: 'assets/images/icons/status-up.svg',
         },
       ],
-      image: 'assets/images/projects/tierro/logo-result.svg',
+      image: 'assets/images/projects/prompt-management/logo-result.webp',
       sectionName: 'lesson-learned',
       backgroundCircles: [
-        '',
         '',
       ]
     },
@@ -325,6 +420,8 @@ const TIERRO_PROJECT_DATA = {
     ProjectSideImgCardsComponent,
     TableOfContentsComponent,
     ProjectThanksComponent,
+    ProjectStyleGuideComponent,
+    ProjectSideImgTextComponent, 
   ],
   templateUrl: './prompt-management-project.html',
   styleUrl: './prompt-management-project.scss',

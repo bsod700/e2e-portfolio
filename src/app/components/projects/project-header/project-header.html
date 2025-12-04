@@ -1,7 +1,7 @@
-<section class="project-header">
+<section class="project-header" [ngClass]="['project-'+projectHeaderData.name]">
   <!-- Project Background Images -->
   @if (projectHeaderData.backgroundImages || projectHeaderData.circles) {
-    <div [ngClass]="['background-images',`project-${projectHeaderData.name}`]">
+    <div class="background-images">
       @if (projectHeaderData.backgroundImages) {
         @for (image of projectHeaderData.backgroundImages; track $index) {
           <img [src]="image" alt="background" />

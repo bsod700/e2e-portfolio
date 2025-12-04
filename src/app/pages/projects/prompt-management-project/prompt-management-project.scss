@@ -2,9 +2,42 @@
 
 .prompt-management-project-page {
   min-height: 100vh;
+  overflow: hidden;
 }
 ::ng-deep {
   body {
     background: #080C1A;
+  }
+
+  .projects-side-img-text-container {
+    background: #080C1A;
+    box-shadow: 0 -10px 20px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 20px 0 rgba(0, 0, 0, 0.25) inset;
+    padding: 48px 0 0;
+
+    @include respond-to(md) {
+      padding: 96px 0 0;
+    }
+    >.container {
+      text-align: center;
+      display: flex;
+      padding: 0 48px;
+      flex-direction: column;
+      gap: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+
+      h3 {
+        color: #FCFCFC;
+        font-size: 36px;
+        font-weight: 600;
+        line-height: 120%;
+      }
+      p {
+        color: rgba(252, 252, 252, 0.80);
+        font-size: 18px;
+        font-weight: 300;
+        line-height: 150%;
+      }
+    }
   }
 }
