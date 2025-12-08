@@ -1,0 +1,136 @@
+@use 'mixins' as *;
+
+.project-components-library {
+  position: relative;
+  padding: 48px 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden;
+  @include respond-to(md) {
+    padding: 96px 0;
+  }
+
+  &.project-brush-along {
+    --background-color: #FCFCFC;
+    --text-color: #080C1A;
+    padding: 0 0 48px;
+    margin-top: -3px;
+    @include respond-to(md) {
+      padding: 0 0 96px;
+    }
+    .background {
+      img {
+        &:nth-child(1) {
+          width: 2300px;
+          height: 1500px;
+          object-fit: contain;
+          top: 300px;
+          left: calc(50% - 2300px / 2);
+        }
+        &:nth-child(2) {
+          width: 250px;
+          height: 135px;
+          object-fit: contain;
+          bottom: 0%;
+          left: 50%;
+          transform: translate(-90%, -20%) translate(-90%, -20%);
+        }
+      }
+    }
+    .container {
+      .imgs-content {
+        img {
+          width: 100%;
+          &:nth-child(1) {
+            max-width: 400px;
+          }
+          &:nth-child(2) {
+            max-width: 400px;
+          }
+          &:nth-child(3) {
+            max-width: 500px;
+          }
+          &:nth-child(4) {
+            max-width: 300px;
+          }
+          &:nth-child(5) {
+            max-width: 300px;
+          }
+          &:nth-child(6) {
+            max-width: 300px;
+          }
+        }
+      }
+    }
+  }
+
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+    }
+    .circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      .circle {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .container {
+    display: flex;
+    gap: 48px;
+    position: relative;
+    z-index: 2;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    .text-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 500px;
+      h3 {
+        color: inherit;
+        font-size: 24px;
+        font-weight: 600;
+        @include respond-to(md) {
+          font-size: 36px;
+        }
+      }
+      p {
+        color: inherit;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 150%;
+        @include respond-to(md) {
+          font-size: 18px;
+        }
+      }
+    }
+    .imgs-content {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+  }
+}

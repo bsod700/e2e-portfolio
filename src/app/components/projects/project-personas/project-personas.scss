@@ -5,6 +5,7 @@
   overflow: hidden;
   position: relative;
   &.project-tierro {
+    --overflow-color: #141313;
     .persona {
       border-radius: 24px;
       border: 1px solid rgba(62, 61, 61, 0.58);
@@ -49,6 +50,33 @@
     
   }
   }
+  &.project-brush-along {
+    --overflow-color: #37579C;
+    padding: 96px 0 0;
+    .persona {
+      border-radius: 24px;
+      border: 1px solid #627EBA;
+      background: #1E3157;
+      box-shadow: 0 331px 93px 0 rgba(0, 0, 0, 0.00), 0 212px 85px 0 rgba(0, 0, 0, 0.01), 0 119px 72px 0 rgba(0, 0, 0, 0.05), 0 53px 53px 0 rgba(0, 0, 0, 0.09), 0 13px 29px 0 rgba(0, 0, 0, 0.10);
+   
+      }
+
+      .personas {
+        padding: 0 0 145px;
+      }
+
+    .background {
+      img.number-1 {
+        width: 2000px;
+        height: 2000px;
+        top: -200px;
+        left: calc(50% - 800px);
+        position: absolute;
+      }
+    
+    }
+  }
+
   .container {
     display: flex;
     flex-direction: column;
@@ -114,7 +142,7 @@
   .overflow {
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, #141313 5%, transparent 50%, #141313 95%);
+    background: linear-gradient(to right, var(--overflow-color) 5%, transparent 50%, var(--overflow-color) 95%);
     position: absolute;
     bottom: 0;
     left: 0;

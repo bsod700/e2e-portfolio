@@ -6,7 +6,14 @@
     </div>
     <div class="font-guide">
         <h4>{{projectStyleGuideData.fontGuideTitle}}</h4>
+        @if (projectStyleGuideData.fontGuideText) {
+            <p>{{projectStyleGuideData.fontGuideText}}</p>
+        }
         <div class="font-cards">
+            @if (projectStyleGuideData.fontGuideImg) {
+                <img [src]="projectStyleGuideData.fontGuideImg" alt="Aa">
+            }
+
             @for (fontWeight of projectStyleGuideData.fontGuide; track $index) {
                 <div class="font-card">
                     <h5>{{ fontWeight }}</h5>
@@ -37,5 +44,6 @@
             }
         </div>
     </div>
+    
   </div>
 </section>

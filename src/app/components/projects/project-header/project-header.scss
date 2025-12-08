@@ -9,6 +9,40 @@
   @include respond-to(md) {
     padding: 240px 0 80px;
   }
+  &.project-brush-along {
+    @include respond-to(md) {
+      padding: 200px 0 80px;
+    }
+    .circles {
+      .circle-0 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 65%);
+        transform: translate(calc(50% - 600px), 55px);
+        z-index: 2;
+        opacity: 0.4;
+      }
+    }
+    .container {
+      .img {
+        @include respond-to(md) {
+         
+        }
+        
+        @include respond-to(lg) {
+         margin-bottom: -80px;
+        }
+        img {
+          width: 100%;
+          height: auto;
+  
+          @include respond-to(lg) {
+            width: 820px;
+          }
+        }
+      }
+    }
+  }
   &.project-prompt-management {
     @include respond-to(md) {
       padding: 200px 0 80px;

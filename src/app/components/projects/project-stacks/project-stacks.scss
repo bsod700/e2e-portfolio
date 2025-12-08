@@ -30,6 +30,31 @@
       }
     }
   }
+  &.project-brush-along {
+    .container {
+      .card-stack {
+        background: #1C3871;
+        border-color: #37579C;
+        box-shadow: 3px 74px 21px 0 rgba(#294479, 0.01), 2px 48px 19px 0 rgba(#294479, 0.1), 1px 27px 16px 0 rgba(#294479, 0.34), 0 12px 12px 0 rgba(#294479, 0.58), 0 3px 7px 0 rgba(#294479, 0.67);
+      }
+    }
+    .circles {
+      .circle-0 {
+       width: 600px;
+       height: 600px;
+       background: radial-gradient(circle, #70B9EE 0%, transparent 65%);
+       transform: translate(calc(50% - 1200px), -85px);
+       opacity: 0.3;
+      }
+      .circle-1 {
+         width: 700px;
+         height: 700px;
+         background: radial-gradient(circle, #70B9EE 0%, transparent 65%);
+         transform: translate(calc(50% - 100px), -200px);
+         opacity: 0.3;
+       }
+     }
+  }
 
   &.project-prompt-management {
     .circles {

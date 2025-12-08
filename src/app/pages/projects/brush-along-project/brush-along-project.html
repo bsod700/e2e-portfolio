@@ -1,8 +1,91 @@
-
 <main class="brush-along-project-page">
-  <div class="container">
-    <h1>Brush Along Project</h1>
-    <p>Interactive Brushing Tracker for Children</p>
+  <app-table-of-contents [sections]="tocSections"></app-table-of-contents>
+  
+  <div id="header">
+    <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
+  </div>
+  
+  <div id="stacks">
+    <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
+  </div>
+  
+  <div id="role-impact">
+    <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
+  </div>
+  
+  <div id="nutshell">
+    <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
+  </div>
+  
+  <div id="strategic-goals">
+    <app-project-strategic [projectStrategicData]="projectData.strategicData"></app-project-strategic>
+  </div>
+  
+  <div id="design-process">
+    <app-project-process [projectProcessData]="projectData.processData"></app-project-process>
+  </div>
+  
+  <div id="mobile-game-children">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.mobileGameChildrenData"></app-project-side-img-cards>
+  </div>
+
+  <div id="mobile-app-parents">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.mobileAppParentsData"></app-project-side-img-cards>
+  </div>
+
+  <div id="target-audience">
+    <app-project-audience [projectAudienceData]="projectData.audienceData"></app-project-audience>
+  </div>
+
+  <div id="personas">
+    <app-project-personas [projectPersonasData]="projectData.personasData"></app-project-personas>
+  </div>
+
+  <div id="insights">
+    <app-project-strategic [projectStrategicData]="projectData.insightsData"></app-project-strategic>
+  </div>
+
+  <div id="user-flow">
+    <app-project-side-img-text [projectSideImgTextData]="projectData.userFlowData"></app-project-side-img-text>
+  </div>
+
+  <div id="wireframes">
+    <app-project-side-img-text [projectSideImgTextData]="projectData.wireframesData"></app-project-side-img-text>
+  </div>
+
+  <div id="style-guide">
+    <app-project-style-guide [projectStyleGuideData]="projectData.styleGuideData"></app-project-style-guide>
+  </div>
+
+  <div id="components-library">
+    <app-project-components-library [projectComponentsLibraryData]="projectData.componentsLibraryData"></app-project-components-library>
+  </div>
+
+  <div id="prompt-library-screens" class="projects-side-img-text-container">
+    <div class="background">
+      <div class="circle"></div>
+    </div>
+    <div class="container">
+      <h3>{{ projectData.screensSection.title }}</h3>
+      <p>{{ projectData.screensSection.text }}</p>
+    </div>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.onboardingScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.avatarSelectionScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.homeScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.brushingScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.giftRevealScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.dressRoomScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.avatarGalleryScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.parentalControlsScreenData"></app-project-side-img-text>
+    <app-project-side-img-text [projectSideImgTextData]="projectData.calendarManagementScreenData"></app-project-side-img-text>
+  </div>
+
+  <div id="lessons-learned">
+    <app-project-side-img-cards [projectSideImgCardsData]="projectData.lessonLearnedData"></app-project-side-img-cards>
+  </div>
+
+  <div id="thanks">
+    <app-project-thanks [projectThanksData]="projectData.thanksData"></app-project-thanks>
   </div>
 </main>
 

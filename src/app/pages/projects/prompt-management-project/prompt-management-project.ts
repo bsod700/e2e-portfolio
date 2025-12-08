@@ -46,7 +46,7 @@ export interface ProjectData {
   thanksData: ProjectThanksData;
 }
 
-const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
+const TOC_SECTIONS: readonly TocSection[] = [
     { id: 'header', title: 'Overview' },
     { id: 'stacks', title: 'Tech Stack' },
     { id: 'role-impact', title: 'Role & Impact' },
@@ -60,7 +60,7 @@ const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
     { id: 'thanks', title: 'Thanks For Watching!' },
 ];
 
-const TIERRO_PROJECT_DATA = {
+const PROJECT_DATA = {
     headerData: {
       name: 'prompt-management',
       title: 'Complete Prompt Management Solution',
@@ -394,7 +394,7 @@ const TIERRO_PROJECT_DATA = {
       ]
     },
     thanksData: {
-      projectName: 'tierro',
+      projectName: 'prompt-management',
       title: 'Thanks For Watching!',
       projectKicker: 'The next step',
       projectTitle: 'Ready to Start Your Project?',
@@ -428,7 +428,7 @@ const TIERRO_PROJECT_DATA = {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PromptManagementProjectComponent {
-  readonly tocSections: TocSection[] = [...TIERRO_TOC_SECTIONS];
-  readonly projectData: ProjectData = TIERRO_PROJECT_DATA;
+  readonly tocSections: TocSection[] = [...TOC_SECTIONS];
+  readonly projectData: ProjectData = PROJECT_DATA;
 }
 

@@ -8,6 +8,8 @@ export interface ProjectStyleGuideData {
   text: string;
   fontGuideTitle: string;
   fontGuide: string[];
+  fontGuideText?: string;
+  fontGuideImg?: string;
   colorGuideTitle: string;
   colorGuide: {
     title: string;

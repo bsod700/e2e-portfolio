@@ -40,3 +40,5 @@ export { TableOfContentsComponent } from './table-of-contents/table-of-contents'
 export type { TocSection } from './table-of-contents/table-of-contents';
 export { ProjectThanksComponent } from './project-thanks/project-thanks';
 export type { ProjectThanksData } from './project-thanks/project-thanks';
+export { ProjectComponentsLibraryComponent } from './project-components-library/project-components-library';
+export type { ProjectComponentsLibraryData } from './project-components-library/project-components-library';

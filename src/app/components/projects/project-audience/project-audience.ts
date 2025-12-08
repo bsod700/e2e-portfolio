@@ -6,6 +6,7 @@ export interface ProjectAudienceData {
   title?: string;
   text?: string;
   sideLeftTitle: string;
+  backgroundCircles?: string[];
   sideLeftCards: {
     backgroundImages?: string[];
     title: string;

@@ -39,7 +39,35 @@
       }
     }
   }
-
+  &.project-brush-along {
+    background: #6A8A45;
+    box-shadow: 0 -10px 20px 0 rgba(0, 0, 0, 0.25) inset, 0 10px 20px 0 rgba(0, 0, 0, 0.25) inset;
+    .circle {
+      &.circle-1 {
+        bottom: calc(-365px / 2);
+        left: calc(50% - 365px / 2);
+        width: 365px;
+        height: 365px;
+        border-radius: 100%;
+        background: radial-gradient(#fff, transparent 70%);  
+        filter: blur(20px);
+        opacity: 0.1;
+      }
+    }
+    .background {
+      img {
+        &:nth-child(1) {
+          position: absolute;
+          width: 185px;
+          height: 230px;
+          top: unset;
+          bottom: 0;
+          left: 50%;
+          transform: translate(-300%, 7px);
+        }
+      }
+    }
+  }
   .container {
     display: flex;
     flex-direction: column;

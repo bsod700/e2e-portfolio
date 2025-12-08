@@ -47,7 +47,27 @@
             }
         }
     }
-
+    &.project-brush-along {
+        --process-dot: #84C8FF;
+        --background-color: #1E3157;
+        --spot-color: #84C8FF;
+        .background {
+            position: relative;
+            z-index: 6;
+            &:after {
+                content: '';
+                position: absolute;
+                top: -350px;
+                left: calc(50% - 1800px / 2);
+                width: 1800px;
+                height: 550px;
+                border-radius: 100%;
+                opacity: 0.05;
+                background: radial-gradient(50% 50% at 50% 50%, #FDC45D 0%, rgba(253, 196, 93, 0) 100%);
+                z-index: 6;
+            }
+        }
+    }
     .background {
         position: absolute;
         top: 0;

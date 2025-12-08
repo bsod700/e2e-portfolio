@@ -21,7 +21,14 @@
       <p>{{ projectSideImgTextData.text }}</p>
     </div>
     <div class="img-content">
+      @if (projectSideImgTextData.image) {
         <img [src]="projectSideImgTextData.image" alt="projectSideImgTextData.title" />
+      }
+      @if (projectSideImgTextData.video) {
+        <video [src]="projectSideImgTextData.video" alt="projectSideImgTextData.title" autoplay loop muted playsinline>
+          <source [src]="projectSideImgTextData.video" type="video/mp4">
+        </video>
+      }
     </div>
   </div>
 </section>

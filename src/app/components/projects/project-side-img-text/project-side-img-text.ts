@@ -5,10 +5,11 @@ export interface ProjectSideImgTextData {
   projectName: string;
   title: string;
   text: string;
-  image: string;
+  image?: string;
+  video?: string;
   backgroundImages?: string[];
   circles?: string[];
-  sideDirection: 'left' | 'right';
+  sideDirection: 'left' | 'right' | 'column';
   sectionName: string;
 }
 @Component({
@@ -23,7 +24,6 @@ export class ProjectSideImgTextComponent {
     projectName: '',
     title: '',
     text: '',
-    image: '',
     backgroundImages: [],
     sideDirection: 'left',
     sectionName: '',

@@ -1,0 +1,31 @@
+<section [ngClass]="['project-components-library',
+'project-'+projectComponentsLibraryData.projectName,
+  `project-${projectComponentsLibraryData.sectionName}`]">
+    @if (projectComponentsLibraryData.backgroundImages || projectComponentsLibraryData.circles) {
+        <div class="background">
+          @if (projectComponentsLibraryData.backgroundImages) {
+            @for (image of projectComponentsLibraryData.backgroundImages; track $index) {
+                <img [src]="image" alt="background" />
+            }
+          }
+            @if (projectComponentsLibraryData.circles) {
+            <div class="circles">
+              @for (circle of projectComponentsLibraryData.circles; track $index) {
+                <div class="circle" [ngClass]="['circle-' + ($index + 1)]"></div>
+              }
+            </div>
+          }
+        </div>
+    }
+  <div class="container">
+    <div class="text-content">
+      <h3>{{ projectComponentsLibraryData.title }}</h3>
+      <p>{{ projectComponentsLibraryData.text }}</p>
+    </div>
+    <div class="imgs-content">
+        @for (image of projectComponentsLibraryData.images; track $index) {
+            <img [src]="image.src" [alt]="image.alt" />
+        }
+    </div>
+  </div>
+</section>

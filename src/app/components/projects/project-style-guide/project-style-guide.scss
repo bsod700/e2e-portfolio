@@ -1,13 +1,107 @@
 @use 'mixins' as *;
 
 .project-style-guide {
-  padding: 96px 0;
+  padding: 48px 0;
   position: relative;
   overflow: hidden;
   text-align: center;
+  @include respond-to(md) {
+    padding: 96px 0;
+  }
+  &.project-brush-along {
+    background: #FCFCFC;
+    --text-color: #080C1A;
+    --font-name: "Lilita One", sans-serif;
+    padding: 48px 0 200px;
+    @include respond-to(md) {
+      padding: 96px 0 200px;
+    }
+    .font-guide {
+      max-width: 600px;
+      margin: 0 auto;
+      .font-cards {
+       .font-card {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+        @include respond-to(md) {
+          flex-direction: row;
+        }
+        .font-card-a {
+          display: none;
+        }
+        h5, p {
+          color: var(--text-color);
+        }
+       }
+      }
+    }
+    .color-guide {
+      h4 {
+        display: none;
+      }
+      .color-cards {
+        h5 {
+          display: none;
+        }
+        .card-container {
+          display: grid;
+          grid-template-columns: repeat(2, 150px);
+          gap: 0;
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 238px 66px 0 rgba(74, 79, 155, 0.00), 0 152px 61px 0 rgba(74, 79, 155, 0.04), 0 85px 51px 0 rgba(74, 79, 155, 0.13), 0 38px 38px 0 rgba(74, 79, 155, 0.21), 0 10px 21px 0 rgba(74, 79, 155, 0.25);
+
+          @include respond-to(md) {
+            grid-template-columns: repeat(3, 200px);
+          }
+          @include respond-to(xl) {
+            grid-template-columns: repeat(6, 200px);
+          }
+          .color-card {
+            position: relative;
+            &:nth-child(1) {
+              grid-column: 1 / 3;
+              grid-row: 1 / 3;
+              .color-card-color {
+                width: 300px;
+                height: 300px;
+                @include respond-to(md) {
+                  width: 400px;
+                  height: 400px;
+                }
+              }
+            }
+            .color-card-color {
+              width: 150px;
+              height: 150px;
+              border-radius: 0;
+              @include respond-to(md) {
+                width: 200px;
+                height: 200px;
+              }
+            }
+            .color-card-text {
+              position: absolute;
+              bottom: 16px;
+              left: 16px;
+              p {
+                font-size: 16px;
+                font-weight: 600;
+                &:nth-child(1) {
+                  display: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   &.project-tierro {
     background: #171925;
     --font-name: 'Montserrat';
+    --text-color: #fcfcfc;
     .font-guide {
       .font-card {
         border-radius: 5px;
@@ -22,6 +116,7 @@
 
   &.project-prompt-management {
     background: #0E1829;
+    --text-color: #fcfcfc;
     --font-name: 'Geist';
     .font-guide {
       .font-card {
@@ -48,17 +143,22 @@
     gap: 16px;
     text-align: center;
     h3 {
-      color: #fcfcfc;
+      color: var(--text-color);
       font-size: 36px;
       font-weight: 600;
       line-height: 120%;
     }
     p {
-      color: rgba(252, 252, 252, 0.8);
+      color: var(--text-color);
+      opacity: 0.8;
       font-size: 18px;
       font-weight: 300;
       line-height: 150%;
       max-width: 600px;
+      @supports (color-mix(in srgb, red, blue)) {
+        color: color-mix(in srgb, var(--text-color) 80%, transparent);
+        opacity: 1;
+      }
     }
   }
   .font-guide {
@@ -67,13 +167,20 @@
     gap: 16px;
     text-align: center;
     h4 {
-      color: #fcfcfc;
+      color: var(--text-color);
+      font-family: var(--font-name);
       font-size: 48px;
       font-weight: 600;
       line-height: 140%;
       @include respond-to(md) {
         font-size: 96px;
       }
+    }
+    p {
+      color: var(--text-color);
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 150%;
     }
     .font-cards {
       display: flex;
@@ -120,7 +227,7 @@
     gap: 32px;
 
     h4 {
-      color: #fcfcfc;
+      color: var(--text-color);
       font-size: 24px;
       font-weight: 600;
       line-height: 120%;
@@ -134,7 +241,7 @@
         gap: 16px;
         text-align: start;
         h5 {
-          color: #FCFCFC;
+          color: var(--text-color);
           font-size: 18px;
           font-weight: 700;
           line-height: 150%;
@@ -162,16 +269,21 @@
           justify-content: center;
           p {
             &:nth-child(1) {
-              color: #fcfcfc;
+              color: var(--text-color);
               font-size: 14px;
               font-weight: 500;
               line-height: 140%;
             }
             &:nth-child(2) {
-              color: rgba(252, 252, 252, 0.6);
+              color: var(--text-color);
+              opacity: 0.6;
               font-size: 12px;
               font-weight: 300;
               line-height: 140%;
+              @supports (color-mix(in srgb, red, blue)) {
+                color: color-mix(in srgb, var(--text-color) 60%, transparent);
+                opacity: 1;
+              }
             }
           }
         }

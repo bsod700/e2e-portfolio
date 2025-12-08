@@ -1,4 +1,13 @@
 <section [ngClass]="['project-audience','project-'+projectAudienceData.projectName]">
+    @if (projectAudienceData.backgroundCircles) {
+        <div class="background">
+            <div class="circles">
+                @for (circle of projectAudienceData.backgroundCircles; track $index) {
+                    <div class="circle" [ngClass]="['circle-' + ($index + 1)]"></div>
+                }
+            </div>
+        </div>
+    }
   <div class="container">
     <div class="text-content">
       @if (projectAudienceData.title) {

@@ -2,8 +2,11 @@
 
 .project-side-img-cards {
   position: relative;
-  padding: 96px 0;
+  padding: 48px 0;
   overflow: hidden;
+  @include respond-to(lg) {
+    padding: 96px 0;
+  }
   &.side-left {
     .container {
       flex-direction: column;
@@ -34,7 +37,8 @@
           0 3px 7px 0 rgba(0, 0, 0, 0.67);
       }
     }
-    &.project-producer-client-page, &.project-admin-page {
+    &.project-producer-client-page,
+    &.project-admin-page {
       .container {
         .img-content {
           display: flex;
@@ -70,7 +74,7 @@
           width: 365px;
           height: 365px;
           border-radius: 100%;
-          background: radial-gradient(#FDC45D, transparent 70%);
+          background: radial-gradient(#fdc45d, transparent 70%);
           filter: blur(20px);
           opacity: 0.05;
         }
@@ -79,7 +83,7 @@
           height: 567px;
           border-radius: 100%;
           opacity: 0.05;
-          background: radial-gradient(#FDC45D, transparent 70%);
+          background: radial-gradient(#fdc45d, transparent 70%);
           filter: blur(20px);
           right: -192px;
           top: -62px;
@@ -104,15 +108,15 @@
     }
     &.project-lesson-learned {
       .background {
-          .circle {
-            &.circle-1 {
-              width: 365px;
-              height: 365px;
-              background: radial-gradient(#FF7474, transparent 70%);
-              opacity: 0.2;
-              transform: translate(calc(50% - 1000px), -150px);
-            }
+        .circle {
+          &.circle-1 {
+            width: 365px;
+            height: 365px;
+            background: radial-gradient(#ff7474, transparent 70%);
+            opacity: 0.2;
+            transform: translate(calc(50% - 1000px), -150px);
           }
+        }
       }
       .container {
         .img-content {
@@ -124,6 +128,105 @@
             margin-bottom: -224px;
             @include respond-to(lg) {
               width: 600px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.project-brush-along {
+    &.project-mobile-game-children,
+    &.project-mobile-app-parents {
+      .container {
+        .img-content {
+          img {
+            object-fit: contain;
+          }
+        }
+      }
+    }
+    &.project-lesson-learned {
+      background: #fcfcfc;
+      padding: 48px 0 0;
+      @include respond-to(lg) {
+        padding: 96px 0;
+      }
+      .background {
+        img {
+          position: absolute;
+          &:nth-child(1) {
+            width: 700px;
+            height: 460px;
+            object-fit: contain;
+            bottom: 0;
+            left: 50%;
+            transform: translate(5%,30px);
+            display: none;
+            @include respond-to(lg) {
+              display: block;
+            }
+          }
+          &:nth-child(2) {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(170%, -50%);
+            display: none;
+            @include respond-to(lg) {
+              display: block;
+            }
+          }
+          &:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(120%, -360%);
+            display: none;
+            @include respond-to(lg) {
+              display: block;
+            }
+          }
+        }
+      }
+      .container {
+        .img-content {
+          display: block;
+          
+          @include respond-to(lg) {
+            display: none;
+          }
+          img {
+            width: 500px;
+            height: 300px;
+            margin-bottom: -20px;
+          }
+        }
+        .text-content {
+          h3 {
+            color: #0c1524;
+          }
+          p {
+            color: #0c1524;
+            opacity: 0.8;
+          }
+          .cards {
+            .card {
+              padding: 12px 0;
+              h4 {
+                color: #0c1524;
+              }
+              p {
+                color: #0c1524;
+                opacity: 0.8;
+              }
+              img {
+                filter: brightness(0);
+              }
             }
           }
         }
@@ -213,7 +316,7 @@
         flex-direction: column;
 
         @include respond-to(md) {
-         flex-direction: row;
+          flex-direction: row;
         }
         .background {
           position: absolute;

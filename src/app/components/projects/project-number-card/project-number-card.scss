@@ -61,6 +61,31 @@
         }
 
     }
+    &.project-brush-along {
+        border: 1px solid rgba(#37579C, 0.60);
+        background: #1C3871;
+        box-shadow: 3px 74px 21px 0 rgba(#294479, 0.01), 2px 48px 19px 0 rgba(#294479, 0.10), 1px 27px 16px 0 rgba(#294479, 0.34), 0 12px 12px 0 rgba(#294479, 0.58), 0 3px 7px 0 rgba(#294479, 0.67);
+
+        .background {
+            img {
+                opacity: 0.1;
+            }
+            &:after {
+                content: '';
+                position: absolute;
+                right: -55px;
+                top: -20px;
+                width: 248px;
+                height: 93px;
+                background: radial-gradient(#70b9ee, transparent 70%);
+                border-radius: 100%;
+                opacity: 0.2;
+                filter: blur(20px);
+                z-index: 2;
+            }
+        }
+
+    }
     .background {
         position: absolute;
         top: 0;

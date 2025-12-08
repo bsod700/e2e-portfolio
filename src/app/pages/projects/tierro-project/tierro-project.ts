@@ -32,7 +32,7 @@ import {
   ProjectThanksComponent,
 } from '../../../components/projects';
 import { CommonModule } from '@angular/common';
-import { DOCUMENT } from '@angular/common';
+import { FontLoaderService } from '../../../services/font-loader.service';
 
 export interface ProjectData {
   headerData: ProjectHeaderData;
@@ -62,7 +62,7 @@ export interface ProjectData {
   thanksData: ProjectThanksData;
 }
 
-const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
+const TOC_SECTIONS: readonly TocSection[] = [
     { id: 'header', title: 'Overview' },
     { id: 'stacks', title: 'Tech Stack' },
     { id: 'role-impact', title: 'Role & Impact' },
@@ -83,7 +83,7 @@ const TIERRO_TOC_SECTIONS: readonly TocSection[] = [
     { id: 'thanks', title: 'Thanks For Watching!' },
 ];
 
-const TIERRO_PROJECT_DATA = {
+const PROJECT_DATA = {
     headerData: {
       name: 'tierro',
       title: 'Building a Custom Music Platform from Scratch',
@@ -718,37 +718,22 @@ const TIERRO_PROJECT_DATA = {
   styleUrl: './tierro-project.scss',
 })
 export class TierroProjectComponent implements OnInit, OnDestroy {
-  private readonly document = inject(DOCUMENT);
-  private fontLinkElement?: HTMLLinkElement;
+  private readonly fontLoaderService = inject(FontLoaderService);
+  private cleanupFont?: () => void;
 
-  readonly tocSections: TocSection[] = [...TIERRO_TOC_SECTIONS];
-  readonly projectData: ProjectData = TIERRO_PROJECT_DATA;
+  readonly tocSections: TocSection[] = [...TOC_SECTIONS];
+  readonly projectData: ProjectData = PROJECT_DATA;
 
   ngOnInit(): void {
-    const head = this.document.head;
-    const existingLink = head.querySelector<HTMLLinkElement>(
-      'link[data-font="tierro-montserrat"]'
-    );
-
-    if (existingLink) {
-      this.fontLinkElement = existingLink;
-      return;
-    }
-
-    const linkEl = this.document.createElement('link');
-    linkEl.rel = 'stylesheet';
-    linkEl.href =
-      'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap';
-    linkEl.setAttribute('data-font', 'tierro-montserrat');
-
-    head.appendChild(linkEl);
-    this.fontLinkElement = linkEl;
+    const fontHref = 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap';
+    const fontId = 'tierro-montserrat';
+    
+    this.cleanupFont = this.fontLoaderService.loadFont(fontHref, fontId);
   }
 
   ngOnDestroy(): void {
-    if (this.fontLinkElement?.parentNode) {
-      this.fontLinkElement.parentNode.removeChild(this.fontLinkElement);
-      this.fontLinkElement = undefined;
+    if (this.cleanupFont) {
+      this.cleanupFont();
     }
   }
 }
