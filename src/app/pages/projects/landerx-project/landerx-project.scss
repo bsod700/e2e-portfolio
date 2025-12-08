@@ -1,5 +1,11 @@
+@use 'mixins' as *;
+
 .landerx-project-page {
   min-height: 100vh;
-  padding-top: 80px;
+  overflow: hidden;
 }
-
+::ng-deep {
+  body {
+    background: #080C1A;
+  }
+}

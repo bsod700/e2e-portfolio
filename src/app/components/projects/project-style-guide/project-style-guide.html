@@ -11,7 +11,7 @@
         }
         <div class="font-cards">
             @if (projectStyleGuideData.fontGuideImg) {
-                <img [src]="projectStyleGuideData.fontGuideImg" alt="Aa">
+                <img [src]="projectStyleGuideData.fontGuideImg" alt="Aa" loading="lazy">
             }
 
             @for (fontWeight of projectStyleGuideData.fontGuide; track $index) {

@@ -3,7 +3,7 @@
     <div class="background">
       @if (projectStacksData.backgroundImages) {
         @for (image of projectStacksData.backgroundImages; track $index) {
-          <img [src]="image" alt="background" />
+          <img [src]="image" alt="background" loading="lazy" />
         }
       }
       @if (projectStacksData.circles) {
@@ -22,7 +22,7 @@
         @for (service of projectStacksData.services; track service.name) {
         <div class="card-stack">
           <div class="icon">
-            <img [src]="service.icon" [alt]="service.name" />
+            <img [src]="service.icon" [alt]="service.name" loading="lazy" />
           </div>
           <div class="name">{{ service.name }}</div>
         </div>
@@ -35,7 +35,7 @@
         @for (technology of projectStacksData.technologies; track technology.name) {
         <div class="card-stack">
           <div class="icon">
-            <img [src]="technology.icon" [alt]="technology.name" />
+            <img [src]="technology.icon" [alt]="technology.name" loading="lazy" />
           </div>
           <div class="name">{{ technology.name }}</div>
         </div>

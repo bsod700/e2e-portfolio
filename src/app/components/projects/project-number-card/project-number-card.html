@@ -2,7 +2,7 @@
   @if (projectNumberCardData.backgroundImages) {
     <div class="background">
       @for (image of projectNumberCardData.backgroundImages; track $index) {
-        <img [src]="image" alt="background" />
+        <img [src]="image" alt="background" loading="lazy" />
       }
     </div>
   }

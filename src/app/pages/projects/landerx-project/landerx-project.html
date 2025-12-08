@@ -1,8 +1,24 @@
-
 <main class="landerx-project-page">
-  <div class="container">
-    <h1>Landerx Project</h1>
-    <p>End-to-End SaaS Platform for Marketing</p>
+  <app-table-of-contents [sections]="tocSections"></app-table-of-contents>
+  
+  <div id="header">
+    <app-project-header [projectHeaderData]="projectData.headerData"></app-project-header>
+  </div>
+  
+  <div id="stacks">
+    <app-project-stacks [projectStacksData]="projectData.stacksData"></app-project-stacks>
+  </div>
+  
+  <div id="role-impact">
+    <app-project-side-texts [projectSideTextsData]="projectData.sideTextsData"></app-project-side-texts>
+  </div>
+  
+  <div id="nutshell">
+    <app-project-nutshell [projectNutshellData]="projectData.nutshellData"></app-project-nutshell>
+  </div>
+
+  <div id="thanks">
+    <app-project-thanks [projectThanksData]="projectData.thanksData"></app-project-thanks>
   </div>
 </main>
 

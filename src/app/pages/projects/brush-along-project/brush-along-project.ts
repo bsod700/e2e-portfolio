@@ -82,7 +82,6 @@ const TOC_SECTIONS: readonly TocSection[] = [
     { id: 'components-library', title: 'Components Library' },
     { id: 'mobile-app-screens', title: 'Mobile App Screens' },
     { id: 'lessons-learned', title: 'Lessons Learned' },
-    { id: 'style-guide', title: 'Style Guide' },
     { id: 'thanks', title: 'Thanks For Watching!' },
 ];
 

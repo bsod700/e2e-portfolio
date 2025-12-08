@@ -51,44 +51,44 @@
   &.project-tierro {
     --spot-color: #fdc45d;
     &.side-left {
-        .img-content {
-            &::before {
-                top: -150px;
-                right: -150px;
-            }
+      .img-content {
+        &::before {
+          top: -150px;
+          right: -150px;
         }
+      }
     }
     &.side-right {
-        .img-content {
-            &::before {
-                top: -150px;
-                left: -150px;
-            }
+      .img-content {
+        &::before {
+          top: -150px;
+          left: -150px;
         }
+      }
     }
   }
-  
+
   &.project-prompt-management {
-    --spot-color: #19DEFB;
+    --spot-color: #19defb;
     padding: 48px 0 0;
     @include respond-to(md) {
       padding: 96px 0 0;
     }
     &.side-left {
-        .img-content {
-            &::before {
-                top: -150px;
-                right: -150px;
-            }
+      .img-content {
+        &::before {
+          top: -150px;
+          right: -150px;
         }
+      }
     }
     &.side-right {
-        .img-content {
-            &::before {
-                top: -150px;
-                left: -150px;
-            }
+      .img-content {
+        &::before {
+          top: -150px;
+          left: -150px;
         }
+      }
     }
     &.project-settings-screen {
       padding: 0 0 48px;
@@ -100,7 +100,7 @@
         .circles {
           .circle {
             &.circle-1 {
-              background: radial-gradient(#70B9EE, transparent 70%);
+              background: radial-gradient(#70b9ee, transparent 70%);
               width: 800px;
               height: 800px;
               opacity: 0.2;
@@ -113,7 +113,7 @@
     .container {
       .text-content {
         h3 {
-         font-size: 24px;
+          font-size: 24px;
         }
       }
 
@@ -122,19 +122,17 @@
           width: 500px;
           flex: 0 0 500px;
         }
-      
       }
     }
-   
   }
 
   &.project-brush-along {
     &.project-user-flow {
-      background: #FCFCFC;
+      background: #fcfcfc;
       .container {
         .text-content {
           h3 {
-            color: #080C1A;
+            color: #080c1a;
           }
           p {
             color: #080c1ad0;
@@ -143,7 +141,7 @@
       }
     }
     &.project-wireframes {
-      background: #6A8A45;
+      background: #6a8a45;
       padding: 48px 0 0;
 
       @include respond-to(md) {
@@ -186,8 +184,9 @@
         }
       }
     }
-   
-    &:has(video), &.project-home-screen {
+
+    &:has(video),
+    &.project-home-screen {
       .container {
         gap: 72px;
         @include respond-to(lg) {
@@ -215,45 +214,49 @@
               height: 500px;
             }
           }
-        }
-      }
-    }
-    .container {
-      .img-content {
-        img {
-          width: 293px;
-          @include respond-to(lg) {
-            width: 490px;
+          img {
+            width: 293px;
+            @include respond-to(lg) {
+              width: 490px;
+            }
           }
         }
       }
-    }
-    video {
-      border-radius: 22px;
-      width: 300px;
-      @include respond-to(lg) {
-        border-radius: 22px;
-        width: 480px;
-      }
-    }
-    &.side-left {
-      .img-content {
-        img {
-          transform: rotate(20deg)
+      .video-wrapper {
+        width: 300px;
+        @include respond-to(lg) {
+          width: 480px;
+        }
+
+        video {
+          border-radius: 22px;
+          width: 100%;
+          height: auto;
+          display: block;
+          @include respond-to(lg) {
+            border-radius: 22px;
+          }
         }
       }
-      video {
-        transform: rotate(20deg)
-      }
-    }
-    &.side-right {
-      .img-content {
-        img {
-          transform: rotate(-20deg)
+      &.side-left {
+        .img-content {
+          img {
+            transform: rotate(20deg);
+          }
+        }
+        video {
+          transform: rotate(20deg);
         }
       }
-      video {
-        transform: rotate(-20deg)
+      &.side-right {
+        .img-content {
+          img {
+            transform: rotate(-20deg);
+          }
+        }
+        video {
+          transform: rotate(-20deg);
+        }
       }
     }
   }
@@ -334,12 +337,78 @@
         height: 500px;
         border-radius: 100%;
         opacity: 0.1;
-        background: radial-gradient(50% 50% at 50% 50%, var(--spot-color) 0%, rgba(253, 196, 93, 0) 100%);
+        background: radial-gradient(
+          50% 50% at 50% 50%,
+          var(--spot-color) 0%,
+          rgba(253, 196, 93, 0) 100%
+        );
       }
 
       img {
         width: 100%;
         height: 100%;
+      }
+
+      .video-wrapper {
+        position: relative;
+
+        display: block;
+        cursor: pointer;
+
+        video {
+          display: block;
+          cursor: pointer;
+        }
+
+        .video-control-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          background: rgba(0, 0, 0, 0.7);
+          border: 2px solid rgba(255, 255, 255, 0.9);
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+          z-index: 10;
+          padding: 0;
+          backdrop-filter: blur(4px);
+          opacity: 0;
+          pointer-events: all;
+
+          &:hover {
+            background: rgba(0, 0, 0, 0.85);
+            border-color: white;
+            transform: translate(-50%, -50%) scale(1.1);
+            opacity: 1;
+          }
+
+          &:active {
+            transform: translate(-50%, -50%) scale(0.95);
+            opacity: 1;
+          }
+
+          &:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+            opacity: 0.5;
+          }
+          // Show button when video is paused (play state)
+          &.video-paused {
+            opacity: 1;
+          }
+          svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+          }
+        }
       }
     }
   }

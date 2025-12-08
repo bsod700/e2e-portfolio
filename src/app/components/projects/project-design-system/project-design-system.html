@@ -34,7 +34,7 @@
               @for (systemCard of projectDesignSystemData.systemCards; track $index) {
                 <div class="carousel-slide" [style.min-width.%]="100 / getItemsPerView()">
                   <div class="card" (click)="openOverlay($index)">
-                    <img [src]="systemCard.image" [alt]="systemCard.title" width="467" height="400" draggable="false">
+                    <img [src]="systemCard.image" [alt]="systemCard.title" width="467" height="400" draggable="false" loading="lazy">
                   </div>
                 </div>
               }
@@ -98,6 +98,7 @@
              [alt]="projectDesignSystemData.systemCards[overlayImageIndex].title"
              width="1400"
              height="400"
+             loading="lazy"
              [style.transform]="getImageTransform()"
              [style.cursor]="getImageCursor()"
              [class.is-zoomed]="zoomLevel > 1"

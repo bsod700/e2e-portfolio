@@ -3,7 +3,7 @@
     <div class="background">
         @if (projectThanksData.backgroundImages) {
             @for (image of projectThanksData.backgroundImages; track $index) {
-                <img [src]="image" alt="background" />
+                <img [src]="image" alt="background" loading="lazy" />
             }
         }
         @if (projectThanksData.backgroundCircles) {

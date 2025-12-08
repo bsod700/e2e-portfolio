@@ -2,7 +2,7 @@
   <div class="background">
     <div class="circle"></div>
     @for (image of projectProcessData.backgroundImages; track $index) {
-    <img [src]="image" alt="background" />
+    <img [src]="image" alt="background" loading="lazy" />
     }
   </div>
   <div class="container">

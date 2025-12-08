@@ -3,7 +3,7 @@
         <div class="background">
           @if (projectSideImgTextData.backgroundImages) {
             @for (image of projectSideImgTextData.backgroundImages; track $index) {
-                <img [src]="image" alt="background" />
+                <img [src]="image" alt="background" loading="lazy" />
             }
           }
             @if (projectSideImgTextData.circles) {
@@ -22,12 +22,42 @@
     </div>
     <div class="img-content">
       @if (projectSideImgTextData.image) {
-        <img [src]="projectSideImgTextData.image" alt="projectSideImgTextData.title" />
+        <img [src]="projectSideImgTextData.image" alt="projectSideImgTextData.title" loading="lazy" />
       }
       @if (projectSideImgTextData.video) {
-        <video [src]="projectSideImgTextData.video" alt="projectSideImgTextData.title" autoplay loop muted playsinline>
-          <source [src]="projectSideImgTextData.video" type="video/mp4">
-        </video>
+        <div class="video-wrapper" [class.video-paused]="!isPlaying">
+          <video 
+            #videoPlayer
+            [src]="projectSideImgTextData.video" 
+            [attr.aria-label]="projectSideImgTextData.title" 
+            autoplay 
+            loop 
+            muted 
+            playsinline 
+            preload="none"
+            (click)="togglePlayPause()"
+            (play)="isPlaying = true"
+            (pause)="isPlaying = false">
+            <source [src]="projectSideImgTextData.video" type="video/mp4">
+          </video>
+          <button 
+            class="video-control-btn"
+            [class.video-paused]="!isPlaying"
+            (click)="togglePlayPause(); $event.stopPropagation()"
+            [attr.aria-label]="isPlaying ? 'Pause video' : 'Play video'"
+            type="button">
+            @if (isPlaying) {
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+            } @else {
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            }
+          </button>
+        </div>
       }
     </div>
   </div>

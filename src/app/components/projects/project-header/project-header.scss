@@ -77,6 +77,21 @@
       }
     }
   }
+  &.project-landerx {
+    @include respond-to(md) {
+      padding: 200px 0 80px;
+    }
+    .circles {
+      .circle-0 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(112, 185, 238, 0.40) 0%, transparent 65%);
+        transform: translate(calc(50% - 600px), 55px);
+        z-index: 2;
+        opacity: 0.4;
+      }
+    }
+  }
   &.project-tierro {
     .background-images {
       img {

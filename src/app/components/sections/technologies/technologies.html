@@ -51,7 +51,7 @@
               <div class="tech-card"
                    (mouseenter)="showTooltip($event, tech.name)"
                    (mouseleave)="hideTooltip()">
-                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" />
+                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" loading="lazy" />
               </div>
             }
           </div>
@@ -73,7 +73,7 @@
             <div class="glow-circle glow-5"></div>
             <div class="glow-circle glow-6"></div>
             <!-- Logo Icon -->
-            <img src="assets/images/logo-icon-white-3.svg" alt="Logo" class="logo-icon">
+            <img src="assets/images/logo-icon-white-3.svg" alt="Logo" class="logo-icon" loading="lazy">
           </div>
         </a>
 
@@ -85,7 +85,7 @@
               <div class="tech-card"
                    (mouseenter)="showTooltip($event, tech.name)"
                    (mouseleave)="hideTooltip()">
-                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" />
+                <img [src]="tech.icon" [alt]="tech.name" class="tech-icon" loading="lazy" />
               </div>
             }
           </div>

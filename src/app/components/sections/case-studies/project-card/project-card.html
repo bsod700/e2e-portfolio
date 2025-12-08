@@ -26,7 +26,7 @@
         <div class="top">
           @if (project.logoUrl) {
             <div class="project-logo">
-              <img [src]="project.logoUrl" [alt]="project.title + ' logo'" />
+              <img [src]="project.logoUrl" [alt]="project.title + ' logo'" loading="lazy" />
             </div>
           }
           <div class="text">
@@ -60,7 +60,7 @@
 
     @if (project.img) {
       <div [ngClass]="['card-img', `project-${project.type}`]">
-        <img [src]="project.img.src" [alt]="project.img.alt" />
+        <img [src]="project.img.src" [alt]="project.img.alt" loading="lazy" />
       </div>
     }
 

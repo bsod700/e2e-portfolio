@@ -1,12 +1,12 @@
 @if (routerLink) {
   <a [routerLink]="routerLink" (click)="onClick($event)" [class]="'cta-button ' + size" role="button" tabindex="0" [target]="target">
     <span>{{ text }}</span>
-    <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" />
+    <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" loading="lazy" />
   </a>
 } @else {
   <a [href]="href" (click)="onClick($event)" [class]="'cta-button ' + size" role="button" tabindex="0" [target]="target">
     <span>{{ text }}</span>
-    <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" />
+    <img src="assets/images/arrow-icon.svg" alt="Arrow" class="arrow-icon" loading="lazy" />
   </a>
 }
 

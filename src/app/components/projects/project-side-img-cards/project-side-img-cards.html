@@ -3,7 +3,7 @@
         <div class="background">
             @if (projectSideImgCardsData.backgroundImages) {
                 @for (image of projectSideImgCardsData.backgroundImages; track $index) {
-                    <img [src]="image" alt="background" />
+                    <img [src]="image" alt="background" loading="lazy" />
                 }
             }
             @if (projectSideImgCardsData.backgroundCircles) {
@@ -28,11 +28,11 @@
                         @if (card.backgroundImages) {
                             <div class="background">
                                 @for (image of card.backgroundImages; track image) {
-                                    <img [src]="image" alt="background" />
+                                    <img [src]="image" alt="background" loading="lazy" />
                                 }
                             </div>
                         }
-                        <img [src]="card.icon" alt="card.title" />
+                        <img [src]="card.icon" alt="card.title" loading="lazy" />
                         <div class="text">
                             <h4>{{ card.title }}</h4>
                             <p>{{ card.text }}</p>
@@ -43,7 +43,7 @@
         </div>
 
         <div class="img-content">
-            <img [src]="projectSideImgCardsData.image" alt="projectSideImgCardsData.title" />
+            <img [src]="projectSideImgCardsData.image" alt="projectSideImgCardsData.title" loading="lazy" />
         </div>
     </div>
 </section>

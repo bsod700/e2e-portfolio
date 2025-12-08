@@ -2,7 +2,7 @@
   @if (projectLogoViewData.backgroundImages) {
     <div class="background">
       @for (image of projectLogoViewData.backgroundImages; track $index) {
-        <img [src]="image" alt="background" />
+        <img [src]="image" alt="background" loading="lazy" />
       }
     </div>
   }
@@ -16,7 +16,7 @@
                     @if (typeof item === 'string') {
                         <span class="logo-item-text">{{ item }}</span>
                     } @else if (typeof item === 'object') {
-                        <img [class]="`logo-item-img-${$index+1}`" [src]="item.src" [alt]="item.alt" />
+                        <img [class]="`logo-item-img-${$index+1}`" [src]="item.src" [alt]="item.alt" loading="lazy" />
                     }
                 </div>
             }

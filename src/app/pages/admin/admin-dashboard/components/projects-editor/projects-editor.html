@@ -123,7 +123,7 @@
           <div class="preview-project-content">
             @if (editingProject.logo_url) {
               <div class="preview-project-header">
-                <img [src]="editingProject.logo_url" [alt]="editingProject.title" class="preview-project-logo" />
+                <img [src]="editingProject.logo_url" [alt]="editingProject.title" class="preview-project-logo" loading="lazy" />
               </div>
             }
             <h3 class="preview-project-title">{{ editingProject.title || 'Project Title' }}</h3>
@@ -137,7 +137,7 @@
             }
             @if (editingProject.image_src) {
               <div class="preview-project-image">
-                <img [src]="editingProject.image_src" [alt]="editingProject.title" class="preview-image" />
+                <img [src]="editingProject.image_src" [alt]="editingProject.title" class="preview-image" loading="lazy" />
               </div>
             }
             @if (editingProject.link) {
