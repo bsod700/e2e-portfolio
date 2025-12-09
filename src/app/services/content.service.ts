@@ -1,6 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { Injectable, inject, PLATFORM_ID, TransferState, makeStateKey } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Observable, from, of, throwError } from 'rxjs';
+import { map, catchError, switchMap, tap, shareReplay, finalize } from 'rxjs/operators';
 import { SupabaseService } from './supabase.service';
 
 export interface HomePageContent {
@@ -95,441 +96,451 @@ export interface LegalPageSection {
   display_order: number;
 }
 
+// TransferState keys for SSR
+const HOME_PAGE_CONTENT_KEY = makeStateKey<HomePageContent | null>('home_page_content');
+const HOME_SERVICES_SECTION_KEY = makeStateKey<HomeServiceCard[]>('home_services_section');
+const SERVICES_SECTION_HEADER_KEY = makeStateKey<ServicesSectionHeader | null>('services_section_header');
+const SERVICES_CONTENT_KEY = makeStateKey<ServiceContent[]>('services_content');
+const PROJECTS_CONTENT_KEY = makeStateKey<ProjectContent[]>('projects_content');
+const TESTIMONIALS_CONTENT_KEY = makeStateKey<TestimonialContent[]>('testimonials_content');
+const FAQ_CONTENT_KEY = makeStateKey<FAQContent[]>('faq_content');
+const LEGAL_PAGE_CONTENT_KEY = makeStateKey<Record<string, LegalPageContent | null>>('legal_pages_content');
+
+type UpdateResult<T> = { success: boolean; error?: string; data?: T };
+type SupabaseResponse<T> = { data: T | null; error: any };
+type StateKey<T> = ReturnType<typeof makeStateKey<T>>;
+
 @Injectable({
   providedIn: 'root'
 })
 export class ContentService {
-  private supabaseService = inject(SupabaseService);
-  private readonly TABLE_NAME = 'home_page_content';
+  private readonly supabaseService = inject(SupabaseService);
+  private readonly transferState = inject(TransferState);
+  private readonly platformId = inject(PLATFORM_ID);
+  
+  // Cache observables to prevent duplicate requests
+  private readonly cache = new Map<string, Observable<any>>();
 
-  getHomePageContent(): Observable<HomePageContent | null> {
+  /**
+   * Helper method to check TransferState cache
+   */
+  private getFromTransferState<T>(key: StateKey<T>, defaultValue: T | null = null): T | null {
+    if (isPlatformBrowser(this.platformId)) {
+      const cached = this.transferState.get<T | null>(key, null);
+      return cached !== null ? cached : defaultValue;
+    }
+    return defaultValue;
+  }
+
+  /**
+   * Helper method to set TransferState cache
+   */
+  private setTransferState<T>(key: StateKey<T>, value: T): void {
+    if (isPlatformServer(this.platformId)) {
+      this.transferState.set(key, value);
+    }
+  }
+
+  /**
+   * Helper method to get Supabase client or return error observable
+   */
+  private getClientOrError(): Observable<never> | null {
     const client = this.supabaseService.client;
     if (!client) {
-      return new Observable(observer => {
-        observer.next(null);
-        observer.complete();
-      });
+      return throwError(() => new Error('Supabase client not initialized'));
+    }
+    return null;
+  }
+
+  /**
+   * Generic method to fetch single record from a table
+   */
+  private fetchSingle<T>(
+    tableName: string,
+    transferKey: StateKey<T | null>,
+    orderBy: string = 'updated_at',
+    transform?: (data: any) => T
+  ): Observable<T | null> {
+    // Check cache first
+    const cached = this.getFromTransferState(transferKey);
+    if (cached !== null) {
+      return of(cached);
     }
 
-    return from(
+    // Check if observable is already in flight
+    const cacheKey = `fetch_${tableName}`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
+    const client = this.supabaseService.client;
+    if (!client) {
+      return of(null);
+    }
+
+    const observable = from(
       client
-        .from(this.TABLE_NAME)
+        .from(tableName)
         .select('*')
-        .order('updated_at', { ascending: false })
+        .order(orderBy, { ascending: false })
         .limit(1)
         .single()
     ).pipe(
-      map(({ data, error }) => {
+      map(({ data, error }: SupabaseResponse<T>) => {
         if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching content:', error);
+          console.error(`Error fetching ${tableName}:`, error);
           return null;
         }
-        return data as HomePageContent | null;
+        return transform ? transform(data) : (data as T | null);
       }),
-      catchError(error => {
-        console.error('Error in getHomePageContent:', error);
-        return [null];
-      })
+      tap((data: T | null) => this.setTransferState(transferKey, data)),
+      shareReplay(1),
+      catchError((error) => {
+        console.error(`Error in fetchSingle for ${tableName}:`, error);
+        return of(null);
+      }),
+      finalize(() => this.cache.delete(cacheKey))
     );
+
+    this.cache.set(cacheKey, observable);
+    return observable;
   }
 
-  updateHomePageContent(content: Partial<HomePageContent>): Observable<{ success: boolean; error?: string; data?: HomePageContent }> {
+  /**
+   * Generic method to fetch multiple records from a table
+   */
+  private fetchMultiple<T>(
+    tableName: string,
+    transferKey: StateKey<T[]>,
+    orderBy: string = 'display_order',
+    transform?: (data: any[]) => T[]
+  ): Observable<T[]> {
+    // Check cache first
+    const cached = this.getFromTransferState(transferKey, []);
+    if (cached !== null && cached.length >= 0) {
+      return of(cached);
+    }
+
+    // Check if observable is already in flight
+    const cacheKey = `fetch_${tableName}_multiple`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
     const client = this.supabaseService.client;
     if (!client) {
+      return of([]);
+    }
+
+    const observable = from(
+      client
+        .from(tableName)
+        .select('*')
+        .order(orderBy, { ascending: true })
+    ).pipe(
+      map(({ data, error }: SupabaseResponse<T[]>) => {
+        if (error) {
+          console.error(`Error fetching ${tableName}:`, error);
+          return [];
+        }
+        const items = (data || []) as T[];
+        return transform ? transform(items) : items;
+      }),
+      tap((data: T[]) => this.setTransferState(transferKey, data)),
+      shareReplay(1),
+      catchError(() => of([])),
+      finalize(() => this.cache.delete(cacheKey))
+    );
+
+    this.cache.set(cacheKey, observable);
+    return observable;
+  }
+
+  /**
+   * Generic method to update or insert a single record
+   */
+  private upsertSingle<T extends { id?: string; updated_at?: string }>(
+    tableName: string,
+    content: Partial<T>,
+    conflictColumn: string,
+    getExistingQuery: () => any
+  ): Observable<UpdateResult<T>> {
+    const error = this.getClientOrError();
+    if (error) {
       return of({ success: false, error: 'Supabase client not initialized' });
     }
 
-    return from(
-      client
-        .from(this.TABLE_NAME)
-        .select('*')
-        .order('updated_at', { ascending: false })
-        .limit(1)
-        .single()
-    ).pipe(
+    const client = this.supabaseService.client!;
+
+    return from(getExistingQuery() as Promise<SupabaseResponse<T>>).pipe(
       switchMap(({ data: existingData, error: fetchError }) => {
         if (fetchError && fetchError.code !== 'PGRST116') {
           return of({ success: false, error: fetchError.message });
         }
 
+        const updateData = {
+          ...content,
+          updated_at: new Date().toISOString()
+        };
+
         if (existingData) {
           return from(
             client
-              .from(this.TABLE_NAME)
-              .update({
-                ...content,
-                updated_at: new Date().toISOString()
-              })
+              .from(tableName)
+              .update(updateData)
               .eq('id', existingData.id)
               .select()
               .single()
           ).pipe(
-            map(({ data, error }) => {
+            map(({ data, error }: SupabaseResponse<T>) => {
               if (error) {
                 return { success: false, error: error.message };
               }
-              return { success: true, data: data as HomePageContent };
+              return { success: true, data: data as T };
             })
           );
         } else {
           return from(
             client
-              .from(this.TABLE_NAME)
-              .insert({
-                ...content,
-                updated_at: new Date().toISOString()
-              })
+              .from(tableName)
+              .insert(updateData)
               .select()
               .single()
           ).pipe(
-            map(({ data, error }) => {
+            map(({ data, error }: SupabaseResponse<T>) => {
               if (error) {
                 return { success: false, error: error.message };
               }
-              return { success: true, data: data as HomePageContent };
+              return { success: true, data: data as T };
             })
           );
         }
       }),
-      catchError((error) => {
-        return of({ success: false, error: error.message || 'An error occurred' });
+      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+    );
+  }
+
+  /**
+   * Generic method to upsert with conflict resolution
+   */
+  private upsertWithConflict<T extends { updated_at?: string }>(
+    tableName: string,
+    content: Partial<T>,
+    conflictColumn: string
+  ): Observable<UpdateResult<T>> {
+    const error = this.getClientOrError();
+    if (error) {
+      return of({ success: false, error: 'Supabase client not initialized' });
+    }
+
+    const client = this.supabaseService.client!;
+
+    if (!(content as any)[conflictColumn]) {
+      return of({ success: false, error: `${conflictColumn} is required` });
+    }
+
+    return from(
+      client
+        .from(tableName)
+        .upsert(
+          {
+            ...content,
+            updated_at: new Date().toISOString()
+          },
+          { onConflict: conflictColumn }
+        )
+        .select()
+        .single()
+    ).pipe(
+      map(({ data, error }: SupabaseResponse<T>) => {
+        if (error) {
+          return { success: false, error: error.message };
+        }
+        return { success: true, data: data as T };
+      }),
+      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+    );
+  }
+
+  getHomePageContent(): Observable<HomePageContent | null> {
+    return this.fetchSingle<HomePageContent>(
+      'home_page_content',
+      HOME_PAGE_CONTENT_KEY
+    );
+  }
+
+  updateHomePageContent(content: Partial<HomePageContent>): Observable<UpdateResult<HomePageContent>> {
+    const client = this.supabaseService.client;
+    if (!client) {
+      return of({ success: false, error: 'Supabase client not initialized' });
+    }
+
+    return this.upsertSingle<HomePageContent>(
+      'home_page_content',
+      content,
+      'id',
+      () => client
+        .from('home_page_content')
+        .select('*')
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single()
+    ).pipe(
+      tap((result) => {
+        if (result.success && result.data) {
+          // Invalidate cache
+          this.cache.delete('fetch_home_page_content');
+          this.setTransferState(HOME_PAGE_CONTENT_KEY, result.data);
+        }
       })
     );
   }
 
   // Home Page Services Section (Service Cards)
   getHomeServicesSection(): Observable<HomeServiceCard[]> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of([]);
-    }
-
-    return from(
-      client
-        .from('home_services_section')
-        .select('*')
-        .order('display_order', { ascending: true })
-    ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching home services section:', error);
-          return [];
-        }
-        return (data || []) as HomeServiceCard[];
-      }),
-      catchError(() => of([]))
+    return this.fetchMultiple<HomeServiceCard>(
+      'home_services_section',
+      HOME_SERVICES_SECTION_KEY
     );
   }
 
-  updateHomeServiceCard(service: Partial<HomeServiceCard>): Observable<{ success: boolean; error?: string; data?: HomeServiceCard }> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of({ success: false, error: 'Supabase client not initialized' });
-    }
-
-    if (!service.service_id) {
-      return of({ success: false, error: 'service_id is required' });
-    }
-
-    return from(
-      client
-        .from('home_services_section')
-        .upsert({
-          ...service,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'service_id'
-        })
-        .select()
-        .single()
+  updateHomeServiceCard(service: Partial<HomeServiceCard>): Observable<UpdateResult<HomeServiceCard>> {
+    return this.upsertWithConflict<HomeServiceCard>(
+      'home_services_section',
+      service,
+      'service_id'
     ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          return { success: false, error: error.message };
+      tap((result) => {
+        if (result.success) {
+          this.cache.delete('fetch_home_services_section_multiple');
         }
-        return { success: true, data: data as HomeServiceCard };
-      }),
-      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+      })
     );
   }
 
   // Services Section Header
   getServicesSectionHeader(): Observable<ServicesSectionHeader | null> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return new Observable(observer => {
-        observer.next(null);
-        observer.complete();
-      });
-    }
-
-    return from(
-      client
-        .from('services_section_header')
-        .select('*')
-        .order('updated_at', { ascending: false })
-        .limit(1)
-        .single()
-    ).pipe(
-      map(({ data, error }) => {
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching services section header:', error);
-          return null;
-        }
-        return data as ServicesSectionHeader | null;
-      }),
-      catchError(error => {
-        console.error('Error in getServicesSectionHeader:', error);
-        return [null];
-      })
+    return this.fetchSingle<ServicesSectionHeader>(
+      'services_section_header',
+      SERVICES_SECTION_HEADER_KEY
     );
   }
 
-  updateServicesSectionHeader(content: Partial<ServicesSectionHeader>): Observable<{ success: boolean; error?: string; data?: ServicesSectionHeader }> {
+  updateServicesSectionHeader(content: Partial<ServicesSectionHeader>): Observable<UpdateResult<ServicesSectionHeader>> {
     const client = this.supabaseService.client;
     if (!client) {
       return of({ success: false, error: 'Supabase client not initialized' });
     }
 
-    return from(
-      client
+    return this.upsertSingle<ServicesSectionHeader>(
+      'services_section_header',
+      content,
+      'id',
+      () => client
         .from('services_section_header')
         .select('*')
         .order('updated_at', { ascending: false })
         .limit(1)
         .single()
     ).pipe(
-      switchMap(({ data: existingData, error: fetchError }) => {
-        if (fetchError && fetchError.code !== 'PGRST116') {
-          return of({ success: false, error: fetchError.message });
+      tap((result) => {
+        if (result.success && result.data) {
+          this.cache.delete('fetch_services_section_header');
+          this.setTransferState(SERVICES_SECTION_HEADER_KEY, result.data);
         }
-
-        if (existingData) {
-          return from(
-            client
-              .from('services_section_header')
-              .update({
-                ...content,
-                updated_at: new Date().toISOString()
-              })
-              .eq('id', existingData.id)
-              .select()
-              .single()
-          ).pipe(
-            map(({ data, error }) => {
-              if (error) {
-                return { success: false, error: error.message };
-              }
-              return { success: true, data: data as ServicesSectionHeader };
-            })
-          );
-        } else {
-          return from(
-            client
-              .from('services_section_header')
-              .insert({
-                ...content,
-                updated_at: new Date().toISOString()
-              })
-              .select()
-              .single()
-          ).pipe(
-            map(({ data, error }) => {
-              if (error) {
-                return { success: false, error: error.message };
-              }
-              return { success: true, data: data as ServicesSectionHeader };
-            })
-          );
-        }
-      }),
-      catchError((error) => {
-        return of({ success: false, error: error.message || 'An error occurred' });
       })
     );
   }
 
   // Services Content (Service Detail Pages)
   getServicesContent(): Observable<ServiceContent[]> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of([]);
-    }
-
-    return from(
-      client
-        .from('services_content')
-        .select('*')
-        .order('display_order', { ascending: true })
-    ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching services:', error);
-          return [];
-        }
-        return (data || []).map(item => ({
-          ...item,
-          services: Array.isArray(item.services) ? item.services : [],
-          benefits: Array.isArray(item.benefits) ? item.benefits : []
-        })) as ServiceContent[];
-      }),
-      catchError(() => of([]))
+    return this.fetchMultiple<ServiceContent>(
+      'services_content',
+      SERVICES_CONTENT_KEY,
+      'display_order',
+      (items) => items.map(item => ({
+        ...item,
+        services: Array.isArray(item.services) ? item.services : [],
+        benefits: Array.isArray(item.benefits) ? item.benefits : []
+      })) as ServiceContent[]
     );
   }
 
-  updateServiceContent(service: Partial<ServiceContent>): Observable<{ success: boolean; error?: string; data?: ServiceContent }> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of({ success: false, error: 'Supabase client not initialized' });
-    }
-
-    if (!service.service_id) {
-      return of({ success: false, error: 'service_id is required' });
-    }
-
-    return from(
-      client
-        .from('services_content')
-        .upsert({
-          ...service,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'service_id'
-        })
-        .select()
-        .single()
+  updateServiceContent(service: Partial<ServiceContent>): Observable<UpdateResult<ServiceContent>> {
+    return this.upsertWithConflict<ServiceContent>(
+      'services_content',
+      service,
+      'service_id'
     ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          return { success: false, error: error.message };
+      tap((result) => {
+        if (result.success) {
+          this.cache.delete('fetch_services_content_multiple');
         }
-        return { success: true, data: data as ServiceContent };
-      }),
-      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+      })
     );
   }
 
   // Projects Content
   getProjectsContent(): Observable<ProjectContent[]> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of([]);
-    }
-
-    return from(
-      client
-        .from('projects_content')
-        .select('*')
-        .order('display_order', { ascending: true })
-    ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching projects:', error);
-          return [];
-        }
-        return (data || []).map(item => ({
-          ...item,
-          background_images: Array.isArray(item.background_images) ? item.background_images : [],
-          services: Array.isArray(item.services) ? item.services : []
-        })) as ProjectContent[];
-      }),
-      catchError(() => of([]))
+    return this.fetchMultiple<ProjectContent>(
+      'projects_content',
+      PROJECTS_CONTENT_KEY,
+      'display_order',
+      (items) => items.map(item => ({
+        ...item,
+        background_images: Array.isArray(item.background_images) ? item.background_images : [],
+        services: Array.isArray(item.services) ? item.services : []
+      })) as ProjectContent[]
     );
   }
 
-  updateProjectContent(project: Partial<ProjectContent>): Observable<{ success: boolean; error?: string; data?: ProjectContent }> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of({ success: false, error: 'Supabase client not initialized' });
-    }
-
-    if (!project.project_id) {
-      return of({ success: false, error: 'project_id is required' });
-    }
-
-    return from(
-      client
-        .from('projects_content')
-        .upsert({
-          ...project,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'project_id'
-        })
-        .select()
-        .single()
+  updateProjectContent(project: Partial<ProjectContent>): Observable<UpdateResult<ProjectContent>> {
+    return this.upsertWithConflict<ProjectContent>(
+      'projects_content',
+      project,
+      'project_id'
     ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          return { success: false, error: error.message };
+      tap((result) => {
+        if (result.success) {
+          this.cache.delete('fetch_projects_content_multiple');
         }
-        return { success: true, data: data as ProjectContent };
-      }),
-      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+      })
     );
   }
 
   // Testimonials Content
   getTestimonialsContent(): Observable<TestimonialContent[]> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of([]);
-    }
-
-    return from(
-      client
-        .from('testimonials_content')
-        .select('*')
-        .order('display_order', { ascending: true })
-    ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching testimonials:', error);
-          return [];
-        }
-        return (data || []) as TestimonialContent[];
-      }),
-      catchError(() => of([]))
+    return this.fetchMultiple<TestimonialContent>(
+      'testimonials_content',
+      TESTIMONIALS_CONTENT_KEY
     );
   }
 
-  updateTestimonialContent(testimonial: Partial<TestimonialContent>): Observable<{ success: boolean; error?: string; data?: TestimonialContent }> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of({ success: false, error: 'Supabase client not initialized' });
-    }
-
-    return from(
-      client
-        .from('testimonials_content')
-        .upsert({
-          ...testimonial,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'id'
-        })
-        .select()
-        .single()
+  updateTestimonialContent(testimonial: Partial<TestimonialContent>): Observable<UpdateResult<TestimonialContent>> {
+    return this.upsertWithConflict<TestimonialContent>(
+      'testimonials_content',
+      testimonial,
+      'id'
     ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          return { success: false, error: error.message };
+      tap((result) => {
+        if (result.success) {
+          this.cache.delete('fetch_testimonials_content_multiple');
         }
-        return { success: true, data: data as TestimonialContent };
-      }),
-      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+      })
     );
   }
 
   deleteTestimonialContent(id: string): Observable<{ success: boolean; error?: string }> {
-    const client = this.supabaseService.client;
-    if (!client) {
+    const error = this.getClientOrError();
+    if (error) {
       return of({ success: false, error: 'Supabase client not initialized' });
     }
 
     if (!id) {
       return of({ success: false, error: 'Testimonial ID is required' });
     }
+
+    const client = this.supabaseService.client!;
 
     return from(
       client
@@ -541,6 +552,8 @@ export class ContentService {
         if (error) {
           return { success: false, error: error.message };
         }
+        // Invalidate cache
+        this.cache.delete('fetch_testimonials_content_multiple');
         return { success: true };
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
@@ -549,65 +562,37 @@ export class ContentService {
 
   // FAQ Content
   getFAQContent(): Observable<FAQContent[]> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of([]);
-    }
-
-    return from(
-      client
-        .from('faq_content')
-        .select('*')
-        .order('display_order', { ascending: true })
-    ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching FAQs:', error);
-          return [];
-        }
-        return (data || []) as FAQContent[];
-      }),
-      catchError(() => of([]))
+    return this.fetchMultiple<FAQContent>(
+      'faq_content',
+      FAQ_CONTENT_KEY
     );
   }
 
-  updateFAQContent(faq: Partial<FAQContent>): Observable<{ success: boolean; error?: string; data?: FAQContent }> {
-    const client = this.supabaseService.client;
-    if (!client) {
-      return of({ success: false, error: 'Supabase client not initialized' });
-    }
-
-    return from(
-      client
-        .from('faq_content')
-        .upsert({
-          ...faq,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'id'
-        })
-        .select()
-        .single()
+  updateFAQContent(faq: Partial<FAQContent>): Observable<UpdateResult<FAQContent>> {
+    return this.upsertWithConflict<FAQContent>(
+      'faq_content',
+      faq,
+      'id'
     ).pipe(
-      map(({ data, error }) => {
-        if (error) {
-          return { success: false, error: error.message };
+      tap((result) => {
+        if (result.success) {
+          this.cache.delete('fetch_faq_content_multiple');
         }
-        return { success: true, data: data as FAQContent };
-      }),
-      catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
+      })
     );
   }
 
   deleteFAQContent(id: string): Observable<{ success: boolean; error?: string }> {
-    const client = this.supabaseService.client;
-    if (!client) {
+    const error = this.getClientOrError();
+    if (error) {
       return of({ success: false, error: 'Supabase client not initialized' });
     }
 
     if (!id) {
       return of({ success: false, error: 'FAQ ID is required' });
     }
+
+    const client = this.supabaseService.client!;
 
     return from(
       client
@@ -619,6 +604,8 @@ export class ContentService {
         if (error) {
           return { success: false, error: error.message };
         }
+        // Invalidate cache
+        this.cache.delete('fetch_faq_content_multiple');
         return { success: true };
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
@@ -627,19 +614,33 @@ export class ContentService {
 
   // Legal Pages Content
   getLegalPageContent(pageType: 'accessibility-statement' | 'privacy-policy' | 'terms-conditions'): Observable<LegalPageContent | null> {
+    // Check TransferState first (client-side hydration)
+    if (isPlatformBrowser(this.platformId)) {
+      const cachedPages = this.transferState.get<Record<string, LegalPageContent | null> | null>(LEGAL_PAGE_CONTENT_KEY, null);
+      if (cachedPages && cachedPages[pageType] !== undefined) {
+        return of(cachedPages[pageType]);
+      }
+    }
+
+    // Check if observable is already in flight
+    const cacheKey = `fetch_legal_page_${pageType}`;
+    if (this.cache.has(cacheKey)) {
+      return this.cache.get(cacheKey)!;
+    }
+
     const client = this.supabaseService.client;
     if (!client) {
       return of(null);
     }
 
-    return from(
+    const observable = from(
       client
         .from('legal_pages_content')
         .select('*, sections:legal_page_sections(*)')
         .eq('page_type', pageType)
         .single()
     ).pipe(
-      map(({ data, error }) => {
+      map(({ data, error }: SupabaseResponse<LegalPageContent>) => {
         if (error && error.code !== 'PGRST116') {
           console.error('Error fetching legal page content:', error);
           return null;
@@ -654,13 +655,28 @@ export class ContentService {
         }
         return data as LegalPageContent | null;
       }),
-      catchError(() => of(null))
+      tap((data: LegalPageContent | null) => {
+        // Store in TransferState on server
+        if (isPlatformServer(this.platformId)) {
+          const cachedPages = this.transferState.get<Record<string, LegalPageContent | null>>(LEGAL_PAGE_CONTENT_KEY, {});
+          this.transferState.set(LEGAL_PAGE_CONTENT_KEY, {
+            ...cachedPages,
+            [pageType]: data
+          });
+        }
+      }),
+      shareReplay(1),
+      catchError(() => of(null)),
+      finalize(() => this.cache.delete(cacheKey))
     );
+
+    this.cache.set(cacheKey, observable);
+    return observable;
   }
 
-  updateLegalPageContent(content: Partial<LegalPageContent>): Observable<{ success: boolean; error?: string; data?: LegalPageContent }> {
-    const client = this.supabaseService.client;
-    if (!client) {
+  updateLegalPageContent(content: Partial<LegalPageContent>): Observable<UpdateResult<LegalPageContent>> {
+    const error = this.getClientOrError();
+    if (error) {
       return of({ success: false, error: 'Supabase client not initialized' });
     }
 
@@ -668,14 +684,17 @@ export class ContentService {
       return of({ success: false, error: 'page_type is required' });
     }
 
+    const client = this.supabaseService.client!;
     const sections = content.sections || [];
-    delete content.sections; // Remove sections from main content
+    const pageType = content.page_type;
+    const contentWithoutSections = { ...content };
+    delete contentWithoutSections.sections;
 
     return from(
       client
         .from('legal_pages_content')
         .upsert({
-          ...content,
+          ...contentWithoutSections,
           last_updated: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }, {
@@ -684,79 +703,105 @@ export class ContentService {
         .select()
         .single()
     ).pipe(
-      switchMap(({ data: pageData, error: pageError }) => {
+      switchMap(({ data: pageData, error: pageError }: SupabaseResponse<LegalPageContent>) => {
         if (pageError) {
           return of({ success: false, error: pageError.message });
         }
 
-        if (!pageData || !sections.length) {
-          return of({ success: true, data: pageData as LegalPageContent });
+        if (!pageData) {
+          return of({ success: true, data: { ...contentWithoutSections, sections: [] } as LegalPageContent });
         }
 
-        // Update sections and remove any that were deleted
+        if (!sections.length) {
+          // Delete all sections if none provided
+          return from(
+            client
+              .from('legal_page_sections')
+              .delete()
+              .eq('page_id', pageData.id)
+          ).pipe(
+            map(() => ({ success: true, data: { ...pageData, sections: [] } as LegalPageContent }))
+          );
+        }
+
+        // Prepare section updates
         const sectionUpdates = sections.map((section, index) => ({
           ...section,
           page_id: pageData.id,
           display_order: section.display_order ?? index
         }));
 
-        return from((async () => {
-          // Upsert current sections
-          const { data: upsertedSections, error: sectionsError } = await client
+        // Upsert sections
+        return from(
+          client
             .from('legal_page_sections')
             .upsert(sectionUpdates, {
               onConflict: 'id'
             })
-            .select();
-
-          if (sectionsError) {
-            return { success: false, error: sectionsError.message };
-          }
-
-          // Determine which IDs should remain
-          const idsToKeep = (sectionUpdates
-            .map(s => (s as any).id)
-            .filter((id: unknown): id is string | number => !!id));
-
-          // Delete sections that are no longer present
-          if (idsToKeep.length > 0) {
-            const { error: deleteError } = await client
-              .from('legal_page_sections')
-              .delete()
-              .eq('page_id', pageData.id)
-              .not('id', 'in', `(${idsToKeep.join(',')})`);
-
-            if (deleteError) {
-              return { success: false, error: deleteError.message };
+            .select()
+        ).pipe(
+          switchMap(({ data: upsertedSections, error: sectionsError }: SupabaseResponse<LegalPageSection[]>) => {
+            if (sectionsError) {
+              return of({ success: false, error: sectionsError.message });
             }
-          } else {
-            // If no sections left, remove all for this page
-            const { error: deleteError } = await client
-              .from('legal_page_sections')
-              .delete()
-              .eq('page_id', pageData.id);
 
-            if (deleteError) {
-              return { success: false, error: deleteError.message };
-            }
-          }
+            // Determine which IDs should remain
+            const idsToKeep = sectionUpdates
+              .map(s => (s as any).id)
+              .filter((id: unknown): id is string | number => !!id)
+              .map(String);
 
-          // Fetch final sections list for this page, ordered
-          const { data: finalSections, error: finalError } = await client
-            .from('legal_page_sections')
-            .select('*')
-            .eq('page_id', pageData.id)
-            .order('display_order', { ascending: true });
+            // Delete sections that are no longer present
+            const deleteQuery = idsToKeep.length > 0
+              ? client
+                  .from('legal_page_sections')
+                  .delete()
+                  .eq('page_id', pageData.id)
+                  .not('id', 'in', `(${idsToKeep.join(',')})`)
+              : client
+                  .from('legal_page_sections')
+                  .delete()
+                  .eq('page_id', pageData.id);
 
-          if (finalError) {
-            return { success: false, error: finalError.message };
-          }
+            return from(deleteQuery).pipe(
+              switchMap(({ error: deleteError }) => {
+                if (deleteError) {
+                  return of({ success: false, error: deleteError.message });
+                }
 
-          return {
-            success: true,
-            data: { ...pageData, sections: finalSections || [] } as LegalPageContent
-          };
-        })());
+                // Fetch final sections list
+                return from(
+                  client
+                    .from('legal_page_sections')
+                    .select('*')
+                    .eq('page_id', pageData.id)
+                    .order('display_order', { ascending: true })
+                ).pipe(
+                  map(({ data: finalSections, error: finalError }: SupabaseResponse<LegalPageSection[]>) => {
+                    if (finalError) {
+                      return { success: false, error: finalError.message };
+                    }
+                    return {
+                      success: true,
+                      data: { ...pageData, sections: finalSections || [] } as LegalPageContent
+                    };
+                  })
+                );
+              })
+            );
+          })
+        );
+      }),
+      tap((result: UpdateResult<LegalPageContent>) => {
+        if (result.success && 'data' in result && result.data) {
+          // Invalidate cache
+          this.cache.delete(`fetch_legal_page_${pageType}`);
+          const cachedPages = this.transferState.get<Record<string, LegalPageContent | null>>(LEGAL_PAGE_CONTENT_KEY, {});
+          this.transferState.set(LEGAL_PAGE_CONTENT_KEY, {
+            ...cachedPages,
+            [pageType]: result.data
+          });
+        }
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
     );

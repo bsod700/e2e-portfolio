@@ -3,7 +3,7 @@
 .legal-page {
   min-height: 100vh;
   padding: 120px 0 80px;
-  background: var(--color-bg-primary);
+  background: linear-gradient(to bottom, var(--color-bg-primary), var(--color-bg-secondary));
 
   .legal-content {
     max-width: 800px;
@@ -14,14 +14,6 @@
       font-weight: 800;
       margin-bottom: 1rem;
       color: var(--color-text-primary);
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-
-      @media (max-width: 768px) {
-        font-size: 2rem;
-      }
     }
 
     .last-updated {

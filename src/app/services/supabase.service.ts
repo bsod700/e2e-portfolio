@@ -27,18 +27,14 @@ export class SupabaseService {
   private platformId = inject(PLATFORM_ID);
 
   constructor() {
-    // Initialize client only once, lazily
-    if (isPlatformBrowser(this.platformId) && !globalSupabaseClient && !clientInitializationInProgress) {
+    // Initialize client only once, lazily (both browser and server)
+    if (!globalSupabaseClient && !clientInitializationInProgress) {
       this.initializeClient();
     }
   }
 
   private initializeClient(): void {
     if (globalSupabaseClient || clientInitializationInProgress) {
-      return;
-    }
-
-    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
@@ -49,32 +45,42 @@ export class SupabaseService {
     try {
       clientInitializationInProgress = true;
 
-      // Create client with noOpLock to disable Navigator LockManager
-      // This prevents NavigatorLockAcquireTimeoutError errors
-      globalSupabaseClient = createClient(environment.supabase.url, environment.supabase.anonKey, {
-        auth: {
-          lock: noOpLock, // Disable lock mechanism to prevent NavigatorLockAcquireTimeoutError
-          storage: this.createSafeStorageAdapter(),
-          autoRefreshToken: true,
-          persistSession: true,
-          detectSessionInUrl: true,
-          flowType: 'pkce'
-        },
-        global: {
-          headers: {}
-        }
-      });
-    } catch (error) {
-      console.error('Error initializing Supabase client:', error);
-      // If initialization fails, try with default storage but still disable lock
-      try {
+      if (isPlatformBrowser(this.platformId)) {
+        // Browser initialization with auth features
         globalSupabaseClient = createClient(environment.supabase.url, environment.supabase.anonKey, {
           auth: {
-            lock: noOpLock, // Disable lock mechanism
+            lock: noOpLock, // Disable lock mechanism to prevent NavigatorLockAcquireTimeoutError
+            storage: this.createSafeStorageAdapter(),
             autoRefreshToken: true,
             persistSession: true,
             detectSessionInUrl: true,
             flowType: 'pkce'
+          },
+          global: {
+            headers: {}
+          }
+        });
+      } else {
+        // Server initialization - minimal config, no auth features
+        globalSupabaseClient = createClient(environment.supabase.url, environment.supabase.anonKey, {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false
+          },
+          global: {
+            headers: {}
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error initializing Supabase client:', error);
+      // If initialization fails, try with minimal config
+      try {
+        globalSupabaseClient = createClient(environment.supabase.url, environment.supabase.anonKey, {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false
           }
         });
       } catch (fallbackError) {
@@ -120,8 +126,8 @@ export class SupabaseService {
   }
 
   get client(): SupabaseClient | null {
-    // Ensure client is initialized if it hasn't been yet
-    if (!globalSupabaseClient && isPlatformBrowser(this.platformId)) {
+    // Ensure client is initialized if it hasn't been yet (both browser and server)
+    if (!globalSupabaseClient) {
       this.initializeClient();
     }
     return globalSupabaseClient;
