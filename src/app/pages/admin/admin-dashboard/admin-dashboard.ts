@@ -293,6 +293,38 @@ export class AdminDashboardComponent implements OnInit {
     return this.pages.find((page) => page.id === id);
   }
 
+  onContentRefresh(): void {
+    // Reload the current legal page content after cache is cleared
+    if (this.activePage === 'accessibility-statement') {
+      this.contentService.getLegalPageContent('accessibility-statement').subscribe({
+        next: (data) => {
+          this.accessibilityContent = data;
+        },
+        error: (error) => {
+          this.logError('Error refreshing accessibility content', error);
+        }
+      });
+    } else if (this.activePage === 'privacy-policy') {
+      this.contentService.getLegalPageContent('privacy-policy').subscribe({
+        next: (data) => {
+          this.privacyContent = data;
+        },
+        error: (error) => {
+          this.logError('Error refreshing privacy content', error);
+        }
+      });
+    } else if (this.activePage === 'terms-conditions') {
+      this.contentService.getLegalPageContent('terms-conditions').subscribe({
+        next: (data) => {
+          this.termsContent = data;
+        },
+        error: (error) => {
+          this.logError('Error refreshing terms content', error);
+        }
+      });
+    }
+  }
+
   private logError(context: string, error: unknown): void {
     console.error(context, error);
   }

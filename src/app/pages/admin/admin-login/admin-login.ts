@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, effect, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -14,6 +14,7 @@ export class AdminLoginComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly platformId = inject(PLATFORM_ID);
 
   // Centralised route configuration to avoid magic strings
   private readonly adminRoute = ['/admin'];
@@ -52,8 +53,13 @@ export class AdminLoginComponent implements OnInit {
   }
 
   private async checkAuthCallback(): Promise<void> {
+    // Only run in browser (not during SSR)
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Small delay to allow auth service to process callback
-    window.setTimeout(() => {
+    setTimeout(() => {
       if (this.authService.isAuthenticated()) {
         this.router.navigate(this.adminRoute);
       }

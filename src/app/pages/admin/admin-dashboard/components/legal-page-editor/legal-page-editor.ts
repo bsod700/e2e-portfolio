@@ -22,11 +22,13 @@ export class LegalPageEditorComponent {
   @Input() pageType: 'accessibility-statement' | 'privacy-policy' | 'terms-conditions' = 'accessibility-statement';
   @Output() contentSaved = new EventEmitter<string>();
   @Output() contentError = new EventEmitter<string>();
+  @Output() contentRefresh = new EventEmitter<void>();
 
   editingSectionIndex: number | null = null;
   editingSection: LegalPageSection | null = null;
   newListItem: string = '';
   saving = false;
+  refreshing = false;
   error = '';
   successMessage = '';
   hasUnsavedChanges = false;
@@ -390,6 +392,33 @@ export class LegalPageEditorComponent {
 
     // Save after deletion
     await this.saveLegalPage();
+  }
+
+  async refreshContent(): Promise<void> {
+    this.refreshing = true;
+    this.error = '';
+    this.successMessage = '';
+
+    try {
+      // Clear all caches for this page
+      this.contentService.clearLegalPageCache(this.pageType);
+
+      // Emit event to parent to reload content
+      this.contentRefresh.emit();
+
+      // Show success message
+      this.successMessage = 'Cache cleared! Content will refresh on next page load.';
+      
+      setTimeout(() => {
+        this.successMessage = '';
+        this.cdr.markForCheck();
+      }, 3000);
+    } catch (error: any) {
+      this.error = error?.message || 'Failed to refresh content';
+    } finally {
+      this.refreshing = false;
+      this.cdr.markForCheck();
+    }
   }
 }
 

@@ -812,5 +812,41 @@ export class ContentService {
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
     );
   }
+
+  /**
+   * Clear all caches for a specific legal page
+   * This forces a fresh fetch from the database on the next request
+   */
+  clearLegalPageCache(pageType: 'accessibility-statement' | 'privacy-policy' | 'terms-conditions'): void {
+    // Clear in-memory cache
+    const cacheKey = `fetch_legal_page_${pageType}`;
+    this.cache.delete(cacheKey);
+
+    // Clear TransferState cache (client-side)
+    if (isPlatformBrowser(this.platformId)) {
+      const cachedPages = this.transferState.get<Record<string, LegalPageContent | null>>(LEGAL_PAGE_CONTENT_KEY, {});
+      delete cachedPages[pageType];
+      this.transferState.set(LEGAL_PAGE_CONTENT_KEY, cachedPages);
+    }
+
+    // Clear localStorage cache (if exists)
+    if (isPlatformBrowser(this.platformId) && typeof window !== 'undefined' && window.localStorage) {
+      const localStorageKey = `legal_page_${pageType.replace('-', '_')}`;
+      try {
+        window.localStorage.removeItem(localStorageKey);
+      } catch (error) {
+        console.warn('Failed to clear localStorage cache:', error);
+      }
+    }
+  }
+
+  /**
+   * Clear all caches for all legal pages
+   */
+  clearAllLegalPagesCache(): void {
+    this.clearLegalPageCache('accessibility-statement');
+    this.clearLegalPageCache('privacy-policy');
+    this.clearLegalPageCache('terms-conditions');
+  }
 }
 
