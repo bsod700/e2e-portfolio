@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from '../../../components/layout';
-import { ContentService, LegalPageContent, LegalPageSection } from '../../../services/content.service';
-import { take } from 'rxjs';
+import { LegalPageContent, LegalPageSection } from '../../../services/content.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-privacy-policy-page',
@@ -15,58 +16,40 @@ import { take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PrivacyPolicyPageComponent implements OnInit {
-  private readonly isBrowser: boolean;
+  private readonly route = inject(ActivatedRoute);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly cacheKey = 'legal_page_privacy_policy';
 
   legalContent: LegalPageContent | null = null;
   lastUpdated = '';
-  loading = true;
-
-  constructor(
-    private readonly contentService: ContentService,
-    @Inject(PLATFORM_ID) platformId: Object
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  loading = false;
 
   get sections(): LegalPageSection[] {
     return this.legalContent?.sections || [];
   }
 
   ngOnInit(): void {
-    this.tryLoadFromCache();
-    this.loadContent();
-  }
-
-  private loadContent(): void {
-    this.contentService
-      .getLegalPageContent('privacy-policy')
-      .pipe(take(1))
-      .subscribe({
-        next: (content) => {
-          if (!content) {
-            this.loading = false;
-            return;
-          }
-
-          const isNewContent =
-            !this.legalContent ||
-            this.legalContent.updated_at !== content.updated_at ||
-            this.legalContent.last_updated !== content.last_updated;
-
-          if (isNewContent) {
-            this.legalContent = content;
-            this.lastUpdated = this.formatLastUpdated(content.last_updated);
-            this.saveToCache(content);
-          }
-
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading privacy policy content:', error);
-          this.loading = false;
+    // Get resolved data from route using observable to handle async resolution
+    this.route.data.pipe(take(1)).subscribe({
+      next: (data) => {
+        const resolvedContent = data['legalContent'] as LegalPageContent | null;
+        
+        if (resolvedContent) {
+          this.legalContent = resolvedContent;
+          this.lastUpdated = this.formatLastUpdated(resolvedContent.last_updated);
+          this.saveToCache(resolvedContent);
+        } else {
+          // Fallback: try to load from cache if resolver didn't provide data
+          this.tryLoadFromCache();
         }
-      });
+      },
+      error: (error) => {
+        console.error('Error getting resolved data:', error);
+        // Fallback to cache on error
+        this.tryLoadFromCache();
+      }
+    });
   }
 
   private tryLoadFromCache(): void {
@@ -87,7 +70,6 @@ export class PrivacyPolicyPageComponent implements OnInit {
 
       this.legalContent = cached;
       this.lastUpdated = this.formatLastUpdated(cached.last_updated);
-      this.loading = false;
     } catch (error) {
       console.error('Error reading privacy policy from cache:', error);
     }

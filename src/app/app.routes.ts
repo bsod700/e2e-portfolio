@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
+import { legalPageResolver } from './resolvers/legal-page.resolver';
 
 export const routes: Routes = [
   {
@@ -45,16 +46,19 @@ export const routes: Routes = [
   {
     path: 'terms-conditions',
     loadComponent: () => import('./pages/legal/terms-conditions-page/terms-conditions-page').then(m => m.TermsConditionsPageComponent),
+    resolve: { legalContent: legalPageResolver },
     title: 'Terms & Conditions - Guy Tagger'
   },
   {
     path: 'privacy-policy',
     loadComponent: () => import('./pages/legal/privacy-policy-page/privacy-policy-page').then(m => m.PrivacyPolicyPageComponent),
+    resolve: { legalContent: legalPageResolver },
     title: 'Privacy Policy - Guy Tagger'
   },
   {
     path: 'accessibility-statement',
     loadComponent: () => import('./pages/legal/accessibility-statement-page/accessibility-statement-page').then(m => m.AccessibilityStatementPageComponent),
+    resolve: { legalContent: legalPageResolver },
     title: 'Accessibility Statement - Guy Tagger'
   },
   {
