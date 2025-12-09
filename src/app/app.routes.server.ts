@@ -41,15 +41,15 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'terms-conditions',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Prerender
   },
   {
     path: 'privacy-policy',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Prerender
   },
   {
     path: 'accessibility-statement',
-    renderMode: RenderMode.Server
+    renderMode: RenderMode.Prerender
   },
   {
     path: 'sitemap',
