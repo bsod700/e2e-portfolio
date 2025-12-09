@@ -60,6 +60,128 @@
           }
         }
       }
+
+      .content-wrapper {
+        color: var(--color-text-secondary);
+        line-height: 1.8;
+        ::ng-deep {
+
+        // Headings
+        h2 {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          color: var(--color-text-primary);
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+          color: var(--color-text-primary);
+        }
+
+        h4 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          color: var(--color-text-primary);
+        }
+
+        // Paragraphs
+        p {
+          color: var(--color-text-secondary);
+          line-height: 1.8;
+          margin-bottom: 1rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        // Line breaks
+        br {
+          display: block;
+          content: "";
+          margin-top: 0.5rem;
+        }
+
+        // Text formatting
+        b,
+        strong {
+          font-weight: 600;
+          color: var(--color-text-primary);
+        }
+
+        i,
+        em {
+          font-style: italic;
+        }
+
+        // Inline spans
+        span {
+          color: inherit;
+        }
+
+        // Links
+        a {
+          color: var(--color-primary);
+          text-decoration: underline;
+          transition: color 0.2s ease;
+
+          &:hover {
+            color: var(--color-primary-hover, var(--color-primary));
+            text-decoration: underline;
+          }
+
+          &:focus {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 2px;
+          }
+        }
+
+        // Lists
+        ul,
+        ol {
+          color: var(--color-text-secondary);
+          line-height: 1.8;
+          margin-left: 1.5rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+
+          li {
+            margin-bottom: 0.5rem;
+            color: var(--color-text-secondary);
+
+            strong,
+            b {
+              color: var(--color-text-primary);
+            }
+          }
+        }
+
+        ul {
+          list-style-type: disc;
+        }
+
+        ol {
+          list-style-type: decimal;
+        }
+
+        // Nested lists
+        ul ul,
+        ol ol,
+        ul ol,
+        ol ul {
+          margin-top: 0.5rem;
+          margin-bottom: 0.5rem;
+        }
+      }
+      }
     }
   }
 }

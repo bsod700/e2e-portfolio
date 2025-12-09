@@ -16,7 +16,7 @@
                 <h2>{{ section.heading }}</h2>
               }
               @if (section.content) {
-                <p [innerHTML]="section.content"></p>
+                <div class="content-wrapper" [innerHTML]="section.content"></div>
               }
               @if (section.list_items && section.list_items.length > 0) {
                 <ul>
