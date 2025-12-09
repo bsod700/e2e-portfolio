@@ -1,0 +1,16 @@
+# Block specific directories from all bots
+User-agent: *
+Disallow: /admin/
+Disallow: /assets/email-templates/
+Disallow: /api/
+Disallow: /login/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /test/
+
+# Specify the location of the sitemap
+Sitemap: https://www.guytagger.com/sitemap.xml
+
+# Block specific user agents
+User-agent: BadBot
+Disallow: /
