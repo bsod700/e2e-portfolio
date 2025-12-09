@@ -1,5 +1,4 @@
-@use "mixins" as *;
-
+@use 'mixins' as *;
 
 .services {
   background: var(--color-bg-primary);
@@ -28,7 +27,7 @@
       background: radial-gradient(circle, rgba(209, 75, 59, 0.6) 0%, transparent 70%);
       border-radius: 50%;
       filter: blur(20px);
-      opacity: .6;
+      opacity: 0.6;
     }
 
     .glow-blue-1 {
@@ -39,7 +38,7 @@
       background: radial-gradient(circle, rgba(102, 126, 234, 0.5) 0%, transparent 70%);
       border-radius: 50%;
       filter: blur(20px);
-      opacity: .6;
+      opacity: 0.6;
     }
 
     .glow-blue-2 {
@@ -50,7 +49,7 @@
       background: radial-gradient(circle, rgba(102, 126, 234, 0.5) 0%, transparent 70%);
       border-radius: 50%;
       filter: blur(20px);
-      opacity: .6;
+      opacity: 0.6;
     }
 
     .glow-blue-3 {
@@ -61,7 +60,7 @@
       background: radial-gradient(circle, rgba(102, 126, 234, 0.5) 0%, transparent 70%);
       border-radius: 50%;
       filter: blur(20px);
-      opacity: .6;
+      opacity: 0.6;
     }
 
     .stars {
@@ -84,7 +83,7 @@
       left: -81.14px;
       width: 2946px;
       height: 1363px;
-      background: linear-gradient(to top, #050A27 0, transparent 100%),
+      background: linear-gradient(to top, #050a27 0, transparent 100%),
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 50px 50px, 50px 50px;
@@ -133,34 +132,31 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto;
 
-  
   @include respond-to(lg) {
     max-width: 1000px;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(2, 400px);
-    
 
     .service-card:nth-child(1) {
       grid-column: 1 / 4;
       grid-row: 1;
     }
-    
-   
+
     .service-card:nth-child(2) {
       grid-column: 4 / 7;
       grid-row: 1;
     }
-    
+
     .service-card:nth-child(3) {
       grid-column: 1 / 3;
       grid-row: 2;
     }
-    
+
     .service-card:nth-child(4) {
       grid-column: 3 / 5;
       grid-row: 2;
     }
-    
+
     .service-card:nth-child(5) {
       grid-column: 5 / 7;
       grid-row: 2;
@@ -176,7 +172,8 @@
 }
 
 .service-card {
-  transition: transform 400ms ease, box-shadow 200ms ease, border-color 200ms ease, filter 200ms ease;
+  transition: transform 400ms ease, box-shadow 200ms ease, border-color 200ms ease,
+    filter 200ms ease;
   // cursor: pointer;
   display: flex;
   flex-direction: column-reverse;
@@ -186,7 +183,7 @@
   border-radius: 8px;
   border: 1px solid rgba(176, 174, 177, 0.05);
   background: #09112f;
-  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.60);
+  box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.6);
   min-height: 400px;
   // Cursor-following glow effect
   --px: -1000px;
@@ -199,18 +196,17 @@
   // Dynamic depth and tilt based on cursor
   @media (hover: hover) and (pointer: fine) {
     transform: perspective(900px)
-               translate3d(calc(var(--hover) * var(--dx) * 4px), calc(var(--hover) * var(--dy) * 4px), 0)
-               rotateX(calc(var(--hover) * var(--dy) * -4deg))
-               rotateY(calc(var(--hover) * var(--dx) * 4deg))
-               /* approximate twist around Z based on direction */
-               rotateZ(calc(var(--hover) * (var(--dx) * -2deg + var(--dy) * 2deg)));
+      translate3d(calc(var(--hover) * var(--dx) * 4px), calc(var(--hover) * var(--dy) * 4px), 0)
+      rotateX(calc(var(--hover) * var(--dy) * -4deg)) rotateY(calc(var(--hover) * var(--dx) * 4deg))
+      /* approximate twist around Z based on direction */
+      rotateZ(calc(var(--hover) * (var(--dx) * -2deg + var(--dy) * 2deg)));
     // Avoid reserving a permanent compositing layer; use transform only when needed.
     transform-style: preserve-3d;
   }
   // Shadow casts opposite to the light (cursor) direction
   @media (hover: hover) and (pointer: fine) {
-    box-shadow:
-      calc(var(--hover) * var(--dx) * -10px) calc(var(--hover) * var(--dy) * -10px) 26px rgba(0, 0, 0, 0.4),
+    box-shadow: calc(var(--hover) * var(--dx) * -10px) calc(var(--hover) * var(--dy) * -10px) 26px
+        rgba(0, 0, 0, 0.4),
       0 8px 16px rgba(0, 0, 0, 0.35);
   }
 
@@ -243,7 +239,6 @@
         transparent 70%
       );
     }
-
   }
 
   // Border light effect
@@ -255,9 +250,9 @@
     padding: 1px;
     pointer-events: none;
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
     // Fallback for browsers that don't support color-mix
     background: radial-gradient(
       120px 120px at var(--px) var(--py),
@@ -279,12 +274,12 @@
         transparent 70%
       );
     }
- 
   }
 
   &:hover {
     // Faster transition on mouse in
-    transition: transform 300ms ease, box-shadow 300ms ease, border-color 200ms ease, filter 200ms ease;
+    transition: transform 300ms ease, box-shadow 300ms ease, border-color 200ms ease,
+      filter 200ms ease;
     border-color: rgba(255, 116, 116, 0.4);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 
@@ -295,7 +290,7 @@
     .learn-more {
       color: var(--color-primary);
       text-shadow: 0 0 2px rgba(252, 252, 252, 0.5);
-      
+
       .arrow {
         transform: translateX(5px);
       }
@@ -303,6 +298,52 @@
 
     .service-icon-text {
       transform: scale(1.05);
+    }
+  }
+
+  &.service-card-design {
+    .service-visual {
+      .service-image {
+        width: 113%;
+        height: 105%;
+        transform: translate(5%, 5%);
+      }
+    }
+  }
+  &.service-card-development {
+    .service-visual {
+      .service-image {
+        width: 128%;
+        height: 115%;
+        transform: translate(-5%, 5%);
+      }
+    }
+  }
+  &.service-card-ai-automation {
+    .service-visual {
+      .service-image {
+        width: 130%;
+        height: 158%;
+        transform: translate(-4%, -16%);
+      }
+    }
+  }
+  &.service-card-strategy {
+    .service-visual {
+      .service-image {
+        width: 163%;
+        height: 86%;
+        transform: translate(-15%, -9%);
+      }
+    }
+  }
+  &.service-card-brand {
+    .service-visual {
+      .service-image {
+        width: 100%;
+        height: 80%;
+        transform: translate(-4%, -16%);
+      }
     }
   }
 
@@ -318,6 +359,48 @@
     width: 100%;
     z-index: 1;
     border-radius: 8px;
+
+    .service-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 1;
+      transition: opacity 500ms ease;
+      z-index: 1;
+
+      &.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    .service-visual-component {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 500ms ease;
+      z-index: 2;
+      pointer-events: none;
+
+      &.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    // On mobile, always show image
+    @media (max-width: 1023px) {
+      .service-image {
+        opacity: 1;
+      }
+
+      .service-visual-component {
+        display: none;
+      }
+    }
   }
 
   .service-content {
@@ -374,5 +457,3 @@
     }
   }
 }
-
-

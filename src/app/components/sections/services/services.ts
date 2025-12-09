@@ -17,6 +17,7 @@ export interface ServiceOffering {
   services: string[];
   benefits: string[];
   codeExample?: string;
+  image?: string;
 }
 
 @Component({
@@ -48,17 +49,23 @@ export class ServicesComponent implements OnInit, OnDestroy {
   private interactiveEnabled = false;
   // Track animation frame for throttling mousemove events
   private rafId: number | null = null;
+  // Performance and device detection
+  isLowPerformance = false;
+  isMobile = false;
+  showVisuals: { [key: string]: boolean } = {};
 
   ngOnInit(): void {
-    // Initialize glow styles for each service card
-    // Only enable interactive effects on devices with mouse (not touch screens)
+    // Detect device type and performance
     if (typeof window !== 'undefined') {
+      this.detectDeviceAndPerformance();
+      
       const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
       this.interactiveEnabled = mq.matches;
       // Update if the media query changes (e.g., device mode switches)
       if (typeof mq.addEventListener === 'function') {
         mq.addEventListener('change', (e) => { 
           this.interactiveEnabled = e.matches;
+          this.detectDeviceAndPerformance();
           // Reset hover states when switching between mouse and touch
           if (!e.matches) {
             this.services.forEach(service => {
@@ -76,6 +83,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
         // Safari fallback
         mq.addListener((e) => { 
           this.interactiveEnabled = e.matches;
+          this.detectDeviceAndPerformance();
           // Reset hover states when switching between mouse and touch
           if (!e.matches) {
             this.services.forEach(service => {
@@ -88,6 +96,24 @@ export class ServicesComponent implements OnInit, OnDestroy {
               };
             });
           }
+        });
+      }
+
+      // On desktop, show thumbnail first, then transition to visual after delay
+      if (!this.isMobile && !this.isLowPerformance) {
+        this.services.forEach(service => {
+          this.showVisuals[service.id] = false;
+          // Show visual after a delay (e.g., 500ms) or on hover
+          setTimeout(() => {
+            if (!this.isLowPerformance) {
+              this.showVisuals[service.id] = true;
+            }
+          }, 500);
+        });
+      } else {
+        // On mobile or low-performance devices, always show images
+        this.services.forEach(service => {
+          this.showVisuals[service.id] = false;
         });
       }
     }
@@ -187,11 +213,56 @@ export class ServicesComponent implements OnInit, OnDestroy {
     };
   }
 
+  onCardEnterDesktop(serviceId: string): void {
+    // On desktop hover, show visual component
+    if (!this.isMobile && !this.isLowPerformance) {
+      this.showVisuals[serviceId] = true;
+    }
+    this.onCardEnter(serviceId);
+  }
+
+  onCardLeaveDesktop(serviceId: string): void {
+    this.onCardLeave(serviceId);
+  }
+
+  private detectDeviceAndPerformance(): void {
+    if (typeof window === 'undefined') return;
+
+    // Detect mobile device
+    const mobileMediaQuery = window.matchMedia('(max-width: 1023px)');
+    this.isMobile = mobileMediaQuery.matches;
+
+    // Detect low-performance device
+    // Check for reduced motion preference (often indicates performance concerns)
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Check hardware capabilities
+    const hardwareConcurrency = (navigator as any).hardwareConcurrency || 4;
+    const deviceMemory = (navigator as any).deviceMemory || 4;
+    
+    // Consider device low-performance if:
+    // - User prefers reduced motion
+    // - Less than 4 CPU cores
+    // - Less than 4GB RAM (if available)
+    this.isLowPerformance = prefersReducedMotion || 
+                            hardwareConcurrency < 4 || 
+                            (deviceMemory && deviceMemory < 4);
+  }
+
+  shouldShowImage(serviceId: string): boolean {
+    return this.isMobile || this.isLowPerformance || !this.showVisuals[serviceId];
+  }
+
+  shouldShowVisual(serviceId: string): boolean {
+    return !this.isMobile && !this.isLowPerformance && this.showVisuals[serviceId];
+  }
+
   services: ServiceOffering[] = [
     {
       id: 'design',
       title: 'Digital Product Design',
       description: 'Smart, scalable product design built from scratch for your business.',
+      image: 'assets/images/service-digital-product-design.webp',
       fullDescription: 'I create beautiful, intuitive interfaces that users love. Every design decision is backed by user research and best practices, ensuring your product is not just visually appealing but also highly functional and accessible.',
       services: [
         'UI/UX design & prototyping (Figma, Adobe XD)',
@@ -215,6 +286,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
       id: 'development',
       title: 'FullStack Development',
       description: 'Reliable, high-performance systems built with modern frameworks. From scalable APIs to dynamic front-ends, software engineered to evolve and grow with every business need.',
+      image: 'assets/images/service-fullstack-development.webp',
       fullDescription: 'I specialize in building high-performance web applications using cutting-edge technologies and best practices. From single-page applications to complex full-stack systems, I deliver clean, maintainable code that scales with your business.',
       services: [
         'Full-stack web applications (Angular, React, Node.js)',
@@ -250,6 +322,7 @@ export class FeatureComponent {
       id: 'ai-automation',
       title: 'AI Automation',
       description: 'Intelligent workflows that evolve with your business. Custom AI solutions automate tasks, enhance decisions, and create smarter operations.',
+      image: 'assets/images/service-ai-automation.webp',
       fullDescription: 'Harness the power of artificial intelligence to automate repetitive tasks, enhance user experiences, and gain valuable insights from your data. I integrate modern AI tools and create custom automation workflows that save time and increase efficiency.',
       services: [
         'AI API integration (OpenAI, Anthropic, Google AI)',
@@ -273,6 +346,7 @@ export class FeatureComponent {
       id: 'strategy',
       title: 'Digital Strategy',
       description: 'Data-driven direction that connects design, technology, and growth. Every move focused on clarity, consistency, and measurable results.',
+      image: 'assets/images/service-digital-strategy.webp',
       fullDescription: 'Strategic planning is crucial for successful digital products. I help you define clear goals, choose the right technology stack, and create a roadmap that aligns technical decisions with business objectives.',
       services: [
         'Technical consultation & architecture planning',
@@ -296,6 +370,7 @@ export class FeatureComponent {
       id: 'brand',
       title: 'Brand Identity',
       description: 'Distinct visuals and language that define who you are. From logo to palette, every element built to express purpose and leave a mark.',
+      image: 'assets/images/service-brand-identity.webp',
       fullDescription: 'I create distinctive brand identities that communicate your unique value proposition. From logo design to comprehensive brand guidelines, every element is crafted to express your purpose and leave a lasting impression.',
       services: [
         'Logo design & brand identity',

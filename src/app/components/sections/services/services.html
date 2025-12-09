@@ -22,26 +22,39 @@
           class="service-card service-card-{{ service.id }}" 
           [ngStyle]="cardGlowStyles[service.id]"
           (mousemove)="onCardPointerMove($event, service.id)"
-          (mouseenter)="onCardEnter(service.id)"
-          (mouseleave)="onCardLeave(service.id)"
+          (mouseenter)="onCardEnterDesktop(service.id)"
+          (mouseleave)="onCardLeaveDesktop(service.id)"
           >
           <div class="service-visual">
-            @switch (service.id) {
-              @case ('design') {
-                <app-design-visual></app-design-visual>
-              }
-              @case ('development') {
-                <app-development-visual></app-development-visual>
-              }
-              @case ('ai-automation') {
-                <app-ai-automation-visual></app-ai-automation-visual>
-              }
-              @case ('strategy') {
-                <app-strategy-visual></app-strategy-visual>
-              }
-              @case ('brand') {
-                <app-brand-visual></app-brand-visual>
-              }
+            @if (service.image) {
+              <img 
+                [src]="service.image" 
+                [alt]="service.title"
+                class="service-image"
+                [class.hidden]="shouldShowVisual(service.id) && !isMobile && !isLowPerformance"
+                loading="lazy"
+              />
+            }
+            @if (!isMobile && !isLowPerformance) {
+              <div class="service-visual-component" [class.visible]="shouldShowVisual(service.id)">
+                @switch (service.id) {
+                  @case ('design') {
+                    <app-design-visual></app-design-visual>
+                  }
+                  @case ('development') {
+                    <app-development-visual></app-development-visual>
+                  }
+                  @case ('ai-automation') {
+                    <app-ai-automation-visual></app-ai-automation-visual>
+                  }
+                  @case ('strategy') {
+                    <app-strategy-visual></app-strategy-visual>
+                  }
+                  @case ('brand') {
+                    <app-brand-visual></app-brand-visual>
+                  }
+                }
+              </div>
             }
           </div>
           <div class="service-content">
