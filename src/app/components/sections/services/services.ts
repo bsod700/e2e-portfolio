@@ -43,81 +43,29 @@ export class ServicesComponent implements OnInit, OnDestroy {
   servicesTitle = 'Everything needed to ship a digital product';
   servicesDescription = 'A complete service stack: design, full-stack development, AI automation, strategy, and brand identity.';
 
-  // Track glow styles for each service card
   cardGlowStyles: { [key: string]: { [key: string]: string } } = {};
-  // Enable interactive effects only for desktop/mouse
-  private interactiveEnabled = false;
-  // Track animation frame for throttling mousemove events
-  private rafId: number | null = null;
-  // Performance and device detection
-  isLowPerformance = false;
-  isMobile = false;
+  shouldShowImageDevice = false;
   showVisuals: { [key: string]: boolean } = {};
+  
+  private interactiveEnabled = false;
+  private rafId: number | null = null;
+  private mobileQuery?: MediaQueryList;
+  private touchQuery?: MediaQueryList;
+  private mobileQueryHandler?: (e: MediaQueryListEvent | MediaQueryList) => void;
+  private touchQueryHandler?: (e: MediaQueryListEvent | MediaQueryList) => void;
 
   ngOnInit(): void {
-    // Detect device type and performance
-    if (typeof window !== 'undefined') {
-      this.detectDeviceAndPerformance();
-      
-      const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
-      this.interactiveEnabled = mq.matches;
-      // Update if the media query changes (e.g., device mode switches)
-      if (typeof mq.addEventListener === 'function') {
-        mq.addEventListener('change', (e) => { 
-          this.interactiveEnabled = e.matches;
-          this.detectDeviceAndPerformance();
-          // Reset hover states when switching between mouse and touch
-          if (!e.matches) {
-            this.services.forEach(service => {
-              this.cardGlowStyles[service.id] = {
-                '--px': '-1000px',
-                '--py': '-1000px',
-                '--hover': '0',
-                '--dx': '0',
-                '--dy': '0'
-              };
-            });
-          }
-        });
-      } else if (typeof mq.addListener === 'function') {
-        // Safari fallback
-        mq.addListener((e) => { 
-          this.interactiveEnabled = e.matches;
-          this.detectDeviceAndPerformance();
-          // Reset hover states when switching between mouse and touch
-          if (!e.matches) {
-            this.services.forEach(service => {
-              this.cardGlowStyles[service.id] = {
-                '--px': '-1000px',
-                '--py': '-1000px',
-                '--hover': '0',
-                '--dx': '0',
-                '--dy': '0'
-              };
-            });
-          }
-        });
-      }
+    if (typeof window === 'undefined') return;
 
-      // On desktop, show thumbnail first, then transition to visual after delay
-      if (!this.isMobile && !this.isLowPerformance) {
-        this.services.forEach(service => {
-          this.showVisuals[service.id] = false;
-          // Show visual after a delay (e.g., 500ms) or on hover
-          setTimeout(() => {
-            if (!this.isLowPerformance) {
-              this.showVisuals[service.id] = true;
-            }
-          }, 500);
-        });
-      } else {
-        // On mobile or low-performance devices, always show images
-        this.services.forEach(service => {
-          this.showVisuals[service.id] = false;
-        });
-      }
-    }
+    this.initializeCardStyles();
+    this.setupDeviceDetection();
+    this.setupInteractiveDetection();
+    this.updateVisualStates();
+    this.loadUpdatedContent();
+    this.loadServicesHeaderContent();
+  }
 
+  private initializeCardStyles(): void {
     this.services.forEach(service => {
       this.cardGlowStyles[service.id] = {
         '--px': '-1000px',
@@ -125,10 +73,35 @@ export class ServicesComponent implements OnInit, OnDestroy {
         '--hover': '0'
       };
     });
+  }
 
-    // Load updated content from database
-    this.loadUpdatedContent();
-    this.loadServicesHeaderContent();
+  private setupInteractiveDetection(): void {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    this.interactiveEnabled = mq.matches;
+    
+    const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
+      this.interactiveEnabled = e.matches;
+      if (!e.matches) this.resetHoverStates();
+    };
+
+    if (mq.addEventListener) {
+      mq.addEventListener('change', handleChange as EventListener);
+    } else if (mq.addListener) {
+      mq.addListener(handleChange);
+    }
+  }
+
+  private resetHoverStates(): void {
+    this.services.forEach(service => {
+      this.cardGlowStyles[service.id] = {
+        ...this.cardGlowStyles[service.id],
+        '--px': '-1000px',
+        '--py': '-1000px',
+        '--hover': '0',
+        '--dx': '0',
+        '--dy': '0'
+      };
+    });
   }
 
   private loadServicesHeaderContent(): void {
@@ -214,8 +187,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   onCardEnterDesktop(serviceId: string): void {
-    // On desktop hover, show visual component
-    if (!this.isMobile && !this.isLowPerformance) {
+    if (!this.shouldShowImageDevice) {
       this.showVisuals[serviceId] = true;
     }
     this.onCardEnter(serviceId);
@@ -225,36 +197,50 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.onCardLeave(serviceId);
   }
 
-  private detectDeviceAndPerformance(): void {
-    if (typeof window === 'undefined') return;
-
-    // Detect mobile device
-    const mobileMediaQuery = window.matchMedia('(max-width: 1023px)');
-    this.isMobile = mobileMediaQuery.matches;
-
-    // Detect low-performance device
-    // Check for reduced motion preference (often indicates performance concerns)
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  private setupDeviceDetection(): void {
+    // Check for mobile (max-width: 1023px) OR touch screen (pointer: coarse)
+    this.mobileQuery = window.matchMedia('(max-width: 1023px)');
+    this.touchQuery = window.matchMedia('(pointer: coarse)');
     
-    // Check hardware capabilities
-    const hardwareConcurrency = (navigator as any).hardwareConcurrency || 4;
-    const deviceMemory = (navigator as any).deviceMemory || 4;
-    
-    // Consider device low-performance if:
-    // - User prefers reduced motion
-    // - Less than 4 CPU cores
-    // - Less than 4GB RAM (if available)
-    this.isLowPerformance = prefersReducedMotion || 
-                            hardwareConcurrency < 4 || 
-                            (deviceMemory && deviceMemory < 4);
+    const updateDeviceState = () => {
+      const wasImageDevice = this.shouldShowImageDevice;
+      this.shouldShowImageDevice = this.mobileQuery!.matches || this.touchQuery!.matches;
+      if (wasImageDevice !== this.shouldShowImageDevice) {
+        this.updateVisualStates();
+      }
+    };
+
+    this.shouldShowImageDevice = this.mobileQuery.matches || this.touchQuery.matches;
+
+    this.mobileQueryHandler = () => updateDeviceState();
+    this.touchQueryHandler = () => updateDeviceState();
+
+    if (this.mobileQuery.addEventListener) {
+      this.mobileQuery.addEventListener('change', this.mobileQueryHandler as EventListener);
+      this.touchQuery.addEventListener('change', this.touchQueryHandler as EventListener);
+    } else if (this.mobileQuery.addListener) {
+      this.mobileQuery.addListener(this.mobileQueryHandler);
+      this.touchQuery.addListener(this.touchQueryHandler);
+    }
+  }
+
+  private updateVisualStates(): void {
+    this.services.forEach(service => {
+      this.showVisuals[service.id] = false;
+      if (!this.shouldShowImageDevice) {
+        setTimeout(() => {
+          if (!this.shouldShowImageDevice) this.showVisuals[service.id] = true;
+        }, 500);
+      }
+    });
   }
 
   shouldShowImage(serviceId: string): boolean {
-    return this.isMobile || this.isLowPerformance || !this.showVisuals[serviceId];
+    return this.shouldShowImageDevice || !this.showVisuals[serviceId];
   }
 
   shouldShowVisual(serviceId: string): boolean {
-    return !this.isMobile && !this.isLowPerformance && this.showVisuals[serviceId];
+    return !this.shouldShowImageDevice && this.showVisuals[serviceId];
   }
 
   services: ServiceOffering[] = [
@@ -397,13 +383,22 @@ export class FeatureComponent {
   }
 
   ngOnDestroy(): void {
-    // Clean up animation frame on component destroy
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    if (this.headerSubscription) this.headerSubscription.unsubscribe();
+    
+    const removeListener = (mq: MediaQueryList, handler: (e: MediaQueryListEvent | MediaQueryList) => void) => {
+      if (mq.removeEventListener) {
+        mq.removeEventListener('change', handler as EventListener);
+      } else if (mq.removeListener) {
+        mq.removeListener(handler);
+      }
+    };
+
+    if (this.mobileQuery && this.mobileQueryHandler) {
+      removeListener(this.mobileQuery, this.mobileQueryHandler);
     }
-    // Clean up subscription
-    if (this.headerSubscription) {
-      this.headerSubscription.unsubscribe();
+    if (this.touchQuery && this.touchQueryHandler) {
+      removeListener(this.touchQuery, this.touchQueryHandler);
     }
   }
 }

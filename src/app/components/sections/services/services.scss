@@ -63,26 +63,12 @@
       opacity: 0.6;
     }
 
-    .stars {
-      position: absolute;
-      top: -31.02px;
-      left: -14.04px;
-      width: 1569.43px;
-      height: 928.08px;
-      background-repeat: no-repeat;
-      background-image: radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.5), transparent),
-        radial-gradient(2px 2px at 60px 70px, rgba(255, 255, 255, 0.4), transparent),
-        radial-gradient(1px 1px at 50px 50px, rgba(255, 255, 255, 0.6), transparent);
-      background-size: 200px 200px;
-      opacity: 0.6;
-    }
-
     .grid-layer {
       position: absolute;
-      top: -156.5px;
-      left: -81.14px;
-      width: 2946px;
-      height: 1363px;
+      top: -156px;
+      left: -81px;
+      width: 3000px;
+      height: 1400px;
       background: linear-gradient(to top, #050a27 0, transparent 100%),
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);

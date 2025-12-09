@@ -5,7 +5,6 @@
     <div class="glow glow-blue-2"></div>
     <div class="glow glow-blue-3"></div>
     <div class="grid-layer"></div>
-    <div class="stars"></div>
   </div>
   <div class="container">
     <div class="section-header">
@@ -31,11 +30,11 @@
                 [src]="service.image" 
                 [alt]="service.title"
                 class="service-image"
-                [class.hidden]="shouldShowVisual(service.id) && !isMobile && !isLowPerformance"
+                [class.hidden]="shouldShowVisual(service.id) && !shouldShowImageDevice"
                 loading="lazy"
               />
             }
-            @if (!isMobile && !isLowPerformance) {
+            @if (!shouldShowImageDevice) {
               <div class="service-visual-component" [class.visible]="shouldShowVisual(service.id)">
                 @switch (service.id) {
                   @case ('design') {
