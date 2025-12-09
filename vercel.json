@@ -9,7 +9,11 @@
   "regions": ["iad1"],
   "rewrites": [
     {
-      "source": "/((?!api).*)",
+      "source": "/old-site/((?!.*\\.(js|css|png|jpg|jpeg|gif|ico|json|svg)).*)",
+      "destination": "/old-site/index.html"
+    },
+    {
+      "source": "/((?!api|old-site).*)",
       "destination": "/index.html"
     }
   ],

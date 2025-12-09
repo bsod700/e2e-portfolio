@@ -1,0 +1,158 @@
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/pdf "access plus 1 year"
+  ExpiresByType text/x-javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/x-shockwave-flash "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType audio/mpeg "access plus 1 year"
+  ExpiresDefault "access plus 1 year"
+</IfModule>
+## EXPIRES CACHING ##
+
+## CACHE CONTROL ##
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|webp|svg|gif|png|css|pdf|js|swf|ico|mp3)$">
+    Header set Cache-Control "max-age=31536000, public"
+  </FilesMatch>
+</IfModule>
+## CACHE CONTROL ##
+
+<Files .env>
+  Order Allow,Deny
+  Deny from all
+</Files>
+
+RewriteEngine On
+
+# Block direct access to the /api directory
+RewriteCond %{REQUEST_URI} ^/api/ [NC]
+RewriteCond %{REQUEST_METHOD} GET
+RewriteRule ^ - [F]
+
+# Allow access to all files in the api directory for non-GET requests
+RewriteCond %{REQUEST_URI} ^/api/ [NC]
+RewriteCond %{REQUEST_METHOD} !GET
+RewriteRule ^ - [L]
+
+# If an existing asset or directory is requested go to it as it is
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+# If the requested pattern is file and file doesn't exist, send 404
+RewriteCond %{REQUEST_URI} ^(\/[a-z_\-\s0-9\.]+)+\.[a-zA-Z]{2,4}$
+RewriteRule ^ - [L,R=404]
+
+# Otherwise use history router
+RewriteRule ^ /index.html [L,QSA]
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:asL37SIfaL
+deny from 13.74.99.135
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE asL37SIfaL:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:ayVlpgITlZ
+deny from 2001:19f0:5000:1f8f:5400:5ff:fe0e:3f32
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE ayVlpgITlZ:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:yainmVEjO0
+deny from 144.126.135.200
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE yainmVEjO0:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:T75j1bdu9P
+deny from 2603:3:6100:7840::
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE T75j1bdu9P:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:FfFiOfmaLQ
+deny from 20.2.24.89
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE FfFiOfmaLQ:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:VXlpzcfEye
+deny from 13.74.103.171
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE VXlpzcfEye:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:vzemgah2Un
+deny from 66.42.84.158
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE vzemgah2Un:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:v5Lrerfl4k
+deny from 34.87.40.28
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE v5Lrerfl4k:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:MUe5sBbOzS
+deny from 35.235.65.75
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE MUe5sBbOzS:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:Sz3KMaNAK6
+deny from 45.148.10.206
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE Sz3KMaNAK6:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:o8K01f4sAE
+deny from 54.36.148.60
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE o8K01f4sAE:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:yxwwxKA6GQ
+deny from 54.36.149.48
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE yxwwxKA6GQ:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:mcNUk8Za9y
+deny from 35.236.38.93
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE mcNUk8Za9y:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:SDucckrfMu
+deny from 54.156.251.192
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE SDucckrfMu:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:B8nWHMJm66
+deny from 52.178.200.50
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE B8nWHMJm66:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:ryJXU3JWgu
+deny from 194.163.145.202
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE ryJXU3JWgu:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:RAjNKxo09Y
+deny from 2001:bc8:6005:1a:49cc:ae0f:399e:fcdf
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE RAjNKxo09Y:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:HjTz5fhNx6
+deny from 2600:1f18:5278:af00:72c2:ae6:e698:24f2
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE HjTz5fhNx6:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:4ORiDahhZM
+deny from 34.222.26.16
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE 4ORiDahhZM:IPDENYID
+
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW IPDENYID:W2uKUnUfUO
+deny from 157.20.240.188
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE W2uKUnUfUO:IPDENYID
+
