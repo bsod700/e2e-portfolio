@@ -40,6 +40,15 @@
       ]
     },
     {
+      "source": "/(terms-conditions|privacy-policy|accessibility-statement)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, s-maxage=300, stale-while-revalidate=60"
+        }
+      ]
+    },
+    {
       "source": "/(.*)\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)",
       "headers": [
         {

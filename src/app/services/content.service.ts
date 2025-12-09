@@ -794,13 +794,19 @@ export class ContentService {
       }),
       tap((result: UpdateResult<LegalPageContent>) => {
         if (result.success && 'data' in result && result.data) {
-          // Invalidate cache
-          this.cache.delete(`fetch_legal_page_${pageType}`);
-          const cachedPages = this.transferState.get<Record<string, LegalPageContent | null>>(LEGAL_PAGE_CONTENT_KEY, {});
-          this.transferState.set(LEGAL_PAGE_CONTENT_KEY, {
-            ...cachedPages,
-            [pageType]: result.data
-          });
+          // Invalidate all caches for this page type
+          const cacheKey = `fetch_legal_page_${pageType}`;
+          this.cache.delete(cacheKey);
+          
+          // Clear TransferState cache to force fresh fetch on next request
+          // This ensures the updated content is fetched on the next page load
+          if (isPlatformBrowser(this.platformId)) {
+            // On client, clear the cached page from TransferState
+            const cachedPages = this.transferState.get<Record<string, LegalPageContent | null>>(LEGAL_PAGE_CONTENT_KEY, {});
+            delete cachedPages[pageType];
+            this.transferState.set(LEGAL_PAGE_CONTENT_KEY, cachedPages);
+          }
+          // On server, TransferState will be fresh on next request anyway
         }
       }),
       catchError((error) => of({ success: false, error: error.message || 'An error occurred' }))
