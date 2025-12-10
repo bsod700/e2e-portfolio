@@ -1,36 +1,4 @@
-/**
- * Parse message to extract project description and project types
- * @param {string} message - The message string
- * @returns {Object} Parsed data with projectDescription and projectType
- */
-function parseMessage(message) {
-  if (!message) return { projectDescription: '', projectType: '' };
-  
-  const projectDescMatch = message.match(/Project Description:\s*(.+?)(?:\n\n|$)/i);
-  const projectTypeMatch = message.match(/Project Type\(s\):\s*(.+?)(?:\n\n|$)/i);
-  
-  return {
-    projectDescription: projectDescMatch ? projectDescMatch[1].trim() : '',
-    projectType: projectTypeMatch ? projectTypeMatch[1].trim() : ''
-  };
-}
 
-/**
- * Client Confirmation Email Template
- * Sent to the client who submitted the contact form
- * @param {Object} data - Template data
- * @param {string} data.name - Client name
- * @param {string} data.email - Client email
- * @param {string} data.phone - Client phone
- * @param {string} data.message - Client message
- * @returns {string} HTML email template
- */
-export function clientConfirmationTemplate(data) {
-  const parsed = parseMessage(data.message || '');
-  const projectDescription = parsed.projectDescription || data.projectDescription || '';
-  const projectType = parsed.projectType || data.projectType || '';
-  
-  return `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,7 +307,7 @@ export function clientConfirmationTemplate(data) {
 
     <!-- Content -->
     <div class="content">
-      <p class="greeting">Dear ${data.name || '[Name]'}</p>
+      <p class="greeting">Dear John Doe</p>
       
       <div class="intro-text">
         <p>Thank you so much for getting in touch through my portfolio website! I'm excited to hear that you're interested in working together.</p>
@@ -349,36 +317,36 @@ export function clientConfirmationTemplate(data) {
       <!-- Details Section -->
       <div class="details-section">
         <div class="details-box">
-          ${data.name ? `
+          
           <div class="detail-row">
             <span class="detail-label">Name:</span>
-            <span class="detail-value">${data.name}</span>
+            <span class="detail-value">John Doe</span>
           </div>
-          ` : ''}
-          ${data.email ? `
+          
+          
           <div class="detail-row">
             <span class="detail-label">Email:</span>
-            <span class="detail-value">${data.email}</span>
+            <span class="detail-value">john.doe@example.com</span>
           </div>
-          ` : ''}
-          ${data.phone ? `
+          
+          
           <div class="detail-row">
             <span class="detail-label">Phone:</span>
-            <span class="detail-value">${data.phone}</span>
+            <span class="detail-value">(555) 123-4567</span>
           </div>
-          ` : ''}
-          ${projectDescription ? `
+          
+          
           <div class="detail-row">
             <span class="detail-label">Project Description:</span>
-            <span class="detail-value">${projectDescription}</span>
+            <span class="detail-value">Creating a modern e-commerce website</span>
           </div>
-          ` : ''}
-          ${projectType ? `
+          
+          
           <div class="detail-row">
             <span class="detail-label">Project Type(s):</span>
-            <span class="detail-value">${projectType}</span>
+            <span class="detail-value">Website, AI automation</span>
           </div>
-          ` : ''}
+          
         </div>
       </div>
 
@@ -478,350 +446,4 @@ export function clientConfirmationTemplate(data) {
   </div>
 </body>
 </html>
-  `;
-}
-
-/**
- * Admin Notification Email Template
- * Sent to gt@guytagger.com when someone submits the contact form
- * @param {Object} data - Template data
- * @param {string} data.name - Client name
- * @param {string} data.email - Client email
- * @param {string} data.phone - Client phone
- * @param {string} data.message - Client message
- * @param {string} data.submittedAt - Submission timestamp
- * @returns {string} HTML email template
- */
-export function adminNotificationTemplate(data) {
-  const parsed = parseMessage(data.message || '');
-  const projectDescription = parsed.projectDescription || data.projectDescription || '';
-  const projectType = parsed.projectType || data.projectType || '';
   
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Contact Form Submission</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f4f4f5;
-    }
-    .email-wrapper {
-      max-width: 600px;
-      margin: 24px auto;
-      background-color: #ffffff;
-      border: 1px solid #c7c7c7;
-    }
-    .header {
-      background-color: #141313;
-      padding: 32px 16px;
-      text-align: center;
-      border-radius: 12px 12px 0 0;
-    }
-    .logo-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 81px;
-      margin-bottom: 16px;
-    }
-    .logo {
-      width: 88px;
-      height: 81px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .logo img {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
-    .header h1 {
-      margin: 0;
-      color: #fcfcfc;
-      font-size: 34px;
-      font-weight: 500;
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      text-shadow: rgba(252, 252, 252, 0.5) 0px 0px 10px;
-      letter-spacing: -1.36px;
-    }
-    .content {
-      padding: 24px 24px 48px;
-      color: #141313;
-    }
-    .greeting {
-      font-size: 20px;
-      font-weight: 400;
-      margin-bottom: 16px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
-      color: #141313;
-      margin-bottom: 8px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-section {
-      margin: 24px 0;
-    }
-    .details-label {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 24px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-box {
-      background-color: #fafafa;
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .detail-row {
-      display: flex;
-      gap: 12px;
-      padding: 16px 0 0;
-      border-top: 1px solid #d5d5d5;
-      font-size: 14px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-row:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-    .detail-label {
-      font-weight: 500;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-value {
-      font-weight: 300;
-      font-style: italic;
-      font-family: 'Roboto', sans-serif;
-    }
-    .source-info {
-      text-align: center;
-      margin: 24px 0;
-      font-size: 18px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .source-info strong {
-      font-weight: 700;
-    }
-    .action-section {
-      margin: 24px 0;
-      text-align: center;
-    }
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .action-buttons.horizontal {
-      flex-direction: row;
-      justify-content: center;
-    }
-    .action-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: linear-gradient(229deg, #EA624A -15.19%, #961416 73.3%);
-      color: #fcfcfc;
-      padding: 12px 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      font-family: 'Geist', sans-serif;
-      border: 0.5px solid #df563e;
-    }
-    .action-button.call {
-      background: linear-gradient(229deg, #4A65EA -15.19%, #141F96 73.3%);
-      border-color: #3b82f6;
-      display: none; /* Hidden on desktop */
-    }
-    .action-button svg {
-      width: 25px;
-      height: 25px;
-      fill: #fcfcfc;
-    }
-    .pro-tip {
-      text-align: center;
-      font-size: 16px;
-      font-style: italic;
-      color: rgba(20, 19, 19, 0.53);
-      font-family: 'Roboto', sans-serif;
-      margin-top: 24px;
-    }
-    .divider {
-      border-top: 1px solid #e3e3e3;
-      margin: 24px 0;
-      padding-top: 24px;
-    }
-    .timestamp {
-      text-align: center;
-      font-size: 14px;
-      color: rgba(20, 19, 19, 0.53);
-      font-family: 'Roboto', sans-serif;
-    }
-    .footer {
-      text-align: center;
-      padding-top: 48px;
-    }
-    .copyright {
-      font-size: 12px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    @media only screen and (max-width: 600px) {
-      .content {
-        padding: 24px 24px 48px;
-      }
-      .header h1 {
-        font-size: 26px;
-        letter-spacing: -1.04px;
-      }
-      .logo-container {
-        height: 55.711px;
-      }
-      .logo {
-        width: 60px;
-        height: 55.711px;
-      }
-      .greeting {
-        font-size: 18px;
-      }
-      .intro-text {
-        font-size: 16px;
-      }
-      .details-label {
-        font-size: 16px;
-      }
-      .source-info {
-        font-size: 16px;
-      }
-      .timestamp {
-        font-size: 12px;
-      }
-      .pro-tip {
-        font-size: 14px;
-      }
-      .action-button.call {
-        display: inline-flex; /* Show on mobile */
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="email-wrapper">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo-container">
-        <div class="logo">
-          <img src="https://www.guytagger.com/assets/images/icon/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
-        </div>
-      </div>
-      <h1>New Lead Alert!</h1>
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-      <p class="greeting">Hey Guy</p>
-      
-      <div class="intro-text">
-        <p>You have a new opportunity waiting! Here are the details:</p>
-        <p class="details-label">Contact Information:</p>
-      </div>
-
-      <!-- Details Section -->
-      <div class="details-section">
-        <div class="details-box">
-          ${data.name ? `
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">${data.name}</span>
-          </div>
-          ` : ''}
-          ${data.email ? `
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">${data.email}</span>
-          </div>
-          ` : ''}
-          ${data.phone ? `
-          <div class="detail-row">
-            <span class="detail-label">Phone:</span>
-            <span class="detail-value">${data.phone}</span>
-          </div>
-          ` : ''}
-          ${projectDescription ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Description:</span>
-            <span class="detail-value">${projectDescription}</span>
-          </div>
-          ` : ''}
-          ${projectType ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Type(s):</span>
-            <span class="detail-value">${projectType}</span>
-          </div>
-          ` : ''}
-        </div>
-      </div>
-
-      <!-- Source Info -->
-      <div class="source-info">
-        <p><strong>Source</strong>: Portfolio Website</p>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-section">
-        <div class="action-buttons">
-          ${data.phone ? `
-          <a href="tel:${data.phone}" class="action-button call">
-            Call
-           <img src="https://www.guytagger.com/assets/images/icons/phone.svg" alt="Phone Icon" width="25" height="25">
-          </a>
-          ` : ''}
-          ${data.email ? `
-          <a href="mailto:${data.email}?subject=Re: Your inquiry" class="action-button">
-            Reply via Email
-           <img src="https://www.guytagger.com/assets/images/icons/email.svg" alt="Email Icon" width="25" height="25">
-          </a>
-          ` : ''}
-        </div>
-        <p class="pro-tip">Pro Tip: Speed to lead wins deals. Call them within 5 minutes!</p>
-      </div>
-
-      <!-- Divider -->
-      <div class="divider">
-        <div class="timestamp">
-          📅 Submitted on ${data.submittedAt || new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' })}
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p class="copyright">© 2025 Guy Tagger Portfolio. All rights reserved.</p>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-  `;
-}
-

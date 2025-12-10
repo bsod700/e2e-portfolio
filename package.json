@@ -12,7 +12,8 @@
     "load-env": "node scripts/load-env.js",
     "setup-supabase": "node scripts/quick-setup.js",
     "setup-supabase-sql": "cat scripts/setup-supabase-sql.sql",
-    "verify-supabase": "node scripts/quick-setup.js"
+    "verify-supabase": "node scripts/quick-setup.js",
+    "preview-emails": "node api/preview-emails.mjs"
   },
   "prettier": {
     "printWidth": 100,

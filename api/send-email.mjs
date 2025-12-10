@@ -93,6 +93,8 @@ export default async function handler(req, res) {
         subject: 'Thank you for reaching out!',
         html: clientConfirmationTemplate({
           name: contactName || 'there',
+          email: contactEmail,
+          phone: contactPhone,
           message: message
         })
       });
