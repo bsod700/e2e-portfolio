@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, ProjectContent } from '../../../../../services/content.service';
 import { CustomDropdownComponent, DropdownOption } from '../services-editor/custom-dropdown/custom-dropdown';
-import { finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-projects-editor',

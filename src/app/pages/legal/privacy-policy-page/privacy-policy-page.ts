@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from '../../../components/layout';
 import { LegalPageContent, LegalPageSection } from '../../../services/content.service';
-import { take } from 'rxjs/operators';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-privacy-policy-page',

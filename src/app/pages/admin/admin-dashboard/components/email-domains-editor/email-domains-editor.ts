@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { EmailDomainService } from '../../../../../services/email-domain.service';
 import { DialogService } from '../../../../../services/dialog.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize } from 'rxjs/operators';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-email-domains-editor',

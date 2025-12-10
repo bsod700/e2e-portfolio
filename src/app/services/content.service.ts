@@ -1,7 +1,6 @@
 import { Injectable, inject, PLATFORM_ID, TransferState, makeStateKey } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Observable, from, of, throwError } from 'rxjs';
-import { map, catchError, switchMap, tap, shareReplay, finalize } from 'rxjs/operators';
+import { Observable, from, of, throwError, map, catchError, switchMap, tap, shareReplay, finalize } from 'rxjs';
 import { SupabaseService } from './supabase.service';
 
 export interface HomePageContent {

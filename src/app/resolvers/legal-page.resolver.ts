@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError } from 'rxjs';
 import { ContentService, LegalPageContent } from '../services/content.service';
 
 /**

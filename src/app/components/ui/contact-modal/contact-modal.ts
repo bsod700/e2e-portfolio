@@ -5,15 +5,16 @@ import {
   signal, 
   ChangeDetectionStrategy,
   OnDestroy,
-  inject
+  inject,
+  DestroyRef
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { 
   FormBuilder, 
   FormGroup, 
   ReactiveFormsModule
 } from '@angular/forms';
-import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ModalService } from '../../../services/modal.service';
 import { EmailService } from '../../../services/email.service';
 import { ValidationService } from '../../../services/validation.service';
@@ -35,7 +36,7 @@ export class ContactModalComponent implements OnDestroy {
   private readonly emailService = inject(EmailService);
   private readonly validationService = inject(ValidationService);
   private readonly fb = inject(FormBuilder);
-  private readonly destroy$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
   private autoCloseTimer?: ReturnType<typeof setTimeout>;
 
   // Form group
@@ -45,6 +46,16 @@ export class ContactModalComponent implements OnDestroy {
     phone: [''],
     message: ['']
   });
+
+  // Form value signals for reactive validation (Angular 20 best practice)
+  private readonly nameValue = signal<string>('');
+  private readonly emailValue = signal<string>('');
+  private readonly phoneValue = signal<string>('');
+
+  // Debounce timers for validation
+  private nameDebounceTimer?: ReturnType<typeof setTimeout>;
+  private emailDebounceTimer?: ReturnType<typeof setTimeout>;
+  private phoneDebounceTimer?: ReturnType<typeof setTimeout>;
 
   // State signals
   readonly isSubmitted = signal<boolean>(false);
@@ -66,40 +77,80 @@ export class ContactModalComponent implements OnDestroy {
   }
 
   /**
-   * Setup form validation with debounced field validation
+   * Setup form validation with Signals-based debounced validation (Angular 20 best practice)
+   * Uses effects to watch signal changes and debounce validation
    */
   private setupFormValidation(): void {
-    // Debounced validation for name field
+    // Sync form values to signals - valueChanges automatically fires on input
+    // This is the Angular 20 best practice: ReactiveForms + Signals
     this.contactForm.get('name')?.valueChanges.pipe(
-      debounceTime(VALIDATION_DEBOUNCE_TIME),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      if (this.contactForm.get('name')?.touched) {
-        this.validateField('name', value);
-      }
+      this.nameValue.set(value || '');
+      // Clear error immediately on input (before debounced validation)
+      this.nameError.set('');
     });
 
-    // Debounced validation for email field
     this.contactForm.get('email')?.valueChanges.pipe(
-      debounceTime(VALIDATION_DEBOUNCE_TIME),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      if (this.contactForm.get('email')?.touched) {
-        this.validateField('email', value);
-      }
+      this.emailValue.set(value || '');
+      this.emailError.set('');
     });
 
-    // Debounced validation for phone field
     this.contactForm.get('phone')?.valueChanges.pipe(
-      debounceTime(VALIDATION_DEBOUNCE_TIME),
-      distinctUntilChanged(),
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      if (this.contactForm.get('phone')?.touched) {
-        this.validateField('phone', value);
+      this.phoneValue.set(value || '');
+      this.phoneError.set('');
+    });
+
+    // Watch name field changes with debounced validation
+    effect(() => {
+      const value = this.nameValue();
+      const control = this.contactForm.get('name');
+      
+      if (this.nameDebounceTimer) {
+        clearTimeout(this.nameDebounceTimer);
       }
+      
+      this.nameDebounceTimer = setTimeout(() => {
+        if (control?.touched) {
+          this.validateField('name', value);
+        }
+      }, VALIDATION_DEBOUNCE_TIME);
+    });
+
+    // Watch email field changes with debounced validation
+    effect(() => {
+      const value = this.emailValue();
+      const control = this.contactForm.get('email');
+      
+      if (this.emailDebounceTimer) {
+        clearTimeout(this.emailDebounceTimer);
+      }
+      
+      this.emailDebounceTimer = setTimeout(() => {
+        if (control?.touched) {
+          this.validateField('email', value);
+        }
+      }, VALIDATION_DEBOUNCE_TIME);
+    });
+
+    // Watch phone field changes with debounced validation
+    effect(() => {
+      const value = this.phoneValue();
+      const control = this.contactForm.get('phone');
+      
+      if (this.phoneDebounceTimer) {
+        clearTimeout(this.phoneDebounceTimer);
+      }
+      
+      this.phoneDebounceTimer = setTimeout(() => {
+        if (control?.touched) {
+          this.validateField('phone', value);
+        }
+      }, VALIDATION_DEBOUNCE_TIME);
     });
   }
 
@@ -187,30 +238,14 @@ export class ContactModalComponent implements OnDestroy {
   }
 
   /**
-   * Handle field blur events
+   * Handle field blur events - validate immediately (no debounce)
    */
   onFieldBlur(fieldName: 'name' | 'email' | 'phone'): void {
     const control = this.contactForm.get(fieldName);
     if (control) {
       control.markAsTouched();
-      this.validateField(fieldName, control.value);
-    }
-  }
-
-  /**
-   * Clear field error on input
-   */
-  onFieldInput(fieldName: 'name' | 'email' | 'phone'): void {
-    switch (fieldName) {
-      case 'name':
-        this.nameError.set('');
-        break;
-      case 'email':
-        this.emailError.set('');
-        break;
-      case 'phone':
-        this.phoneError.set('');
-        break;
+      // Validate immediately on blur (no debounce)
+      this.validateField(fieldName, control.value || '');
     }
   }
 
@@ -252,13 +287,14 @@ export class ContactModalComponent implements OnDestroy {
     });
 
     // Send email through backend API
+    // Note: Keep RxJS for HTTP calls - this is the correct use case for RxJS
     this.emailService.sendContactEmail({
       contactName: formValue.name,
       contactEmail: formValue.email,
       contactPhone: formValue.phone,
       message: formValue.message
     }).pipe(
-      takeUntil(this.destroy$)
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: (response) => {
         console.log('Email sent successfully:', response);
@@ -304,6 +340,20 @@ export class ContactModalComponent implements OnDestroy {
     this.isLoading.set(false);
     this.clearErrors();
     
+    // Clear debounce timers
+    if (this.nameDebounceTimer) {
+      clearTimeout(this.nameDebounceTimer);
+      this.nameDebounceTimer = undefined;
+    }
+    if (this.emailDebounceTimer) {
+      clearTimeout(this.emailDebounceTimer);
+      this.emailDebounceTimer = undefined;
+    }
+    if (this.phoneDebounceTimer) {
+      clearTimeout(this.phoneDebounceTimer);
+      this.phoneDebounceTimer = undefined;
+    }
+    
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
       this.autoCloseTimer = undefined;
@@ -323,11 +373,19 @@ export class ContactModalComponent implements OnDestroy {
    * Cleanup on component destroy
    */
   ngOnDestroy(): void {
+    // Clear all timers
     if (this.autoCloseTimer) {
       clearTimeout(this.autoCloseTimer);
     }
-    this.destroy$.next();
-    this.destroy$.complete();
+    if (this.nameDebounceTimer) {
+      clearTimeout(this.nameDebounceTimer);
+    }
+    if (this.emailDebounceTimer) {
+      clearTimeout(this.emailDebounceTimer);
+    }
+    if (this.phoneDebounceTimer) {
+      clearTimeout(this.phoneDebounceTimer);
+    }
   }
 }
 

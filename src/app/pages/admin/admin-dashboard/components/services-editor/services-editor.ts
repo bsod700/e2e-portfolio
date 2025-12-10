@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContentService, HomeServiceCard, ServicesSectionHeader } from '../../../../../services/content.service';
 import { CustomDropdownComponent, DropdownOption } from './custom-dropdown/custom-dropdown';
-import { finalize, take } from 'rxjs/operators';
+import { finalize, take } from 'rxjs';
 
 @Component({
   selector: 'app-services-editor',

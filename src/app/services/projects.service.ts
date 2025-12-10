@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs';
 import { ContentService, ProjectContent } from './content.service';
 import { Project } from '../components/sections';
 

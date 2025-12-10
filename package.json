@@ -6,6 +6,8 @@
     "start": "ng serve",
     "dev": "ng serve --port 3000",
     "build": "ng build",
+    "build:analyze": "ng build --configuration production-analyze",
+    "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:e2e-portfolio": "node dist/e2e-portfolio/server/server.mjs",
