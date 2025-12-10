@@ -16,7 +16,7 @@
     </div>
     
     <div class="faq-list">
-      @for (item of faqs; track $index) {
+      @for (item of faqs(); track $index) {
         <div class="faq-item" [class.active]="item.isOpen">
           <button class="faq-question" (click)="toggleFaq($index)">
             <span class="faq-question-text">{{ item.question }}</span>

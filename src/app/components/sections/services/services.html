@@ -8,15 +8,15 @@
   </div>
   <div class="container">
     <div class="section-header">
-      <p class="kicker">{{ servicesKicker }}</p>
-      <h2 class="section-title">{{ servicesTitle }}</h2>
+      <p class="kicker">{{ servicesKicker() }}</p>
+      <h2 class="section-title">{{ servicesTitle() }}</h2>
       <p class="section-description">
-        {{ servicesDescription }}
+        {{ servicesDescription() }}
       </p>
     </div>
     
     <div class="services-grid">
-      @for (service of services; track service.id) {
+      @for (service of services(); track service.id) {
         <div 
           class="service-card service-card-{{ service.id }}" 
           [ngStyle]="cardGlowStyles[service.id]"

@@ -10,12 +10,12 @@ import {
   QueryList,
   ViewChildren,
   signal,
+  computed,
   PLATFORM_ID
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ContentService, FAQContent } from '../../../services/content.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 interface FAQ {
   question: string;
@@ -41,18 +41,47 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly contentService = inject(ContentService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly destroy$ = new Subject<void>();
   private rafId: number | null = null;
 
   @ViewChildren('detailsWrapper') detailsWrappers!: QueryList<ElementRef<HTMLDivElement>>;
 
-  /** FAQs displayed in the component */
-  private readonly _faqs = signal<FAQ[]>([]);
+  // Convert observable to signal - non-blocking, reactive, leverages TransferState
+  private readonly faqsFromDb = toSignal(
+    this.contentService.getFAQContent(),
+    { initialValue: [] }
+  );
 
-  /** Getter for template compatibility */
-  get faqs(): FAQ[] {
-    return this._faqs();
-  }
+  // Writable signal to track which FAQ is open (accordion behavior)
+  private readonly openFaqIndex = signal<number | null>(null);
+
+  // Computed signal that uses database FAQs or falls back to defaults
+  readonly faqs = computed<FAQ[]>(() => {
+    const dbFaqs = this.faqsFromDb();
+    const openIndex = this.openFaqIndex();
+    
+    let baseFaqs: FAQ[];
+    
+    if (!dbFaqs || dbFaqs.length === 0) {
+      baseFaqs = [...this.fallbackFAQs];
+    } else {
+      // Convert database FAQs to component format
+      baseFaqs = dbFaqs
+        .slice() // Create a copy to avoid mutating
+        .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+        .map((dbFAQ, index): FAQ => ({
+          question: dbFAQ.question,
+          answer: dbFAQ.answer,
+          // Only first FAQ should be open by default (accordion behavior)
+          isOpen: index === 0 && (dbFAQ.is_open !== false) && openIndex === null
+        }));
+    }
+
+    // Apply open state from signal
+    return baseFaqs.map((faq, index) => ({
+      ...faq,
+      isOpen: openIndex === index
+    }));
+  });
 
   // Fallback FAQs if database is empty
   private readonly fallbackFAQs: FAQ[] = [
@@ -84,18 +113,22 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   ngOnInit(): void {
-    this.loadFAQsFromDatabase();
+    // Content loading handled by toSignal() - non-blocking and reactive
   }
 
   ngAfterViewInit(): void {
     // Set initial heights for open FAQs using requestAnimationFrame for better performance
+    // Use effect to update heights when FAQs change
     this.scheduleHeightUpdate();
+    
+    // Watch for FAQ changes and update heights
+    if (isPlatformBrowser(this.platformId)) {
+      // Schedule height update when FAQs signal changes
+      setTimeout(() => this.scheduleHeightUpdate(), 0);
+    }
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    
     // Clean up any pending animation frames (only in browser)
     if (isPlatformBrowser(this.platformId) && this.rafId !== null) {
       cancelAnimationFrame(this.rafId);
@@ -132,7 +165,7 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const currentFaqs = this._faqs();
+    const currentFaqs = this.faqs();
     this.detailsWrappers.forEach((wrapper, index) => {
       const element = wrapper.nativeElement;
       const details = element.querySelector('.faq-details') as HTMLElement;
@@ -148,75 +181,19 @@ export class FaqComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Loads FAQs from the database or uses fallback data
-   */
-  private loadFAQsFromDatabase(): void {
-    this.contentService.getFAQContent()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (faqsFromDb: FAQContent[]) => {
-          let processedFaqs: FAQ[];
-
-          if (faqsFromDb && faqsFromDb.length > 0) {
-            // Convert database FAQs to component format
-            processedFaqs = faqsFromDb
-              .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
-              .map((dbFAQ, index): FAQ => ({
-                question: dbFAQ.question,
-                answer: dbFAQ.answer,
-                // Only first FAQ should be open by default (accordion behavior)
-                isOpen: index === 0 && (dbFAQ.is_open !== false)
-              }));
-          } else {
-            // Use fallback if database is empty
-            processedFaqs = [...this.fallbackFAQs];
-          }
-
-          this._faqs.set(processedFaqs);
-          this.cdr.markForCheck();
-          
-          // Update heights after data is loaded
-          this.scheduleHeightUpdate();
-        },
-        error: (error) => {
-          console.error('Error loading FAQs from database:', error);
-          // Use fallback if database fails
-          this._faqs.set([...this.fallbackFAQs]);
-          this.cdr.markForCheck();
-          
-          // Update heights after fallback is set
-          this.scheduleHeightUpdate();
-        }
-      });
-  }
-
-  /**
    * Toggles the FAQ accordion state (only one open at a time)
    * @param index - The index of the FAQ to toggle
    */
   toggleFaq(index: number): void {
-    const currentFaqs = this._faqs();
-    const clickedFaq = currentFaqs[index];
+    const currentOpenIndex = this.openFaqIndex();
     
-    if (!clickedFaq) {
-      return;
+    // If clicking the same FAQ that's already open, close it
+    // Otherwise, open the clicked FAQ (accordion behavior)
+    if (currentOpenIndex === index) {
+      this.openFaqIndex.set(null);
+    } else {
+      this.openFaqIndex.set(index);
     }
-
-    const wasOpen = clickedFaq.isOpen;
-    
-    // Close all FAQs first
-    const updatedFaqs = currentFaqs.map((faq) => ({
-      ...faq,
-      isOpen: false
-    }));
-    
-    // If the clicked FAQ wasn't open, open it now (accordion behavior)
-    if (!wasOpen) {
-      updatedFaqs[index] = { ...clickedFaq, isOpen: true };
-    }
-
-    this._faqs.set(updatedFaqs);
-    this.cdr.markForCheck();
 
     // Recalculate all heights based on the new open/closed state
     this.scheduleHeightUpdate();

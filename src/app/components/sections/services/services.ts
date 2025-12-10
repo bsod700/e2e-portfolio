@@ -1,13 +1,13 @@
-import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy, computed, ChangeDetectionStrategy } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ContentService, ServicesSectionHeader } from '../../../services/content.service';
+import { ContentService, ServicesSectionHeader, HomeServiceCard } from '../../../services/content.service';
 import { DesignVisualComponent } from './service-visuals/design-visual/design-visual';
 import { DevelopmentVisualComponent } from './service-visuals/development-visual/development-visual';
 import { AiAutomationVisualComponent } from './service-visuals/ai-automation-visual/ai-automation-visual';
 import { StrategyVisualComponent } from './service-visuals/strategy-visual/strategy-visual';
 import { BrandVisualComponent } from './service-visuals/brand-visual/brand-visual';
-import { Subscription } from 'rxjs';
 
 export interface ServiceOffering {
   id: string;
@@ -31,17 +31,46 @@ export interface ServiceOffering {
     BrandVisualComponent
   ],
   templateUrl: './services.html',
-  styleUrl: './services.scss'
+  styleUrl: './services.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ServicesComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {}
-  private contentService = inject(ContentService);
-  private headerSubscription?: Subscription;
+  private readonly contentService = inject(ContentService);
 
-  // Services section header content
-  servicesKicker = "Product design • Full-stack • AI";
-  servicesTitle = 'Everything needed to ship a digital product';
-  servicesDescription = 'A complete service stack: design, full-stack development, AI automation, strategy, and brand identity.';
+  // Default header content for immediate render (fallback)
+  private readonly defaultHeader = {
+    kicker: "Product design • Full-stack • AI",
+    title: 'Everything needed to ship a digital product',
+    description: 'A complete service stack: design, full-stack development, AI automation, strategy, and brand identity.'
+  };
+
+  // Convert observables to signals - non-blocking, reactive, leverages TransferState
+  private readonly headerFromDb = toSignal(
+    this.contentService.getServicesSectionHeader(),
+    { initialValue: null }
+  );
+
+  private readonly homeServicesFromDb = toSignal(
+    this.contentService.getHomeServicesSection(),
+    { initialValue: [] }
+  );
+
+  // Computed signals for header content
+  readonly servicesKicker = computed(() => {
+    const header = this.headerFromDb();
+    return header?.kicker || this.defaultHeader.kicker;
+  });
+
+  readonly servicesTitle = computed(() => {
+    const header = this.headerFromDb();
+    return header?.title || this.defaultHeader.title;
+  });
+
+  readonly servicesDescription = computed(() => {
+    const header = this.headerFromDb();
+    return header?.description || this.defaultHeader.description;
+  });
 
   cardGlowStyles: { [key: string]: { [key: string]: string } } = {};
   shouldShowImageDevice = false;
@@ -61,12 +90,10 @@ export class ServicesComponent implements OnInit, OnDestroy {
     this.setupDeviceDetection();
     this.setupInteractiveDetection();
     this.updateVisualStates();
-    this.loadUpdatedContent();
-    this.loadServicesHeaderContent();
   }
 
   private initializeCardStyles(): void {
-    this.services.forEach(service => {
+    this.services().forEach(service => {
       this.cardGlowStyles[service.id] = {
         '--px': '-1000px',
         '--py': '-1000px',
@@ -92,7 +119,7 @@ export class ServicesComponent implements OnInit, OnDestroy {
   }
 
   private resetHoverStates(): void {
-    this.services.forEach(service => {
+    this.services().forEach(service => {
       this.cardGlowStyles[service.id] = {
         ...this.cardGlowStyles[service.id],
         '--px': '-1000px',
@@ -104,146 +131,27 @@ export class ServicesComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadServicesHeaderContent(): void {
-    this.headerSubscription = this.contentService.getServicesSectionHeader().subscribe({
-      next: (header) => {
-        if (header) {
-          this.servicesKicker = header.kicker;
-          this.servicesTitle = header.title;
-          this.servicesDescription = header.description;
+  // Computed signal for services - merges default services with database updates
+  readonly services = computed<ServiceOffering[]>(() => {
+    const dbServices = this.homeServicesFromDb();
+    const defaultServices = [...this.defaultServices];
+    
+    // Update default services with database content if available
+    if (dbServices && dbServices.length > 0) {
+      dbServices.forEach(card => {
+        const existingService = defaultServices.find(s => s.id === card.service_id);
+        if (existingService) {
+          if (card.title) existingService.title = card.title;
+          if (card.description) existingService.description = card.description;
         }
-      },
-      error: (error) => {
-        console.error('Error loading services section header:', error);
-      }
-    });
-  }
-
-  private loadUpdatedContent(): void {
-    this.contentService.getHomeServicesSection().subscribe({
-      next: (data) => {
-        if (data && data.length > 0) {
-          // Update only title, description, and icon from database
-          data.forEach(card => {
-            const existingService = this.services.find(s => s.id === card.service_id);
-            if (existingService) {
-              if (card.title) existingService.title = card.title;
-              if (card.description) existingService.description = card.description;
-            }
-          });
-        }
-      },
-      error: (error) => {
-        console.error('Error loading updated services:', error);
-      }
-    });
-  }
-
-  onCardPointerMove(event: MouseEvent, serviceId: string): void {
-    if (!this.interactiveEnabled) return;
-    const target = event.currentTarget as HTMLElement | null;
-    if (!target) return;
-    
-    // Capture values immediately before RAF
-    const rect = target.getBoundingClientRect();
-    const x = Math.round((event.clientX - rect.left) * 100) / 100; // Round to 2 decimal places
-    const y = Math.round((event.clientY - rect.top) * 100) / 100; // Round to 2 decimal places
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const ndx = Math.round(Math.max(-1, Math.min(1, (x - cx) / cx)) * 1000) / 1000; // Round to 3 decimal places
-    const ndy = Math.round(Math.max(-1, Math.min(1, (y - cy) / cy)) * 1000) / 1000; // Round to 3 decimal places
-    
-    // Cancel previous animation frame if pending
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
+      });
     }
-
-    // Throttle updates using requestAnimationFrame (limits to ~60fps)
-    this.rafId = requestAnimationFrame(() => {
-      this.cardGlowStyles[serviceId] = {
-        ...this.cardGlowStyles[serviceId],
-        '--px': `${x}px`,
-        '--py': `${y}px`,
-        '--dx': `${ndx}`,
-        '--dy': `${ndy}`
-      };
-      this.rafId = null;
-    });
-  }
-
-  onCardEnter(serviceId: string): void {
-    if (!this.interactiveEnabled) return;
-    this.cardGlowStyles[serviceId] = { ...this.cardGlowStyles[serviceId], '--hover': '1' };
-  }
-
-  onCardLeave(serviceId: string): void {
-    if (!this.interactiveEnabled) return;
-    this.cardGlowStyles[serviceId] = { 
-      ...this.cardGlowStyles[serviceId], 
-      '--hover': '0',
-      '--dx': '0',
-      '--dy': '0'
-    };
-  }
-
-  onCardEnterDesktop(serviceId: string): void {
-    if (!this.shouldShowImageDevice) {
-      this.showVisuals[serviceId] = true;
-    }
-    this.onCardEnter(serviceId);
-  }
-
-  onCardLeaveDesktop(serviceId: string): void {
-    this.onCardLeave(serviceId);
-  }
-
-  private setupDeviceDetection(): void {
-    // Check for mobile (max-width: 1023px) OR touch screen (pointer: coarse)
-    this.mobileQuery = window.matchMedia('(max-width: 1023px)');
-    this.touchQuery = window.matchMedia('(pointer: coarse)');
     
-    const updateDeviceState = () => {
-      const wasImageDevice = this.shouldShowImageDevice;
-      this.shouldShowImageDevice = this.mobileQuery!.matches || this.touchQuery!.matches;
-      if (wasImageDevice !== this.shouldShowImageDevice) {
-        this.updateVisualStates();
-      }
-    };
+    return defaultServices;
+  });
 
-    this.shouldShowImageDevice = this.mobileQuery.matches || this.touchQuery.matches;
-
-    this.mobileQueryHandler = () => updateDeviceState();
-    this.touchQueryHandler = () => updateDeviceState();
-
-    if (this.mobileQuery.addEventListener) {
-      this.mobileQuery.addEventListener('change', this.mobileQueryHandler as EventListener);
-      this.touchQuery.addEventListener('change', this.touchQueryHandler as EventListener);
-    } else if (this.mobileQuery.addListener) {
-      this.mobileQuery.addListener(this.mobileQueryHandler);
-      this.touchQuery.addListener(this.touchQueryHandler);
-    }
-  }
-
-  private updateVisualStates(): void {
-    this.services.forEach(service => {
-      this.showVisuals[service.id] = false;
-      if (!this.shouldShowImageDevice) {
-        setTimeout(() => {
-          if (!this.shouldShowImageDevice) this.showVisuals[service.id] = true;
-        }, 500);
-      }
-    });
-  }
-
-  shouldShowImage(serviceId: string): boolean {
-    return this.shouldShowImageDevice || !this.showVisuals[serviceId];
-  }
-
-  shouldShowVisual(serviceId: string): boolean {
-    return !this.shouldShowImageDevice && this.showVisuals[serviceId];
-  }
-
-  services: ServiceOffering[] = [
+  // Default services array (used as base for computed signal)
+  private readonly defaultServices: ServiceOffering[] = [
     {
       id: 'design',
       title: 'Digital Product Design',
@@ -378,13 +286,116 @@ export class FeatureComponent {
     }
   ];
 
+  onCardPointerMove(event: MouseEvent, serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    const target = event.currentTarget as HTMLElement | null;
+    if (!target) return;
+    
+    // Capture values immediately before RAF
+    const rect = target.getBoundingClientRect();
+    const x = Math.round((event.clientX - rect.left) * 100) / 100; // Round to 2 decimal places
+    const y = Math.round((event.clientY - rect.top) * 100) / 100; // Round to 2 decimal places
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const ndx = Math.round(Math.max(-1, Math.min(1, (x - cx) / cx)) * 1000) / 1000; // Round to 3 decimal places
+    const ndy = Math.round(Math.max(-1, Math.min(1, (y - cy) / cy)) * 1000) / 1000; // Round to 3 decimal places
+    
+    // Cancel previous animation frame if pending
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+    }
+
+    // Throttle updates using requestAnimationFrame (limits to ~60fps)
+    this.rafId = requestAnimationFrame(() => {
+      this.cardGlowStyles[serviceId] = {
+        ...this.cardGlowStyles[serviceId],
+        '--px': `${x}px`,
+        '--py': `${y}px`,
+        '--dx': `${ndx}`,
+        '--dy': `${ndy}`
+      };
+      this.rafId = null;
+    });
+  }
+
+  onCardEnter(serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    this.cardGlowStyles[serviceId] = { ...this.cardGlowStyles[serviceId], '--hover': '1' };
+  }
+
+  onCardLeave(serviceId: string): void {
+    if (!this.interactiveEnabled) return;
+    this.cardGlowStyles[serviceId] = { 
+      ...this.cardGlowStyles[serviceId], 
+      '--hover': '0',
+      '--dx': '0',
+      '--dy': '0'
+    };
+  }
+
+  onCardEnterDesktop(serviceId: string): void {
+    if (!this.shouldShowImageDevice) {
+      this.showVisuals[serviceId] = true;
+    }
+    this.onCardEnter(serviceId);
+  }
+
+  onCardLeaveDesktop(serviceId: string): void {
+    this.onCardLeave(serviceId);
+  }
+
+  private setupDeviceDetection(): void {
+    // Check for mobile (max-width: 1023px) OR touch screen (pointer: coarse)
+    this.mobileQuery = window.matchMedia('(max-width: 1023px)');
+    this.touchQuery = window.matchMedia('(pointer: coarse)');
+    
+    const updateDeviceState = () => {
+      const wasImageDevice = this.shouldShowImageDevice;
+      this.shouldShowImageDevice = this.mobileQuery!.matches || this.touchQuery!.matches;
+      if (wasImageDevice !== this.shouldShowImageDevice) {
+        this.updateVisualStates();
+      }
+    };
+
+    this.shouldShowImageDevice = this.mobileQuery.matches || this.touchQuery.matches;
+
+    this.mobileQueryHandler = () => updateDeviceState();
+    this.touchQueryHandler = () => updateDeviceState();
+
+    if (this.mobileQuery.addEventListener) {
+      this.mobileQuery.addEventListener('change', this.mobileQueryHandler as EventListener);
+      this.touchQuery.addEventListener('change', this.touchQueryHandler as EventListener);
+    } else if (this.mobileQuery.addListener) {
+      this.mobileQuery.addListener(this.mobileQueryHandler);
+      this.touchQuery.addListener(this.touchQueryHandler);
+    }
+  }
+
+  private updateVisualStates(): void {
+    this.services().forEach(service => {
+      this.showVisuals[service.id] = false;
+      if (!this.shouldShowImageDevice) {
+        setTimeout(() => {
+          if (!this.shouldShowImageDevice) this.showVisuals[service.id] = true;
+        }, 500);
+      }
+    });
+  }
+
+  shouldShowImage(serviceId: string): boolean {
+    return this.shouldShowImageDevice || !this.showVisuals[serviceId];
+  }
+
+  shouldShowVisual(serviceId: string): boolean {
+    return !this.shouldShowImageDevice && this.showVisuals[serviceId];
+  }
+
   navigateToService(serviceId: string): void {
     this.router.navigate(['/services', serviceId]);
   }
 
   ngOnDestroy(): void {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    if (this.headerSubscription) this.headerSubscription.unsubscribe();
     
     const removeListener = (mq: MediaQueryList, handler: (e: MediaQueryListEvent | MediaQueryList) => void) => {
       if (mq.removeEventListener) {

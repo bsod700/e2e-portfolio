@@ -6,13 +6,14 @@
   position: relative;
   z-index: 1000;
   background-image: linear-gradient(280deg, #030816 35%, transparent 65%), url('/assets/images/footer-bg.webp');
-  background-size: cover, auto 1000px;
-  background-position: 0px 0px, calc(50% + 175px) -630px;
+  background-size: cover, auto 300px;
+  background-position: 0px 0px, calc(50% + 150px) -150px;
   background-repeat: no-repeat;
 
   @include respond-to(lg) {
+    background-size: cover, auto 600px;
     background-image: linear-gradient(280deg, #030816 50%, transparent 65%), url('/assets/images/footer-bg.webp');
-    background-position: 0px 0px, calc(50% + 350px) -474px;
+    background-position: 0px 0px, calc(50% - 400px) -415px;
   }
 }
 

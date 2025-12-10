@@ -5,7 +5,8 @@ import {
   OnInit,
   PLATFORM_ID,
   inject,
-  signal
+  signal,
+  afterNextRender
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -47,6 +48,19 @@ const INTERACTIVE_TAGS = ['a', 'button', 'input', 'select', 'textarea'] as const
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CaseStudiesComponent implements OnInit, OnDestroy {
+  constructor() {
+    // Initialize with default projects first for immediate render
+    const defaultProjects = this.projectsService.getDefaultProjects();
+    this.originalProjects.set(defaultProjects);
+    this.initializeCarousel();
+    
+    // Defer API call until after initial render to avoid blocking critical path
+    afterNextRender(() => {
+      if (typeof window !== 'undefined') {
+        this.loadProjectsFromService();
+      }
+    });
+  }
   private readonly projectsService = inject(ProjectsService);
   private readonly platformId = inject(PLATFORM_ID);
 
@@ -84,7 +98,7 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadProjects();
+    // Projects already initialized in constructor, API call deferred to afterNextRender
     
     // Only start autoplay in browser, not during SSR
     if (isPlatformBrowser(this.platformId)) {
@@ -99,15 +113,10 @@ export class CaseStudiesComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Loads projects from service, initializing with defaults first for immediate render
+   * Loads projects from service (called after initial render)
    */
-  private loadProjects(): void {
-    // Initialize with default projects first for immediate render
-    const defaultProjects = this.projectsService.getDefaultProjects();
-    this.originalProjects.set(defaultProjects);
-    this.initializeCarousel();
-    
-    // Then load from service (which may include database updates)
+  private loadProjectsFromService(): void {
+    // Load from service (which may include database updates)
     this.projectsService.getProjects().subscribe({
       next: (projects: Project[]) => {
         this.originalProjects.set(projects);

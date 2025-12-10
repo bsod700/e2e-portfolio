@@ -56,14 +56,14 @@
               </defs>
             </svg>
           </div>
-          <span class="badge-text">{{ badgeText }}</span>
+          <span class="badge-text">{{ badgeText() }}</span>
         </div>
         
         <!-- Main Content -->
         <div class="content-wrapper">
-          <h1 class="hero-title" [innerHTML]="heroTitle"></h1>
+          <h1 class="hero-title" [innerHTML]="heroTitle()"></h1>
           
-          <p class="hero-description" [innerHTML]="heroDescription"></p>
+          <p class="hero-description" [innerHTML]="heroDescription()"></p>
         </div>
         
         <!-- Project Inquiry Form -->

@@ -1,10 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostListener,
   PLATFORM_ID,
   inject,
-  signal
+  signal,
+  computed,
+  OnDestroy
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
@@ -56,12 +57,16 @@ interface TooltipData {
   styleUrl: './technologies.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TechnologiesComponent {
+export class TechnologiesComponent implements OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
 
   /** Platform check for browser-only operations */
   private readonly isBrowser: boolean = isPlatformBrowser(this.platformId);
+
+  /** Scroll event throttling */
+  private scrollRafId: number | null = null;
+  private scrollListener: (() => void) | null = null;
 
   /** Whether the animation is currently paused */
   readonly isAnimationPaused = signal<boolean>(false);
@@ -69,8 +74,8 @@ export class TechnologiesComponent {
   /** Active tooltip data, null when no tooltip is shown */
   readonly activeTooltip = signal<TooltipData | null>(null);
 
-  /** Array of technology items to display */
-  readonly technologies: Technology[] = [
+  /** Array of technology items to display - readonly to prevent mutations */
+  private readonly technologiesData: readonly Technology[] = [
     { icon: 'assets/images/technologies/tech-react.svg', name: 'React' },
     { icon: 'assets/images/technologies/tech-angular.svg', name: 'Angular' },
     { icon: 'assets/images/technologies/tech-node.svg', name: 'Node.js' },
@@ -95,9 +100,9 @@ export class TechnologiesComponent {
     { icon: 'assets/images/technologies/tech-mixpanel.svg', name: 'Mixpanel' },
     { icon: 'assets/images/technologies/tech-n8n.svg', name: 'n8n' },
     { icon: 'assets/images/technologies/tech-supabase.svg', name: 'Supabase' }
-  ];
+  ] as const;
 
-  /** Array of numbers for ripple animation circles */
+  /** Array of numbers for ripple animation circles - computed once */
   readonly rippleArray: readonly number[] = Array.from(
     { length: TECHNOLOGIES_CONFIG.RIPPLE_COUNT },
     (_, i) => i + 1
@@ -105,52 +110,97 @@ export class TechnologiesComponent {
 
   /**
    * Split technologies into left side for converging animation
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get leftSideTechnologies(): Technology[] {
-    return this.technologies.slice(0, Math.ceil(this.technologies.length / 2));
-  }
+  readonly leftSideTechnologies = computed<readonly Technology[]>(() => {
+    const midpoint = Math.ceil(this.technologiesData.length / 2);
+    return this.technologiesData.slice(0, midpoint);
+  });
 
   /**
    * Split technologies into right side for converging animation
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get rightSideTechnologies(): Technology[] {
-    return this.technologies.slice(Math.ceil(this.technologies.length / 2));
-  }
+  readonly rightSideTechnologies = computed<readonly Technology[]>(() => {
+    const midpoint = Math.ceil(this.technologiesData.length / 2);
+    return this.technologiesData.slice(midpoint);
+  });
 
   /**
    * Get duplicated technologies for seamless infinite scroll (original + duplicate)
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get leftSideTechnologiesDuplicated(): Technology[] {
-    const left = this.leftSideTechnologies;
+  readonly leftSideTechnologiesDuplicated = computed<readonly Technology[]>(() => {
+    const left = this.leftSideTechnologies();
     return [...left, ...left];
-  }
+  });
 
   /**
    * Get duplicated technologies for seamless infinite scroll (original + duplicate)
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get rightSideTechnologiesDuplicated(): Technology[] {
-    const right = this.rightSideTechnologies;
+  readonly rightSideTechnologiesDuplicated = computed<readonly Technology[]>(() => {
+    const right = this.rightSideTechnologies();
     return [...right, ...right];
-  }
+  });
 
   /**
    * Calculate animation distance for left side dynamically
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get leftAnimationDistance(): string {
+  readonly leftAnimationDistance = computed<string>(() => {
     const { CARD_WIDTH, CARD_GAP } = TECHNOLOGIES_CONFIG;
-    const count = this.leftSideTechnologies.length;
+    const count = this.leftSideTechnologies().length;
     const distance = CARD_WIDTH * count + CARD_GAP * count;
     return `-${distance}px`;
-  }
+  });
 
   /**
    * Calculate animation distance for right side dynamically
+   * Using computed signal to prevent recalculation on every change detection
    */
-  get rightAnimationDistance(): string {
+  readonly rightAnimationDistance = computed<string>(() => {
     const { CARD_WIDTH, CARD_GAP } = TECHNOLOGIES_CONFIG;
-    const count = this.rightSideTechnologies.length;
+    const count = this.rightSideTechnologies().length;
     const distance = CARD_WIDTH * count + CARD_GAP * count;
     return `-${distance}px`;
+  });
+
+  constructor() {
+    // Setup optimized scroll listener with requestAnimationFrame throttling
+    if (this.isBrowser) {
+      this.setupScrollListener();
+    }
+  }
+
+  /**
+   * Setup optimized scroll listener using requestAnimationFrame
+   */
+  private setupScrollListener(): void {
+    this.scrollListener = () => {
+      if (this.scrollRafId !== null) {
+        cancelAnimationFrame(this.scrollRafId);
+      }
+
+      this.scrollRafId = requestAnimationFrame(() => {
+        if (this.activeTooltip()) {
+          this.activeTooltip.set(null);
+        }
+        this.scrollRafId = null;
+      });
+    };
+
+    document.addEventListener('scroll', this.scrollListener, { passive: true });
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup scroll listener
+    if (this.scrollListener && this.isBrowser) {
+      document.removeEventListener('scroll', this.scrollListener);
+    }
+    if (this.scrollRafId !== null) {
+      cancelAnimationFrame(this.scrollRafId);
+    }
   }
 
   /**
@@ -200,13 +250,18 @@ export class TechnologiesComponent {
   }
 
   /**
-   * Handles document scroll events to hide tooltip
+   * TrackBy function for technology items to optimize @for loop performance
+   * Uses index since arrays are duplicated for infinite scroll, ensuring unique keys
    */
-  @HostListener('document:scroll', [])
-  onScroll(): void {
-    if (this.activeTooltip()) {
-      this.activeTooltip.set(null);
-    }
+  trackByTechIndex(index: number, tech: Technology): number {
+    return index;
+  }
+
+  /**
+   * TrackBy function for ripple circles to optimize @for loop performance
+   */
+  trackByRippleIndex(index: number, ripple: number): number {
+    return ripple;
   }
 
   /**

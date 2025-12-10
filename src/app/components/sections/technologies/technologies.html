@@ -46,8 +46,8 @@
         <!-- Left Side - Scrolling Right (towards center) -->
         <div class="carousel-half left-side">
           <div class="carousel-track scroll-to-center"
-               [style.--animation-distance]="leftAnimationDistance">
-            @for (tech of leftSideTechnologiesDuplicated; track $index) {
+               [style.--animation-distance]="leftAnimationDistance()">
+            @for (tech of leftSideTechnologiesDuplicated(); track trackByTechIndex($index, tech)) {
               <div class="tech-card"
                    (mouseenter)="showTooltip($event, tech.name)"
                    (mouseleave)="hideTooltip()">
@@ -58,9 +58,9 @@
         </div>
 
         <!-- Center Divider - Logo Pulse -->
-        <a class="center-divider logo-pulse" (click)="scrollToContact($event)">
+        <a class="center-divider logo-pulse" href="#contact" (click)="scrollToContact($event)">
           <!-- Ripple Circles -->
-          @for (ripple of rippleArray; track ripple) {
+          @for (ripple of rippleArray; track trackByRippleIndex($index, ripple)) {
             <div class="ripple-circle ripple-{{ ripple }}"></div>
           }
           <!-- Logo Circle with Glow -->
@@ -80,8 +80,8 @@
         <!-- Right Side - Scrolling Left (towards center) -->
         <div class="carousel-half right-side">
           <div class="carousel-track scroll-to-center-reverse"
-               [style.--animation-distance]="rightAnimationDistance">
-            @for (tech of rightSideTechnologiesDuplicated; track $index) {
+               [style.--animation-distance]="rightAnimationDistance()">
+            @for (tech of rightSideTechnologiesDuplicated(); track trackByTechIndex($index, tech)) {
               <div class="tech-card"
                    (mouseenter)="showTooltip($event, tech.name)"
                    (mouseleave)="hideTooltip()">

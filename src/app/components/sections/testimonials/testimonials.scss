@@ -304,7 +304,7 @@
   .author-info {
     min-width: 0;
 
-    h4 {
+    .author-name {
       font-size: 1.1rem;
       font-weight: 600;
       margin-bottom: 0.25rem;
@@ -314,7 +314,7 @@
       text-overflow: ellipsis;
     }
 
-    p {
+    .author-role {
       font-size: 0.9rem;
       color: var(--color-text-muted);
       margin: 0;
