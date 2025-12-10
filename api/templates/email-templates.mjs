@@ -16,6 +16,17 @@ function parseMessage(message) {
 }
 
 /**
+ * Truncate text with ellipsis if exceeds max length
+ * @param {string} text - The text to truncate
+ * @param {number} maxLength - Maximum character length
+ * @returns {string} Truncated text with ellipsis if needed
+ */
+function truncateText(text, maxLength) {
+  if (!text || text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+}
+
+/**
  * Client Confirmation Email Template
  * Sent to the client who submitted the contact form
  * @param {Object} data - Template data
@@ -44,10 +55,10 @@ export function clientConfirmationTemplate(data) {
       .replace(/'/g, '&#039;');
   };
   
-  const safeName = escapeHtml(data.name || '[Name]');
+  const safeName = escapeHtml(truncateText(data.name || '[Name]', 75));
   const safeEmail = escapeHtml(data.email || '');
   const safePhone = escapeHtml(data.phone || '');
-  const safeProjectDescription = escapeHtml(projectDescription);
+  const safeProjectDescription = escapeHtml(truncateText(projectDescription, 200));
   const safeProjectType = escapeHtml(projectType);
   
   return `
@@ -511,10 +522,10 @@ export function adminNotificationTemplate(data) {
       .replace(/'/g, '&#039;');
   };
   
-  const safeName = escapeHtml(data.name || '');
+  const safeName = escapeHtml(truncateText(data.name || '', 75));
   const safeEmail = escapeHtml(data.email || '');
   const safePhone = escapeHtml(data.phone || '');
-  const safeProjectDescription = escapeHtml(projectDescription);
+  const safeProjectDescription = escapeHtml(truncateText(projectDescription, 200));
   const safeProjectType = escapeHtml(projectType);
   const safeSubmittedAt = escapeHtml(data.submittedAt || new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' }));
   
