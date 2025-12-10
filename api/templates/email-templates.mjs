@@ -71,6 +71,7 @@ export function clientConfirmationTemplate(data) {
       width: 88px;
       height: 81px;
       position: relative;
+      margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -164,18 +165,10 @@ export function clientConfirmationTemplate(data) {
     .step-icon {
       width: 40px;
       height: 40px;
-      background-color: #BE121E;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
     }
-    .step-icon svg {
-      width: 25px;
-      height: 25px;
-      fill: #fcfcfc;
+    .step-icon png {
+      width: 40px;
+      height: 40px;
     }
     .step-content {
       flex: 1;
@@ -207,7 +200,7 @@ export function clientConfirmationTemplate(data) {
       align-items: center;
       gap: 8px;
       background: linear-gradient(229deg, #EA624A -15.19%, #961416 73.3%);
-      color: #fcfcfc;
+      color: #fcfcfc !important;
       padding: 12px 16px;
       border-radius: 8px;
       text-decoration: none;
@@ -216,10 +209,9 @@ export function clientConfirmationTemplate(data) {
       font-family: 'Geist', sans-serif;
       border: 0.5px solid #df563e;
     }
-    .cta-button svg {
+    .cta-button img {
       width: 25px;
       height: 25px;
-      fill: #fcfcfc;
     }
     .closing-section {
       margin: 48px 0;
@@ -231,9 +223,6 @@ export function clientConfirmationTemplate(data) {
       font-family: 'Roboto', sans-serif;
     }
     .signature {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
       margin-bottom: 48px;
     }
     .signature-line {
@@ -249,14 +238,14 @@ export function clientConfirmationTemplate(data) {
       font-family: 'Roboto', sans-serif;
     }
     .contact-link {
-     background: linear-gradient(229deg, #EA624A -15.19%, #961416 73.3%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-decoration: none;
+      color: #961416 !important;
+      text-decoration: none !important;
     }
-    .contact-link.underline {
-      text-decoration: underline;
+    .contact-link.web {
+      float: left;
+    }
+    .contact-link.mail {
+      float: right;
     }
     .social-icons {
       display: flex;
@@ -267,7 +256,7 @@ export function clientConfirmationTemplate(data) {
     .social-icon {
       width: 18px;
       height: 18px;
-      opacity: 0.7;
+      text-decoration: none !important;
     }
     .footer {
       text-align: center;
@@ -306,9 +295,9 @@ export function clientConfirmationTemplate(data) {
         width: 25px;
         height: 25px;
       }
-      .step-icon svg {
-        width: 15.625px;
-        height: 15.625px;
+      .step-icon img {
+       width: 25px;
+        height: 25px;
       }
       .step-title {
         font-size: 16px;
@@ -334,7 +323,7 @@ export function clientConfirmationTemplate(data) {
     <div class="header">
       <div class="logo-container">
         <div class="logo">
-          <img src="${baseUrl}/assets/images/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
+          <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
         </div>
       </div>
       <h1>Great to meet you!</h1>
@@ -391,7 +380,7 @@ export function clientConfirmationTemplate(data) {
       <div class="process-section">
         <div class="process-step">
           <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/chat-bubbles.svg" alt="Chat Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/circle-chat-bubbles.png" alt="Chat Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Let's Chat!</div>
@@ -400,7 +389,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/document.svg" alt="Proposal Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/circle-document.png" alt="Proposal Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Proposal Time:</div>
@@ -409,7 +398,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-            <img src="${baseUrl}/assets/images/icons/verify.svg" alt="verify Icon" width="24" height="24">
+            <img src="${baseUrl}/assets/images/icons/circle-verify.png" alt="verify Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Getting to Work:</div>
@@ -418,7 +407,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/like.svg" alt="like Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/circle-like.png" alt="like Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Your Feedback Matters:</div>
@@ -427,7 +416,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/happy.svg" alt="happy smile Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/circle-happy.png" alt="happy smile Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Final Touches:</div>
@@ -442,7 +431,7 @@ export function clientConfirmationTemplate(data) {
       <div class="cta-section">
         <a href="${calenderUrl}" class="cta-button">
           Schedule a Call with Me
-         <img src="${baseUrl}/assets/images/icons/calendar-add.svg" alt="Calendar Icon" width="25" height="25">
+         <img src="${baseUrl}/assets/images/icons/calendar-add.png" alt="Calendar Icon" width="25" height="25">
         </a>
       </div>
 
@@ -454,21 +443,21 @@ export function clientConfirmationTemplate(data) {
           <p class="signature-line">Best,</p>
           <p class="signature-line">Guy Tagger</p>
           <div class="contact-links">
-            <a href="https://guytagger.com" class="contact-link">guytagger.com</a>
-            <a href="mailto:gt@guytagger.com" class="contact-link underline">gt@guytagger.com</a>
+            <a href="https://guytagger.com" class="contact-link web">guytagger.com</a>
+            <a href="mailto:gt@guytagger.com" class="contact-link mail">gt@guytagger.com</a>
           </div>
         </div>
 
         <!-- Social Icons -->
         <div class="social-icons">
           <a href="https://www.linkedin.com/in/guytagger/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/linkedin-gray.svg" alt="LinkedIn Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/linkedin-gray.png" alt="LinkedIn Icon" width="25" height="25">
           </a>
           <a href="https://github.com/bsod700" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/github-gray.svg" alt="GitHub Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/github-gray.png" alt="GitHub Icon" width="25" height="25">
           </a>
           <a href="https://slack.com/app_redirect?channel=U0943JCBDPG" target="_blank" rel="noopener noreferrer" aria-label="Slack" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/slack-gray.svg" alt="Website Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/slack-gray.png" alt="Website Icon" width="25" height="25">
           </a>
         </div>
       </div>
@@ -540,6 +529,7 @@ export function adminNotificationTemplate(data) {
     .logo {
       width: 88px;
       height: 81px;
+      margin: 0 auto;
       position: relative;
       display: flex;
       align-items: center;
@@ -660,7 +650,7 @@ export function adminNotificationTemplate(data) {
       border-color: #3b82f6;
       display: none; /* Hidden on desktop */
     }
-    .action-button svg {
+    .action-button img {
       width: 25px;
       height: 25px;
       fill: #fcfcfc;
@@ -738,7 +728,7 @@ export function adminNotificationTemplate(data) {
     <div class="header">
       <div class="logo-container">
         <div class="logo">
-          <img src="${baseUrl}/assets/images/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
+          <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
         </div>
       </div>
       <h1>New Lead Alert!</h1>
@@ -800,13 +790,13 @@ export function adminNotificationTemplate(data) {
           ${data.phone ? `
           <a href="tel:${data.phone}" class="action-button call">
             Call
-           <img src="${baseUrl}/assets/images/icons/phone.svg" alt="Phone Icon" width="25" height="25">
+           <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25">
           </a>
           ` : ''}
           ${data.email ? `
           <a href="mailto:${data.email}?subject=Re: Your inquiry" class="action-button">
             Reply via Email
-           <img src="${baseUrl}/assets/images/icons/email.svg" alt="Email Icon" width="25" height="25">
+           <img src="${baseUrl}/assets/images/icons/email.png" alt="Email Icon" width="25" height="25">
           </a>
           ` : ''}
         </div>
