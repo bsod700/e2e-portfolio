@@ -148,16 +148,49 @@
     width: 100px;
     z-index: 2;
     pointer-events: none;
+    display: none;
+    background: var(--color-bg-primary);
+    @include respond-to(md) {
+      display: block;
+    }
   }
 
   &::before {
     left: 0;
-    background: linear-gradient(to right, var(--color-bg-primary), transparent);
+    // Use mask-image to create a fade effect that works with any background
+    mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
   }
 
   &::after {
     right: 0;
-    background: linear-gradient(to left, var(--color-bg-primary), transparent);
+    // Use mask-image to create a fade effect that works with any background
+    mask-image: linear-gradient(
+      to left,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
   }
 
 }

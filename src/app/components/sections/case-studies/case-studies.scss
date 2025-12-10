@@ -39,7 +39,7 @@
       height: 60px;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) translate(-425px, -155px) rotate(45deg);
+      transform: translate(-50%, -50%) translate(-425px, -115px) rotate(45deg);
       background: radial-gradient(#70B9EE 25%, transparent 70%);
       filter: blur(25px);
     }
@@ -175,22 +175,40 @@
 
 .carousel-gradient-left {
   left: 0;
-  background: linear-gradient(
+  background: var(--color-bg-primary);
+  // Use mask-image to create a fade effect that works with any background
+  mask-image: linear-gradient(
     to right,
-    var(--color-bg-primary) 0%,
-    var(--color-bg-primary) 20%,
-    rgba(17, 18, 42, 0.8) 40%,
+    black 0%,
+    black 20%,
+    rgba(0, 0, 0, 0.8) 40%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    black 0%,
+    black 20%,
+    rgba(0, 0, 0, 0.8) 40%,
     transparent 100%
   );
 }
 
 .carousel-gradient-right {
   right: 0;
-  background: linear-gradient(
+  background: var(--color-bg-primary);
+  // Use mask-image to create a fade effect that works with any background
+  mask-image: linear-gradient(
     to left,
-    var(--color-bg-primary) 0%,
-    var(--color-bg-primary) 20%,
-    rgba(17, 18, 42, 0.8) 40%,
+    black 0%,
+    black 20%,
+    rgba(0, 0, 0, 0.8) 40%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to left,
+    black 0%,
+    black 20%,
+    rgba(0, 0, 0, 0.8) 40%,
     transparent 100%
   );
 }

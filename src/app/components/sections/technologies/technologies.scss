@@ -52,12 +52,12 @@
       &.glow-dark-1 {
         width: 450px;
         height: 450px;
-        background: var(--color-bg-primary);
+        background: radial-gradient(var(--color-bg-primary), transparent 70%);
         filter: blur(15px);
         transform: translate(calc(50% + 155px), 115px);
         right: 0;
         @include respond-to(md) {
-          filter: blur(50px);
+          filter: blur(20px);
           transform: translate(calc(50% + 100px / 2), 115px);
         }
       }
@@ -189,6 +189,56 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+
+  // Gradient overlays that fade towards center
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 75px;
+    pointer-events: none;
+    z-index: 2;
+    background: var(--color-bg-primary);
+  }
+
+  // Left side: fade from left edge towards center (right)
+  &.left-side::before {
+    left: 0;
+    mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+  }
+
+  // Right side: fade from right edge towards center (left)
+  &.right-side::before {
+    right: 0;
+    mask-image: linear-gradient(
+      to left,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to left,
+      black 0%,
+      black 20%,
+      rgba(0, 0, 0, 0.8) 40%,
+      transparent 100%
+    );
+  }
 }
 
 // Center Divider - Logo Pulse
