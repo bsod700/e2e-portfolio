@@ -100,6 +100,7 @@ export function clientConfirmationTemplate(data) {
     @media only screen and (max-width: 600px) {
       .email-container {
         width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
       }
       .content-cell {
@@ -114,10 +115,12 @@ export function clientConfirmationTemplate(data) {
         height: 56px !important;
       }
       .text-large {
-        font-size: 18px !important;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
       }
       .text-medium {
-        font-size: 16px !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
       }
       .step-icon-cell {
         width: 30px !important;
@@ -128,6 +131,38 @@ export function clientConfirmationTemplate(data) {
       }
       .button-cell {
         padding: 10px 0 !important;
+      }
+      /* Target all paragraph elements for mobile */
+      p {
+        font-size: 16px !important;
+      }
+      /* Greeting text */
+      td p:first-child {
+        font-size: 18px !important;
+      }
+      /* Step titles */
+      .step-title {
+        font-size: 16px !important;
+      }
+      /* Step descriptions */
+      .step-description {
+        font-size: 14px !important;
+      }
+      /* CTA button text */
+      a[style*="background-color: #961416"] {
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+      }
+      /* Signature and contact links */
+      .signature-text {
+        font-size: 16px !important;
+      }
+      .contact-link {
+        font-size: 16px !important;
+      }
+      /* Footer */
+      .footer-text {
+        font-size: 11px !important;
       }
     }
   </style>
@@ -142,7 +177,7 @@ export function clientConfirmationTemplate(data) {
   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
     <tr>
       <td align="center" style="padding: 24px 0;">
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7; border-radius: 16px; overflow: hidden;">
           
           <!-- Header -->
           <tr>
@@ -190,7 +225,7 @@ export function clientConfirmationTemplate(data) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                       <tr>
                         <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
-                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic;">${safeEmail}</span>
+                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic; color: #141313 !important; text-decoration: none !important;">${safeEmail}</span>
                         </td>
                       </tr>
                     </table>
@@ -480,10 +515,15 @@ export function adminNotificationTemplate(data) {
       font-weight: inherit !important;
       line-height: inherit !important;
     }
+    /* Call button - hidden by default, shown on mobile */
+    .call-button-mobile {
+      display: none !important;
+    }
     /* Mobile styles */
     @media only screen and (max-width: 600px) {
       .email-container {
         width: 100% !important;
+        max-width: 100% !important;
         margin: 0 !important;
       }
       .content-cell {
@@ -498,21 +538,41 @@ export function adminNotificationTemplate(data) {
         height: 56px !important;
       }
       .text-large {
-        font-size: 18px !important;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
       }
       .text-medium {
-        font-size: 16px !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
       }
       .call-button-mobile {
         display: block !important;
       }
-    }
-    .call-button-desktop {
-      display: none;
-    }
-    @media only screen and (min-width: 601px) {
-      .call-button-mobile {
-        display: none !important;
+      /* Target all paragraph elements for mobile */
+      p {
+        font-size: 16px !important;
+      }
+      /* Greeting text */
+      td p:first-child {
+        font-size: 18px !important;
+      }
+      /* Action buttons */
+      a[style*="background-color: #961416"],
+      a[style*="background-color: #141F96"] {
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+      }
+      /* Pro tip text */
+      .pro-tip {
+        font-size: 14px !important;
+      }
+      /* Timestamp */
+      .timestamp {
+        font-size: 12px !important;
+      }
+      /* Footer */
+      .footer-text {
+        font-size: 11px !important;
       }
     }
   </style>
@@ -527,7 +587,7 @@ export function adminNotificationTemplate(data) {
   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
     <tr>
       <td align="center" style="padding: 24px 0;">
-        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7; border-radius: 16px; overflow: hidden;">
           
           <!-- Header -->
           <tr>
@@ -575,7 +635,7 @@ export function adminNotificationTemplate(data) {
                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                       <tr>
                         <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
-                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic;">${safeEmail}</span>
+                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic; text-decoration: none !important; color: #141313 !important;">${safeEmail}</span>
                         </td>
                       </tr>
                     </table>
@@ -626,8 +686,8 @@ export function adminNotificationTemplate(data) {
                   <td align="center" style="padding-bottom: 16px;">
                     ${data.phone ? `
                     <!-- Mobile Call Button -->
-                    <div class="call-button-mobile" style="display: none;">
-                      <a href="tel:${safePhone}" style="display: inline-block; background-color: #141F96; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #3b82f6;">
+                    <div class="call-button-mobile">
+                      <a href="tel:${safePhone}" style="display: inline-block; background-color: #141F96; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #3b82f6; margin-bottom: 16px;">
                         <span style="color: #fcfcfc;">Call</span>
                         <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
                       </a>
