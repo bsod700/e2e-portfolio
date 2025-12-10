@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { NavbarComponent } from '../../../components/layout';
 import { LegalPageContent, LegalPageSection } from '../../../services/content.service';
 import { take } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { take } from 'rxjs';
   selector: 'app-privacy-policy-page',
   imports: [
     CommonModule,
-    NavbarComponent
   ],
   templateUrl: './privacy-policy-page.html',
   styleUrl: './privacy-policy-page.scss',

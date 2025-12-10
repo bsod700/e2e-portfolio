@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { NavbarComponent, FooterComponent } from '../../components/layout';
+import { FooterComponent } from '../../components/layout';
 
 @Component({
   selector: 'app-about-page',
   imports: [
-    NavbarComponent,
     FooterComponent
   ],
   templateUrl: './about-page.html',
