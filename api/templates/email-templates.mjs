@@ -31,7 +31,7 @@ export function clientConfirmationTemplate(data) {
   const projectType = parsed.projectType || data.projectType || '';
   const calenderUrl = "https://calendly.com/guytagger";
   const url = "https://www.guytagger.com";
-  const oldUrl = "https://e2e-portfolio.vercel.app";
+  const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
   return `
 <!DOCTYPE html>
@@ -334,7 +334,7 @@ export function clientConfirmationTemplate(data) {
     <div class="header">
       <div class="logo-container">
         <div class="logo">
-          <img src="${oldUrl}/assets/images/icons/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
+          <img src="${baseUrl}/assets/images/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
         </div>
       </div>
       <h1>Great to meet you!</h1>
@@ -391,7 +391,7 @@ export function clientConfirmationTemplate(data) {
       <div class="process-section">
         <div class="process-step">
           <div class="step-icon">
-           <img src="${oldUrl}/assets/images/icons/chat-bubbles.svg" alt="Chat Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/chat-bubbles.svg" alt="Chat Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Let's Chat!</div>
@@ -400,7 +400,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${oldUrl}/assets/images/icons/document.svg" alt="Proposal Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/document.svg" alt="Proposal Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Proposal Time:</div>
@@ -409,7 +409,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-            <img src="${oldUrl}/assets/images/icons/verify.svg" alt="verify Icon" width="24" height="24">
+            <img src="${baseUrl}/assets/images/icons/verify.svg" alt="verify Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Getting to Work:</div>
@@ -418,7 +418,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${oldUrl}/assets/images/icons/like.svg" alt="like Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/like.svg" alt="like Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Your Feedback Matters:</div>
@@ -427,7 +427,7 @@ export function clientConfirmationTemplate(data) {
         </div>
         <div class="process-step">
           <div class="step-icon">
-           <img src="${oldUrl}/assets/images/icons/happy.svg" alt="happy smile Icon" width="24" height="24">
+           <img src="${baseUrl}/assets/images/icons/happy.svg" alt="happy smile Icon" width="24" height="24">
           </div>
           <div class="step-content">
             <div class="step-title">Final Touches:</div>
@@ -442,7 +442,7 @@ export function clientConfirmationTemplate(data) {
       <div class="cta-section">
         <a href="${calenderUrl}" class="cta-button">
           Schedule a Call with Me
-         <img src="${oldUrl}/assets/images/icons/calendar-add.svg" alt="Calendar Icon" width="25" height="25">
+         <img src="${baseUrl}/assets/images/icons/calendar-add.svg" alt="Calendar Icon" width="25" height="25">
         </a>
       </div>
 
@@ -462,13 +462,13 @@ export function clientConfirmationTemplate(data) {
         <!-- Social Icons -->
         <div class="social-icons">
           <a href="https://www.linkedin.com/in/guytagger/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
-            <img src="${oldUrl}/assets/images/icons/linkedin-gray.svg" alt="LinkedIn Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/linkedin-gray.svg" alt="LinkedIn Icon" width="25" height="25">
           </a>
           <a href="https://github.com/bsod700" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
-            <img src="${oldUrl}/assets/images/icons/github-gray.svg.svg" alt="GitHub Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/github-gray.svg" alt="GitHub Icon" width="25" height="25">
           </a>
           <a href="https://slack.com/app_redirect?channel=U0943JCBDPG" target="_blank" rel="noopener noreferrer" aria-label="Slack" class="social-icon">
-            <img src="${oldUrl}/assets/images/icons/slack-gray.svg" alt="Website Icon" width="25" height="25">
+            <img src="${baseUrl}/assets/images/icons/slack-gray.svg" alt="Website Icon" width="25" height="25">
           </a>
         </div>
       </div>
@@ -501,7 +501,7 @@ export function adminNotificationTemplate(data) {
   const projectType = parsed.projectType || data.projectType || '';
   const calenderUrl = "https://calendly.com/guytagger";
   const url = "https://www.guytagger.com";
-  const oldUrl = "https://e2e-portfolio.vercel.app/";
+  const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
   return `
 <!DOCTYPE html>
@@ -738,7 +738,7 @@ export function adminNotificationTemplate(data) {
     <div class="header">
       <div class="logo-container">
         <div class="logo">
-          <img src="${oldUrl}/assets/images/icons/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
+          <img src="${baseUrl}/assets/images/logo-symbol.webp" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
         </div>
       </div>
       <h1>New Lead Alert!</h1>
@@ -800,13 +800,13 @@ export function adminNotificationTemplate(data) {
           ${data.phone ? `
           <a href="tel:${data.phone}" class="action-button call">
             Call
-           <img src="${oldUrl}/assets/images/icons/phone.svg" alt="Phone Icon" width="25" height="25">
+           <img src="${baseUrl}/assets/images/icons/phone.svg" alt="Phone Icon" width="25" height="25">
           </a>
           ` : ''}
           ${data.email ? `
           <a href="mailto:${data.email}?subject=Re: Your inquiry" class="action-button">
             Reply via Email
-           <img src="${oldUrl}/assets/images/icons/email.svg" alt="Email Icon" width="25" height="25">
+           <img src="${baseUrl}/assets/images/icons/email.svg" alt="Email Icon" width="25" height="25">
           </a>
           ` : ''}
         </div>
