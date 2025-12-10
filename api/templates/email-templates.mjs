@@ -81,6 +81,13 @@ export function clientConfirmationTemplate(data) {
       outline: none;
       text-decoration: none;
     }
+    /* Prevent dark mode inversion for icons */
+    img[src*="icons/"] {
+      filter: none !important;
+      -webkit-filter: none !important;
+      color-scheme: light;
+      mix-blend-mode: normal !important;
+    }
     /* Client-specific styles */
     .ReadMsgBody { width: 100%; }
     .ExternalClass { width: 100%; }
@@ -148,10 +155,35 @@ export function clientConfirmationTemplate(data) {
       .step-description {
         font-size: 14px !important;
       }
-      /* CTA button text */
-      a[style*="background-color: #961416"] {
+      /* CTA button text - make full width on mobile */
+      a[style*="background-color: #961416"],
+      a[style*="background-color: #141F96"] {
         font-size: 14px !important;
-        padding: 10px 14px !important;
+        padding: 12px 16px !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      /* Button container cells - full width on mobile */
+      .button-cell {
+        padding: 10px 0 !important;
+        width: 100% !important;
+      }
+      .button-cell td {
+        width: 100% !important;
+        padding: 0 !important;
+        text-align: center !important;
+      }
+      /* Call button mobile container */
+      .call-button-mobile {
+        width: 100% !important;
+      }
+      .call-button-mobile a {
+        width: 100% !important;
+        display: block !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
       }
       /* Signature and contact links */
       .signature-text {
@@ -159,6 +191,23 @@ export function clientConfirmationTemplate(data) {
       }
       .contact-link {
         font-size: 16px !important;
+      }
+      /* Contact links table - stack vertically on mobile */
+      .contact-links-table {
+        width: 100% !important;
+      }
+      .contact-links-table tr {
+        display: block !important;
+        width: 100% !important;
+      }
+      .contact-link-cell {
+        width: 100% !important;
+        display: block !important;
+        text-align: left !important;
+        padding: 8px 0 !important;
+      }
+      .contact-link-cell:first-child {
+        padding-top: 0 !important;
       }
       /* Footer */
       .footer-text {
@@ -362,7 +411,7 @@ export function clientConfirmationTemplate(data) {
                     <![endif]-->
                     <a href="${calenderUrl}" style="display: inline-block; background-color: #961416; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #df563e;">
                       <span style="color: #fcfcfc;">Schedule a Call with Me</span>
-                      <img src="${baseUrl}/assets/images/icons/calendar-add.png" alt="Calendar Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                      <img src="${baseUrl}/assets/images/icons/calendar-add.png" alt="Calendar Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block; filter: none !important; -webkit-filter: none !important; color-scheme: light; mix-blend-mode: normal !important;">
                     </a>
                   </td>
                 </tr>
@@ -377,12 +426,12 @@ export function clientConfirmationTemplate(data) {
                   <td>
                     <p style="margin: 0 0 8px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Best,</p>
                     <p style="margin: 0 0 24px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Guy Tagger</p>
-                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="contact-links-table">
                       <tr>
-                        <td width="50%" align="left">
+                        <td width="50%" align="left" class="contact-link-cell">
                           <a href="https://guytagger.com" style="color: #961416 !important; text-decoration: none !important; font-size: 18px; font-family: Arial, Helvetica, sans-serif;">guytagger.com</a>
                         </td>
-                        <td width="50%" align="right">
+                        <td width="50%" align="right" class="contact-link-cell">
                           <a href="mailto:gt@guytagger.com" style="color: #961416 !important; text-decoration: none !important; font-size: 18px; font-family: Arial, Helvetica, sans-serif;">gt@guytagger.com</a>
                         </td>
                       </tr>
@@ -500,6 +549,13 @@ export function adminNotificationTemplate(data) {
       outline: none;
       text-decoration: none;
     }
+    /* Prevent dark mode inversion for icons */
+    img[src*="icons/"] {
+      filter: none !important;
+      -webkit-filter: none !important;
+      color-scheme: light;
+      mix-blend-mode: normal !important;
+    }
     /* Client-specific styles */
     .ReadMsgBody { width: 100%; }
     .ExternalClass { width: 100%; }
@@ -547,6 +603,13 @@ export function adminNotificationTemplate(data) {
       }
       .call-button-mobile {
         display: block !important;
+        width: 100% !important;
+      }
+      .call-button-mobile a {
+        width: 100% !important;
+        display: block !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
       }
       /* Target all paragraph elements for mobile */
       p {
@@ -556,11 +619,27 @@ export function adminNotificationTemplate(data) {
       td p:first-child {
         font-size: 18px !important;
       }
-      /* Action buttons */
+      /* Action buttons - make full width on mobile */
       a[style*="background-color: #961416"],
       a[style*="background-color: #141F96"] {
         font-size: 14px !important;
-        padding: 10px 14px !important;
+        padding: 12px 16px !important;
+        display: block !important;
+        width: 100% !important;
+        text-align: center !important;
+        box-sizing: border-box !important;
+      }
+      /* Button container cells - full width on mobile */
+      table[role="presentation"][style*="text-align: center"] {
+        width: 100% !important;
+      }
+      table[role="presentation"][style*="text-align: center"] td {
+        width: 100% !important;
+        padding: 0 0 16px 0 !important;
+        text-align: center !important;
+      }
+      table[role="presentation"][style*="text-align: center"] td:last-child {
+        padding-bottom: 0 !important;
       }
       /* Pro tip text */
       .pro-tip {
@@ -569,6 +648,23 @@ export function adminNotificationTemplate(data) {
       /* Timestamp */
       .timestamp {
         font-size: 12px !important;
+      }
+      /* Contact links table - stack vertically on mobile */
+      .contact-links-table {
+        width: 100% !important;
+      }
+      .contact-links-table tr {
+        display: block !important;
+        width: 100% !important;
+      }
+      .contact-link-cell {
+        width: 100% !important;
+        display: block !important;
+        text-align: left !important;
+        padding: 8px 0 !important;
+      }
+      .contact-link-cell:first-child {
+        padding-top: 0 !important;
       }
       /* Footer */
       .footer-text {
@@ -689,14 +785,14 @@ export function adminNotificationTemplate(data) {
                     <div class="call-button-mobile">
                       <a href="tel:${safePhone}" style="display: inline-block; background-color: #141F96; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #3b82f6; margin-bottom: 16px;">
                         <span style="color: #fcfcfc;">Call</span>
-                        <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                        <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block; filter: none !important; -webkit-filter: none !important; color-scheme: light; mix-blend-mode: normal !important;">
                       </a>
                     </div>
                     ` : ''}
                     ${data.email ? `
                     <a href="mailto:${safeEmail}?subject=Re: Your inquiry" style="display: inline-block; background-color: #961416; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #df563e;">
                       <span style="color: #fcfcfc;">Reply via Email</span>
-                      <img src="${baseUrl}/assets/images/icons/email.png" alt="Email Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                      <img src="${baseUrl}/assets/images/icons/email.png" alt="Email Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block; filter: none !important; -webkit-filter: none !important; color-scheme: light; mix-blend-mode: normal !important;">
                     </a>
                     ` : ''}
                   </td>
