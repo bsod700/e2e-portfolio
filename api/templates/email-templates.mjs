@@ -31,7 +31,7 @@ export function clientConfirmationTemplate(data) {
   const projectType = parsed.projectType || data.projectType || '';
   const calenderUrl = "https://calendly.com/guytagger";
   const url = "https://www.guytagger.com";
-  const oldUrl = "https://e2e-portfolio.vercel.app/";
+  const oldUrl = "https://e2e-portfolio.vercel.app";
   
   return `
 <!DOCTYPE html>
