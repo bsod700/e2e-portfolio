@@ -33,441 +33,365 @@ export function clientConfirmationTemplate(data) {
   const url = "https://www.guytagger.com";
   const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
+  // Escape HTML to prevent XSS
+  const escapeHtml = (text) => {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+  
+  const safeName = escapeHtml(data.name || '[Name]');
+  const safeEmail = escapeHtml(data.email || '');
+  const safePhone = escapeHtml(data.phone || '');
+  const safeProjectDescription = escapeHtml(projectDescription);
+  const safeProjectType = escapeHtml(projectType);
+  
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
   <title>Thank You for Contacting Us</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f4f4f5;
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
+  </style>
+  <![endif]-->
+  <style type="text/css">
+    /* Reset styles */
+    body, table, td, p, a, li, blockquote {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
     }
-    .email-wrapper {
-      max-width: 600px;
-      margin: 24px auto;
-      background-color: #ffffff;
-      border: 1px solid #c7c7c7;
+    table, td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
     }
-    .header {
-      background-color: #141313;
-      padding: 32px 16px;
-      text-align: center;
-      border-radius: 12px 12px 0 0;
-    }
-    .logo-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 81px;
-      margin-bottom: 16px;
-    }
-    .logo {
-      width: 88px;
-      height: 81px;
-      position: relative;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .logo img {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
-    .header h1 {
-      margin: 0;
-      color: #fcfcfc;
-      font-size: 34px;
-      font-weight: 500;
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      text-shadow: rgba(252, 252, 252, 0.5) 0px 0px 10px;
-      letter-spacing: -1.36px;
-    }
-    .content {
-      padding: 24px 24px 48px;
-      color: #141313;
-    }
-    .greeting {
-      font-size: 20px;
-      font-weight: 400;
-      margin-bottom: 16px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
-      color: #141313;
-      margin-bottom: 8px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-section {
-      margin: 24px 0;
-    }
-    .details-label {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 24px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-box {
-      background-color: #fafafa;
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .detail-row {
-      display: flex;
-      gap: 12px;
-      padding: 16px 0 0;
-      border-top: 1px solid #d5d5d5;
-      font-size: 14px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-row:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-    .detail-label {
-      font-weight: 500;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-value {
-      font-weight: 300;
-      font-style: italic;
-      font-family: 'Roboto', sans-serif;
-    }
-    .process-section {
-      margin: 48px 0;
-    }
-    .process-intro {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 24px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .process-step {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      align-items: flex-start;
-    }
-    .step-icon {
-      width: 40px;
-      height: 40px;
-    }
-    .step-icon png {
-      width: 40px;
-      height: 40px;
-    }
-    .step-content {
-      flex: 1;
-    }
-    .step-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #141313;
-      margin-bottom: 8px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .step-description {
-      font-size: 16px;
-      line-height: 1.6;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .cta-section {
-      margin: 24px 0;
-    }
-    .cta-text {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 16px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(229deg, #EA624A -15.19%, #961416 73.3%);
-      color: #fcfcfc !important;
-      padding: 12px 16px;
-      border-radius: 8px;
+    img {
+      -ms-interpolation-mode: bicubic;
+      border: 0;
+      outline: none;
       text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      font-family: 'Geist', sans-serif;
-      border: 0.5px solid #df563e;
     }
-    .cta-button img {
-      width: 25px;
-      height: 25px;
+    /* Client-specific styles */
+    .ReadMsgBody { width: 100%; }
+    .ExternalClass { width: 100%; }
+    .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+      line-height: 100%;
     }
-    .closing-section {
-      margin: 48px 0;
-    }
-    .closing-text {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 48px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .signature {
-      margin-bottom: 48px;
-    }
-    .signature-line {
-      font-size: 18px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .contact-links {
-      display: flex;
-      justify-content: space-between;
-      font-size: 18px;
-      margin-bottom: 48px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .contact-link {
-      color: #961416 !important;
+    /* Prevent iOS blue links */
+    a[x-apple-data-detectors] {
+      color: inherit !important;
       text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
     }
-    .contact-link.web {
-      float: left;
-    }
-    .contact-link.mail {
-      float: right;
-    }
-    .social-icons {
-      display: flex;
-      gap: 24px;
-      justify-content: center;
-      margin-bottom: 48px;
-    }
-    .social-icon {
-      width: 18px;
-      height: 18px;
-      text-decoration: none !important;
-    }
-    .footer {
-      text-align: center;
-      padding-bottom: 52px;
-    }
-    .copyright {
-      font-size: 12px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
+    /* Mobile styles */
     @media only screen and (max-width: 600px) {
-      .content {
-        padding: 24px 24px 48px;
+      .email-container {
+        width: 100% !important;
+        margin: 0 !important;
       }
-      .header h1 {
-        font-size: 26px;
-        letter-spacing: -1.04px;
+      .content-cell {
+        padding: 20px !important;
       }
-      .logo-container {
-        height: 55.711px;
+      .header-title {
+        font-size: 26px !important;
+        letter-spacing: -1px !important;
       }
-      .logo {
-        width: 60px;
-        height: 55.711px;
+      .logo-img {
+        width: 60px !important;
+        height: 56px !important;
       }
-      .greeting {
-        font-size: 18px;
+      .text-large {
+        font-size: 18px !important;
       }
-      .intro-text {
-        font-size: 16px;
+      .text-medium {
+        font-size: 16px !important;
       }
-      .process-intro {
-        font-size: 16px;
+      .step-icon-cell {
+        width: 30px !important;
       }
-      .step-icon {
-        width: 25px;
-        height: 25px;
+      .step-icon-img {
+        width: 25px !important;
+        height: 25px !important;
       }
-      .step-icon img {
-       width: 25px;
-        height: 25px;
-      }
-      .step-title {
-        font-size: 16px;
-      }
-      .step-description {
-        font-size: 16px;
-      }
-      .cta-text {
-        font-size: 16px;
-      }
-      .closing-text {
-        font-size: 16px;
-      }
-      .signature-line {
-        font-size: 18px;
+      .button-cell {
+        padding: 10px 0 !important;
       }
     }
   </style>
 </head>
-<body>
-  <div class="email-wrapper">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo-container">
-        <div class="logo">
-          <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
-        </div>
-      </div>
-      <h1>Great to meet you!</h1>
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-      <p class="greeting">Dear ${data.name || '[Name]'}</p>
-      
-      <div class="intro-text">
-        <p>Thank you so much for getting in touch through my portfolio website! I'm excited to hear that you're interested in working together.</p>
-        <p>Here are the details we received:</p>
-      </div>
-
-      <!-- Details Section -->
-      <div class="details-section">
-        <div class="details-box">
-          ${data.name ? `
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">${data.name}</span>
-          </div>
-          ` : ''}
-          ${data.email ? `
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">${data.email}</span>
-          </div>
-          ` : ''}
-          ${data.phone ? `
-          <div class="detail-row">
-            <span class="detail-label">Phone:</span>
-            <span class="detail-value">${data.phone}</span>
-          </div>
-          ` : ''}
-          ${projectDescription ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Description:</span>
-            <span class="detail-value">${projectDescription}</span>
-          </div>
-          ` : ''}
-          ${projectType ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Type(s):</span>
-            <span class="detail-value">${projectType}</span>
-          </div>
-          ` : ''}
-        </div>
-      </div>
-
-      <p class="process-intro">I'm thrilled about the opportunity to collaborate with you. Here's how we can make it happen:</p>
-
-      <!-- Process Steps -->
-      <div class="process-section">
-        <div class="process-step">
-          <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/circle-chat-bubbles.png" alt="Chat Icon" width="24" height="24">
-          </div>
-          <div class="step-content">
-            <div class="step-title">Let's Chat!</div>
-            <div class="step-description">We'll start with an initial consultation to discuss your needs, understand your vision, and map out the project.</div>
-          </div>
-        </div>
-        <div class="process-step">
-          <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/circle-document.png" alt="Proposal Icon" width="24" height="24">
-          </div>
-          <div class="step-content">
-            <div class="step-title">Proposal Time:</div>
-            <div class="step-description">After our chat, I'll send you a detailed proposal and quote tailored to your specific requirements.</div>
-          </div>
-        </div>
-        <div class="process-step">
-          <div class="step-icon">
-            <img src="${baseUrl}/assets/images/icons/circle-verify.png" alt="verify Icon" width="24" height="24">
-          </div>
-          <div class="step-content">
-            <div class="step-title">Getting to Work:</div>
-            <div class="step-description">Once the proposal is approved, I'll dive into the project, keeping you updated every step of the way.</div>
-          </div>
-        </div>
-        <div class="process-step">
-          <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/circle-like.png" alt="like Icon" width="24" height="24">
-          </div>
-          <div class="step-content">
-            <div class="step-title">Your Feedback Matters:</div>
-            <div class="step-description">I'll regularly seek your input to make sure everything aligns with your expectations.</div>
-          </div>
-        </div>
-        <div class="process-step">
-          <div class="step-icon">
-           <img src="${baseUrl}/assets/images/icons/circle-happy.png" alt="happy smile Icon" width="24" height="24">
-          </div>
-          <div class="step-content">
-            <div class="step-title">Final Touches:</div>
-            <div class="step-description">When you are happy with the results, I'll deliver the final product, ready to impress!</div>
-          </div>
-        </div>
-      </div>
-
-      <p class="cta-text">Ready to start? Schedule a free consultation using the link below:</p>
-
-      <!-- CTA Button -->
-      <div class="cta-section">
-        <a href="${calenderUrl}" class="cta-button">
-          Schedule a Call with Me
-         <img src="${baseUrl}/assets/images/icons/calendar-add.png" alt="Calendar Icon" width="25" height="25">
-        </a>
-      </div>
-
-      <!-- Closing -->
-      <div class="closing-section">
-        <p class="closing-text">Looking forward to creating something awesome together!</p>
-        
-        <div class="signature">
-          <p class="signature-line">Best,</p>
-          <p class="signature-line">Guy Tagger</p>
-          <div class="contact-links">
-            <a href="https://guytagger.com" class="contact-link web">guytagger.com</a>
-            <a href="mailto:gt@guytagger.com" class="contact-link mail">gt@guytagger.com</a>
-          </div>
-        </div>
-
-        <!-- Social Icons -->
-        <div class="social-icons">
-          <a href="https://www.linkedin.com/in/guytagger/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/linkedin-gray.png" alt="LinkedIn Icon" width="25" height="25">
-          </a>
-          <a href="https://github.com/bsod700" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/github-gray.png" alt="GitHub Icon" width="25" height="25">
-          </a>
-          <a href="https://slack.com/app_redirect?channel=U0943JCBDPG" target="_blank" rel="noopener noreferrer" aria-label="Slack" class="social-icon">
-            <img src="${baseUrl}/assets/images/icons/slack-gray.png" alt="Website Icon" width="25" height="25">
-          </a>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p class="copyright">© 2025 Guy Tagger Portfolio. All rights reserved.</p>
-      </div>
-    </div>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: Arial, Helvetica, sans-serif;">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #f4f4f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    Thank you for contacting Guy Tagger. We're excited to work with you!
   </div>
+  
+  <!-- Main email wrapper -->
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
+    <tr>
+      <td align="center" style="padding: 24px 0;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7;">
+          
+          <!-- Header -->
+          <tr>
+            <td class="header-cell" style="background-color: #141313; padding: 32px 16px; text-align: center;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-bottom: 16px;">
+                    <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" class="logo-img" style="display: block; width: 88px; height: 81px; max-width: 100%; height: auto;">
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <h1 class="header-title" style="margin: 0; color: #fcfcfc; font-size: 34px; font-weight: 500; font-family: Arial, Helvetica, sans-serif; letter-spacing: -1.36px;">Great to meet you!</h1>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td class="content-cell" style="padding: 24px 24px 48px; color: #141313;">
+              
+              <!-- Greeting -->
+              <p style="margin: 0 0 16px 0; font-size: 20px; font-weight: 400; color: #141313; font-family: Arial, Helvetica, sans-serif;">Dear ${safeName}</p>
+              
+              <!-- Intro text -->
+              <p class="text-large" style="margin: 0 0 8px 0; font-size: 18px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">Thank you so much for getting in touch through my portfolio website! I'm excited to hear that you're interested in working together.</p>
+              <p class="text-large" style="margin: 0 0 24px 0; font-size: 18px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">Here are the details we received:</p>
+              
+              <!-- Details Box -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #fafafa; border-radius: 8px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 24px;">
+                    ${data.name ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 0 0 16px 0; border-top: none; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Name:</span> <span style="font-weight: 300; font-style: italic;">${safeName}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${data.email ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic;">${safeEmail}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${data.phone ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Phone:</span> <span style="font-weight: 300; font-style: italic;">${safePhone}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${projectDescription ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Project Description:</span> <span style="font-weight: 300; font-style: italic;">${safeProjectDescription}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${projectType ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Project Type(s):</span> <span style="font-weight: 300; font-style: italic;">${safeProjectType}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Process intro -->
+              <p class="text-large" style="margin: 24px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">I'm thrilled about the opportunity to collaborate with you. Here's how we can make it happen:</p>
+              
+              <!-- Process Steps -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 24px 0;">
+                <tr>
+                  <td>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td class="step-icon-cell" width="40" valign="top" style="padding-right: 16px; vertical-align: top;">
+                          <img src="${baseUrl}/assets/images/icons/circle-chat-bubbles.png" alt="Chat Icon" width="40" height="40" class="step-icon-img" style="display: block; width: 40px; height: 40px;">
+                        </td>
+                        <td valign="top" style="vertical-align: top;">
+                          <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #141313; font-family: Arial, Helvetica, sans-serif;">Let's Chat!</p>
+                          <p class="text-medium" style="margin: 0; font-size: 16px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">We'll start with an initial consultation to discuss your needs, understand your vision, and map out the project.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr><td style="height: 16px; line-height: 16px;">&nbsp;</td></tr>
+                <tr>
+                  <td>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td class="step-icon-cell" width="40" valign="top" style="padding-right: 16px; vertical-align: top;">
+                          <img src="${baseUrl}/assets/images/icons/circle-document.png" alt="Proposal Icon" width="40" height="40" class="step-icon-img" style="display: block; width: 40px; height: 40px;">
+                        </td>
+                        <td valign="top" style="vertical-align: top;">
+                          <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #141313; font-family: Arial, Helvetica, sans-serif;">Proposal Time:</p>
+                          <p class="text-medium" style="margin: 0; font-size: 16px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">After our chat, I'll send you a detailed proposal and quote tailored to your specific requirements.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr><td style="height: 16px; line-height: 16px;">&nbsp;</td></tr>
+                <tr>
+                  <td>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td class="step-icon-cell" width="40" valign="top" style="padding-right: 16px; vertical-align: top;">
+                          <img src="${baseUrl}/assets/images/icons/circle-verify.png" alt="Verify Icon" width="40" height="40" class="step-icon-img" style="display: block; width: 40px; height: 40px;">
+                        </td>
+                        <td valign="top" style="vertical-align: top;">
+                          <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #141313; font-family: Arial, Helvetica, sans-serif;">Getting to Work:</p>
+                          <p class="text-medium" style="margin: 0; font-size: 16px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">Once the proposal is approved, I'll dive into the project, keeping you updated every step of the way.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr><td style="height: 16px; line-height: 16px;">&nbsp;</td></tr>
+                <tr>
+                  <td>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td class="step-icon-cell" width="40" valign="top" style="padding-right: 16px; vertical-align: top;">
+                          <img src="${baseUrl}/assets/images/icons/circle-like.png" alt="Like Icon" width="40" height="40" class="step-icon-img" style="display: block; width: 40px; height: 40px;">
+                        </td>
+                        <td valign="top" style="vertical-align: top;">
+                          <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #141313; font-family: Arial, Helvetica, sans-serif;">Your Feedback Matters:</p>
+                          <p class="text-medium" style="margin: 0; font-size: 16px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">I'll regularly seek your input to make sure everything aligns with your expectations.</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr><td style="height: 16px; line-height: 16px;">&nbsp;</td></tr>
+                <tr>
+                  <td>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td class="step-icon-cell" width="40" valign="top" style="padding-right: 16px; vertical-align: top;">
+                          <img src="${baseUrl}/assets/images/icons/circle-happy.png" alt="Happy Icon" width="40" height="40" class="step-icon-img" style="display: block; width: 40px; height: 40px;">
+                        </td>
+                        <td valign="top" style="vertical-align: top;">
+                          <p style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #141313; font-family: Arial, Helvetica, sans-serif;">Final Touches:</p>
+                          <p class="text-medium" style="margin: 0; font-size: 16px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">When you are happy with the results, I'll deliver the final product, ready to impress!</p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- CTA Text -->
+              <p class="text-large" style="margin: 24px 0 16px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Ready to start? Schedule a free consultation using the link below:</p>
+              
+              <!-- CTA Button -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="button-cell">
+                <tr>
+                  <td align="left" style="padding: 12px 0;">
+                    <!--[if mso]>
+                    <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${calenderUrl}" style="height:44px;v-text-anchor:middle;width:250px;" arcsize="8%" stroke="f" fillcolor="#961416">
+                      <w:anchorlock/>
+                      <center style="color:#fcfcfc;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700;">Schedule a Call with Me</center>
+                    </v:roundrect>
+                    <![endif]-->
+                    <a href="${calenderUrl}" style="display: inline-block; background-color: #961416; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #df563e;">
+                      <span style="color: #fcfcfc;">Schedule a Call with Me</span>
+                      <img src="${baseUrl}/assets/images/icons/calendar-add.png" alt="Calendar Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Closing -->
+              <p class="text-large" style="margin: 48px 0 24px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Looking forward to creating something awesome together!</p>
+              
+              <!-- Signature -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 48px;">
+                <tr>
+                  <td>
+                    <p style="margin: 0 0 8px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Best,</p>
+                    <p style="margin: 0 0 24px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;">Guy Tagger</p>
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td width="50%" align="left">
+                          <a href="https://guytagger.com" style="color: #961416 !important; text-decoration: none !important; font-size: 18px; font-family: Arial, Helvetica, sans-serif;">guytagger.com</a>
+                        </td>
+                        <td width="50%" align="right">
+                          <a href="mailto:gt@guytagger.com" style="color: #961416 !important; text-decoration: none !important; font-size: 18px; font-family: Arial, Helvetica, sans-serif;">gt@guytagger.com</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Social Icons -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin-bottom: 48px;">
+                <tr>
+                  <td style="padding: 0 12px;">
+                    <a href="https://www.linkedin.com/in/guytagger/" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                      <img src="${baseUrl}/assets/images/icons/linkedin-gray.png" alt="LinkedIn" width="25" height="25" style="display: block;">
+                    </a>
+                  </td>
+                  <td style="padding: 0 12px;">
+                    <a href="https://github.com/bsod700" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                      <img src="${baseUrl}/assets/images/icons/github-gray.png" alt="GitHub" width="25" height="25" style="display: block;">
+                    </a>
+                  </td>
+                  <td style="padding: 0 12px;">
+                    <a href="https://slack.com/app_redirect?channel=U0943JCBDPG" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">
+                      <img src="${baseUrl}/assets/images/icons/slack-gray.png" alt="Slack" width="25" height="25" style="display: block;">
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Footer -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-bottom: 52px;">
+                    <p style="margin: 0; font-size: 12px; color: #141313; font-family: Arial, Helvetica, sans-serif;">© 2025 Guy Tagger Portfolio. All rights reserved.</p>
+                  </td>
+                </tr>
+              </table>
+              
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
   `;
@@ -492,330 +416,262 @@ export function adminNotificationTemplate(data) {
   const url = "https://www.guytagger.com";
   const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
+  // Escape HTML to prevent XSS
+  const escapeHtml = (text) => {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  };
+  
+  const safeName = escapeHtml(data.name || '');
+  const safeEmail = escapeHtml(data.email || '');
+  const safePhone = escapeHtml(data.phone || '');
+  const safeProjectDescription = escapeHtml(projectDescription);
+  const safeProjectType = escapeHtml(projectType);
+  const safeSubmittedAt = escapeHtml(data.submittedAt || new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' }));
+  
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
   <title>New Contact Form Submission</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-      background-color: #f4f4f5;
+  <!--[if mso]>
+  <style type="text/css">
+    body, table, td {font-family: Arial, Helvetica, sans-serif !important;}
+  </style>
+  <![endif]-->
+  <style type="text/css">
+    /* Reset styles */
+    body, table, td, p, a, li, blockquote {
+      -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
     }
-    .email-wrapper {
-      max-width: 600px;
-      margin: 24px auto;
-      background-color: #ffffff;
-      border: 1px solid #c7c7c7;
+    table, td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
     }
-    .header {
-      background-color: #141313;
-      padding: 32px 16px;
-      text-align: center;
-      border-radius: 12px 12px 0 0;
-    }
-    .logo-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 81px;
-      margin-bottom: 16px;
-    }
-    .logo {
-      width: 88px;
-      height: 81px;
-      margin: 0 auto;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .logo img {
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
-      object-fit: contain;
-    }
-    .header h1 {
-      margin: 0;
-      color: #fcfcfc;
-      font-size: 34px;
-      font-weight: 500;
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      text-shadow: rgba(252, 252, 252, 0.5) 0px 0px 10px;
-      letter-spacing: -1.36px;
-    }
-    .content {
-      padding: 24px 24px 48px;
-      color: #141313;
-    }
-    .greeting {
-      font-size: 20px;
-      font-weight: 400;
-      margin-bottom: 16px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .intro-text {
-      font-size: 18px;
-      line-height: 1.6;
-      color: #141313;
-      margin-bottom: 8px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-section {
-      margin: 24px 0;
-    }
-    .details-label {
-      font-size: 18px;
-      color: #141313;
-      margin-bottom: 24px;
-      font-family: 'Roboto', sans-serif;
-    }
-    .details-box {
-      background-color: #fafafa;
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .detail-row {
-      display: flex;
-      gap: 12px;
-      padding: 16px 0 0;
-      border-top: 1px solid #d5d5d5;
-      font-size: 14px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-row:first-child {
-      border-top: none;
-      padding-top: 0;
-    }
-    .detail-label {
-      font-weight: 500;
-      font-family: 'Roboto', sans-serif;
-    }
-    .detail-value {
-      font-weight: 300;
-      font-style: italic;
-      font-family: 'Roboto', sans-serif;
-    }
-    .source-info {
-      text-align: center;
-      margin: 24px 0;
-      font-size: 18px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
-    .source-info strong {
-      font-weight: 700;
-    }
-    .action-section {
-      margin: 24px 0;
-      text-align: center;
-    }
-    .action-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .action-buttons.horizontal {
-      flex-direction: row;
-      justify-content: center;
-    }
-    .action-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      background: linear-gradient(229deg, #EA624A -15.19%, #961416 73.3%);
-      color: #fcfcfc;
-      padding: 12px 16px;
-      border-radius: 8px;
+    img {
+      -ms-interpolation-mode: bicubic;
+      border: 0;
+      outline: none;
       text-decoration: none;
-      font-weight: 700;
-      font-size: 16px;
-      font-family: 'Geist', sans-serif;
-      border: 0.5px solid #df563e;
     }
-    .action-button.call {
-      background: linear-gradient(229deg, #4A65EA -15.19%, #141F96 73.3%);
-      border-color: #3b82f6;
-      display: none; /* Hidden on desktop */
+    /* Client-specific styles */
+    .ReadMsgBody { width: 100%; }
+    .ExternalClass { width: 100%; }
+    .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+      line-height: 100%;
     }
-    .action-button img {
-      width: 25px;
-      height: 25px;
-      fill: #fcfcfc;
+    /* Prevent iOS blue links */
+    a[x-apple-data-detectors] {
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
     }
-    .pro-tip {
-      text-align: center;
-      font-size: 16px;
-      font-style: italic;
-      color: rgba(20, 19, 19, 0.53);
-      font-family: 'Roboto', sans-serif;
-      margin-top: 24px;
-    }
-    .divider {
-      border-top: 1px solid #e3e3e3;
-      margin: 24px 0;
-      padding-top: 24px;
-    }
-    .timestamp {
-      text-align: center;
-      font-size: 14px;
-      color: rgba(20, 19, 19, 0.53);
-      font-family: 'Roboto', sans-serif;
-    }
-    .footer {
-      text-align: center;
-      padding-top: 48px;
-    }
-    .copyright {
-      font-size: 12px;
-      color: #141313;
-      font-family: 'Roboto', sans-serif;
-    }
+    /* Mobile styles */
     @media only screen and (max-width: 600px) {
-      .content {
-        padding: 24px 24px 48px;
+      .email-container {
+        width: 100% !important;
+        margin: 0 !important;
       }
-      .header h1 {
-        font-size: 26px;
-        letter-spacing: -1.04px;
+      .content-cell {
+        padding: 20px !important;
       }
-      .logo-container {
-        height: 55.711px;
+      .header-title {
+        font-size: 26px !important;
+        letter-spacing: -1px !important;
       }
-      .logo {
-        width: 60px;
-        height: 55.711px;
+      .logo-img {
+        width: 60px !important;
+        height: 56px !important;
       }
-      .greeting {
-        font-size: 18px;
+      .text-large {
+        font-size: 18px !important;
       }
-      .intro-text {
-        font-size: 16px;
+      .text-medium {
+        font-size: 16px !important;
       }
-      .details-label {
-        font-size: 16px;
+      .call-button-mobile {
+        display: block !important;
       }
-      .source-info {
-        font-size: 16px;
-      }
-      .timestamp {
-        font-size: 12px;
-      }
-      .pro-tip {
-        font-size: 14px;
-      }
-      .action-button.call {
-        display: inline-flex; /* Show on mobile */
+    }
+    .call-button-desktop {
+      display: none;
+    }
+    @media only screen and (min-width: 601px) {
+      .call-button-mobile {
+        display: none !important;
       }
     }
   </style>
 </head>
-<body>
-  <div class="email-wrapper">
-    <!-- Header -->
-    <div class="header">
-      <div class="logo-container">
-        <div class="logo">
-          <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" style="display: block; max-width: 100%; height: auto;">
-        </div>
-      </div>
-      <h1>New Lead Alert!</h1>
-    </div>
-
-    <!-- Content -->
-    <div class="content">
-      <p class="greeting">Hey Guy</p>
-      
-      <div class="intro-text">
-        <p>You have a new opportunity waiting! Here are the details:</p>
-        <p class="details-label">Contact Information:</p>
-      </div>
-
-      <!-- Details Section -->
-      <div class="details-section">
-        <div class="details-box">
-          ${data.name ? `
-          <div class="detail-row">
-            <span class="detail-label">Name:</span>
-            <span class="detail-value">${data.name}</span>
-          </div>
-          ` : ''}
-          ${data.email ? `
-          <div class="detail-row">
-            <span class="detail-label">Email:</span>
-            <span class="detail-value">${data.email}</span>
-          </div>
-          ` : ''}
-          ${data.phone ? `
-          <div class="detail-row">
-            <span class="detail-label">Phone:</span>
-            <span class="detail-value">${data.phone}</span>
-          </div>
-          ` : ''}
-          ${projectDescription ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Description:</span>
-            <span class="detail-value">${projectDescription}</span>
-          </div>
-          ` : ''}
-          ${projectType ? `
-          <div class="detail-row">
-            <span class="detail-label">Project Type(s):</span>
-            <span class="detail-value">${projectType}</span>
-          </div>
-          ` : ''}
-        </div>
-      </div>
-
-      <!-- Source Info -->
-      <div class="source-info">
-        <p><strong>Source</strong>: Portfolio Website</p>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="action-section">
-        <div class="action-buttons">
-          ${data.phone ? `
-          <a href="tel:${data.phone}" class="action-button call">
-            Call
-           <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25">
-          </a>
-          ` : ''}
-          ${data.email ? `
-          <a href="mailto:${data.email}?subject=Re: Your inquiry" class="action-button">
-            Reply via Email
-           <img src="${baseUrl}/assets/images/icons/email.png" alt="Email Icon" width="25" height="25">
-          </a>
-          ` : ''}
-        </div>
-        <p class="pro-tip">Pro Tip: Speed to lead wins deals. Call them within 5 minutes!</p>
-      </div>
-
-      <!-- Divider -->
-      <div class="divider">
-        <div class="timestamp">
-          📅 Submitted on ${data.submittedAt || new Date().toLocaleString('en-US', { dateStyle: 'full', timeStyle: 'short' })}
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p class="copyright">© 2025 Guy Tagger Portfolio. All rights reserved.</p>
-      </div>
-    </div>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: Arial, Helvetica, sans-serif;">
+  <!-- Preheader text -->
+  <div style="display: none; font-size: 1px; color: #f4f4f5; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    New contact form submission from ${safeName || safeEmail || 'portfolio website'}
   </div>
+  
+  <!-- Main email wrapper -->
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
+    <tr>
+      <td align="center" style="padding: 24px 0;">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="email-container" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #c7c7c7;">
+          
+          <!-- Header -->
+          <tr>
+            <td class="header-cell" style="background-color: #141313; padding: 32px 16px; text-align: center;">
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-bottom: 16px;">
+                    <img src="${baseUrl}/assets/images/logo-symbol.png" alt="Guy Tagger Logo" width="88" height="81" class="logo-img" style="display: block; width: 88px; height: 81px; max-width: 100%; height: auto;">
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center">
+                    <h1 class="header-title" style="margin: 0; color: #fcfcfc; font-size: 34px; font-weight: 500; font-family: Arial, Helvetica, sans-serif; letter-spacing: -1.36px;">New Lead Alert!</h1>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td class="content-cell" style="padding: 24px 24px 48px; color: #141313;">
+              
+              <!-- Greeting -->
+              <p style="margin: 0 0 16px 0; font-size: 20px; font-weight: 400; color: #141313; font-family: Arial, Helvetica, sans-serif;">Hey Guy</p>
+              
+              <!-- Intro text -->
+              <p class="text-large" style="margin: 0 0 8px 0; font-size: 18px; line-height: 1.6; color: #141313; font-family: Arial, Helvetica, sans-serif;">You have a new opportunity waiting! Here are the details:</p>
+              <p class="text-large" style="margin: 0 0 24px 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;"><strong>Contact Information:</strong></p>
+              
+              <!-- Details Box -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #fafafa; border-radius: 8px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 24px;">
+                    ${data.name ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 0 0 16px 0; border-top: none; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Name:</span> <span style="font-weight: 300; font-style: italic;">${safeName}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${data.email ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Email:</span> <span style="font-weight: 300; font-style: italic;">${safeEmail}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${data.phone ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Phone:</span> <span style="font-weight: 300; font-style: italic;">${safePhone}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${projectDescription ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Project Description:</span> <span style="font-weight: 300; font-style: italic;">${safeProjectDescription}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                    ${projectType ? `
+                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                      <tr>
+                        <td style="padding: 16px 0; border-top: 1px solid #d5d5d5; font-size: 14px; color: #141313; font-family: Arial, Helvetica, sans-serif;">
+                          <span style="font-weight: 500;">Project Type(s):</span> <span style="font-weight: 300; font-style: italic;">${safeProjectType}</span>
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ''}
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Source Info -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 24px 0;">
+                <tr>
+                  <td align="center">
+                    <p class="text-large" style="margin: 0; font-size: 18px; color: #141313; font-family: Arial, Helvetica, sans-serif;"><strong>Source</strong>: Portfolio Website</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Action Buttons -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 24px 0; text-align: center;">
+                <tr>
+                  <td align="center" style="padding-bottom: 16px;">
+                    ${data.phone ? `
+                    <!-- Mobile Call Button -->
+                    <div class="call-button-mobile" style="display: none;">
+                      <a href="tel:${safePhone}" style="display: inline-block; background-color: #141F96; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #3b82f6;">
+                        <span style="color: #fcfcfc;">Call</span>
+                        <img src="${baseUrl}/assets/images/icons/phone.png" alt="Phone Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                      </a>
+                    </div>
+                    ` : ''}
+                    ${data.email ? `
+                    <a href="mailto:${safeEmail}?subject=Re: Your inquiry" style="display: inline-block; background-color: #961416; color: #fcfcfc !important; padding: 12px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 16px; font-family: Arial, Helvetica, sans-serif; border: 0.5px solid #df563e;">
+                      <span style="color: #fcfcfc;">Reply via Email</span>
+                      <img src="${baseUrl}/assets/images/icons/email.png" alt="Email Icon" width="25" height="25" style="vertical-align: middle; margin-left: 8px; display: inline-block;">
+                    </a>
+                    ` : ''}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding-top: 24px;">
+                    <p style="margin: 0; font-size: 16px; font-style: italic; color: rgba(20, 19, 19, 0.53); font-family: Arial, Helvetica, sans-serif;">Pro Tip: Speed to lead wins deals. Call them within 5 minutes!</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Divider -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: 24px 0; border-top: 1px solid #e3e3e3;">
+                <tr>
+                  <td style="padding-top: 24px;">
+                    <p style="margin: 0; text-align: center; font-size: 14px; color: rgba(20, 19, 19, 0.53); font-family: Arial, Helvetica, sans-serif;">📅 Submitted on ${safeSubmittedAt}</p>
+                  </td>
+                </tr>
+              </table>
+              
+              <!-- Footer -->
+              <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                <tr>
+                  <td align="center" style="padding-top: 48px;">
+                    <p style="margin: 0; font-size: 12px; color: #141313; font-family: Arial, Helvetica, sans-serif;">© 2025 Guy Tagger Portfolio. All rights reserved.</p>
+                  </td>
+                </tr>
+              </table>
+              
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
   `;
