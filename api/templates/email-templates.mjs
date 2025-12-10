@@ -40,7 +40,7 @@ export function clientConfirmationTemplate(data) {
   const parsed = parseMessage(data.message || '');
   const projectDescription = parsed.projectDescription || data.projectDescription || '';
   const projectType = parsed.projectType || data.projectType || '';
-  const calenderUrl = "https://calendly.com/guytagger";
+  const calenderUrl = "https://calendly.com/gt-guytagger/intro-chat-with-guy";
   const url = "https://www.guytagger.com";
   const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
@@ -507,7 +507,7 @@ export function adminNotificationTemplate(data) {
   const parsed = parseMessage(data.message || '');
   const projectDescription = parsed.projectDescription || data.projectDescription || '';
   const projectType = parsed.projectType || data.projectType || '';
-  const calenderUrl = "https://calendly.com/guytagger";
+  const calenderUrl = "https://calendly.com/gt-guytagger/intro-chat-with-guy";
   const url = "https://www.guytagger.com";
   const baseUrl = "https://e2e-portfolio.vercel.app"; // Use Vercel deployment URL for all assets
   
