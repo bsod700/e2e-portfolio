@@ -2,6 +2,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 import { injectSpeedInsights } from '@vercel/speed-insights';
+import { inject } from '@vercel/analytics';
 
 // Global error handler to catch and suppress Navigator LockManager errors
 if (typeof window !== 'undefined') {
@@ -33,4 +34,7 @@ if (typeof window !== 'undefined') {
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
+
+// Initialize Vercel Analytics and Speed Insights
+inject();
 injectSpeedInsights();
