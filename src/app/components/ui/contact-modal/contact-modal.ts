@@ -18,6 +18,7 @@ import {
 import { ModalService } from '../../../services/modal.service';
 import { EmailService } from '../../../services/email.service';
 import { ValidationService } from '../../../services/validation.service';
+import { PostHogService } from '../../../services/posthog.service';
 
 // Constants
 const AUTO_CLOSE_DELAY = 3000;
@@ -37,6 +38,7 @@ export class ContactModalComponent implements OnDestroy {
   private readonly validationService = inject(ValidationService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly posthog = inject(PostHogService);
   private autoCloseTimer?: ReturnType<typeof setTimeout>;
 
   // Form group
@@ -253,6 +255,11 @@ export class ContactModalComponent implements OnDestroy {
    * Close the contact form modal
    */
   closeContactForm(): void {
+    // Track modal close
+    this.posthog.captureEvent('contact_modal_closed', {
+      was_submitted: this.isSubmitted()
+    });
+    
     this.modalService.closeContactModal();
   }
 
@@ -270,10 +277,25 @@ export class ContactModalComponent implements OnDestroy {
 
     // Validate all fields
     if (!this.validateAllFields()) {
+      // Track validation failure
+      this.posthog.captureEvent('contact_form_validation_failed', {
+        has_name: !!this.contactForm.value.name,
+        has_email: !!this.contactForm.value.email,
+        has_phone: !!this.contactForm.value.phone,
+        has_message: !!this.contactForm.value.message
+      });
       return;
     }
 
     const formValue = this.contactForm.value;
+    
+    // Track form submission attempt
+    this.posthog.captureEvent('contact_form_submitted', {
+      has_name: !!formValue.name,
+      has_email: !!formValue.email,
+      has_phone: !!formValue.phone,
+      message_length: formValue.message?.length || 0
+    });
     
     // Start loading
     this.isLoading.set(true);
@@ -299,6 +321,11 @@ export class ContactModalComponent implements OnDestroy {
       next: (response) => {
         console.log('Email sent successfully:', response);
         
+        // Track successful submission
+        this.posthog.captureEvent('contact_email_sent', {
+          success: true
+        });
+        
         // Stop loading and show thank you message
         this.isLoading.set(false);
         this.isSubmitted.set(true);
@@ -310,6 +337,11 @@ export class ContactModalComponent implements OnDestroy {
       },
       error: (error) => {
         console.error('Failed to send email:', error);
+        
+        // Track email failure
+        this.posthog.captureEvent('contact_email_failed', {
+          error_message: error.message
+        });
         
         // Stop loading
         this.isLoading.set(false);

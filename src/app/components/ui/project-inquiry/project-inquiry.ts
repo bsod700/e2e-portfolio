@@ -9,6 +9,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '../../../services/modal.service';
+import { PostHogService } from '../../../services/posthog.service';
 
 export interface ProjectType {
   readonly id: string;
@@ -75,6 +76,7 @@ export class ProjectInquiryComponent {
   readonly projectTypes = PROJECT_TYPES;
 
   private readonly modalService = inject(ModalService);
+  private readonly posthog = inject(PostHogService);
 
   /**
    * Toggle project type selection
@@ -86,6 +88,12 @@ export class ProjectInquiryComponent {
         newTypes.delete(typeId);
       } else {
         newTypes.add(typeId);
+        
+        // Track project type selection
+        this.posthog.captureEvent('project_type_selected', {
+          project_type: typeId,
+          form_type: this.classType
+        });
       }
       return newTypes;
     });
@@ -106,6 +114,15 @@ export class ProjectInquiryComponent {
     const description = this.projectDescription.trim();
     const typesText = this.selectedTypesLabels();
     const hasContent = description.length > 0 || this.selectedTypes().size > 0;
+
+    // Track inquiry generation
+    this.posthog.captureEvent('inquiry_generated', {
+      has_description: description.length > 0,
+      description_length: description.length,
+      selected_types_count: this.selectedTypes().size,
+      selected_types: Array.from(this.selectedTypes()),
+      form_type: this.classType
+    });
 
     if (!hasContent) {
       // Nothing provided - use a default message

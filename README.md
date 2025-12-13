@@ -10,6 +10,7 @@ A modern, high-performance portfolio website built with Angular 18, featuring Se
 - ✅ **Modern Animations** - Smooth scroll animations and transitions
 - ✅ **SEO Optimized** - Meta tags, Open Graph, Schema.org
 - ✅ **Performance Optimized** - Target 100 Lighthouse score
+- ✅ **Analytics Integration** - PostHog for product analytics
 - ✅ **Vercel Ready** - One-click deployment
 - ✅ **TypeScript** - Type-safe code
 - ✅ **SCSS** - Modern styling with variables
@@ -87,8 +88,15 @@ src/
 
 - **Frontend:** Angular 18, TypeScript, SCSS
 - **Rendering:** Server-Side Rendering (SSR)
+- **Analytics:** PostHog (product analytics and user insights)
 - **Deployment:** Vercel
 - **Version Control:** Git
+
+## 📊 Analytics
+
+This project uses PostHog for product analytics. For detailed information:
+- **Usage Guide:** See [POSTHOG_USAGE.md](./POSTHOG_USAGE.md)
+- **Security Best Practices:** See [POSTHOG_SECURITY.md](./POSTHOG_SECURITY.md)
 
 ## 📝 License
 
